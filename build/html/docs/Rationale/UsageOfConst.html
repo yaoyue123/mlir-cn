@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Usage of ‘const’ in MLIR, for core IR types</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../../genindex.html" />
+  <link rel="search" title="搜索" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/DataFlowAnalysis.html" class="reference internal ">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-5.html" class="reference internal ">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-6.html" class="reference internal ">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-7.html" class="reference internal ">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/_index.html" class="reference internal ">Toy Tutorial</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+    <li>Usage of ‘const’ in MLIR, for core IR types</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="usage-of-const-in-mlir-for-core-ir-types">
+<h1>Usage of ‘const’ in MLIR, for core IR types<a class="headerlink" href="#usage-of-const-in-mlir-for-core-ir-types" title="此标题的永久链接">¶</a></h1>
+<p>aka, where’d <code class="docutils literal notranslate"><span class="pre">const</span></code> go?</p>
+<p>The MLIR data structures that represent the IR itself (Instruction, Block, etc)
+form a graph-based data structure, and the compiler analyses and passes
+frequently walk this graph (e.g. traversing from defs to users). The early
+design of MLIR adopted the <code class="docutils literal notranslate"><span class="pre">const</span></code> model of LLVM, which is familiar and well
+understood (even though the LLVM implementation is flawed in many ways).</p>
+<p>The design team since decided to change to a different model, which eschews
+<code class="docutils literal notranslate"><span class="pre">const</span></code> entirely for the core IR types: you should never see a <code class="docutils literal notranslate"><span class="pre">const</span></code> method on
+<code class="docutils literal notranslate"><span class="pre">Operation</span></code>, should never see the type <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">Value</span></code>, and you shouldn’t feel bad
+about this. That said, you <em>should</em> use <code class="docutils literal notranslate"><span class="pre">const</span></code> for non-IR types, like
+<code class="docutils literal notranslate"><span class="pre">SmallVector</span></code>’s and many other things.</p>
+<p>The document below explains this design point from the viewpoint of “why make a
+change”, to explain the rationale and the tradeoffs involved that led us to this
+potentially controversial design point.</p>
+<p>Bjarke Roune summarized the situation like this:</p>
+<blockquote>
+<div><p>In my opinion <code class="docutils literal notranslate"><span class="pre">const</span></code> correctness is highly valuable, catching many bugs and
+making it clear in a code base where the mutations happen. In my opinion
+<code class="docutils literal notranslate"><span class="pre">const</span></code> correctness still isn’t worth it in particular for IR elements because
+of the special uses and properties of IRs, in particular that it is common to
+transfer a pointer/reference to an instruction from an analysis to an
+optimization which will change the instruction. The analysis should be const,
+the optimization needs to get a non-<code class="docutils literal notranslate"><span class="pre">const</span></code> pointer. So all analyses either
+end up being templates (and if they never get instantiated in a const context,
+then the point of <code class="docutils literal notranslate"><span class="pre">const</span></code> correctness has been defeated), you need to somehow
+launder the const in a safe way or there will be <code class="docutils literal notranslate"><span class="pre">const_cast</span></code>s. These options
+are all bad, probably so bad as to out-weigh the benefits of const.</p>
+</div></blockquote>
+</section>
+<section id="reconsidering-const-in-mlir">
+<h1>Reconsidering <code class="docutils literal notranslate"><span class="pre">const</span></code> in MLIR<a class="headerlink" href="#reconsidering-const-in-mlir" title="此标题的永久链接">¶</a></h1>
+<p>This document argues this design is introducing significant sub-optimalities
+into the MLIR codebase, argues that the cost/benefit tradeoff of this design is
+a poor tradeoff, and proposes switching to a much simpler approach - eliminating
+the use of const of these IR types entirely.</p>
+<p><strong>Note:</strong> This document is only discussing things like <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">Value</span></code> and
+<code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">Operation*</span></code>. There is no proposed change for other types, e.g.
+<code class="docutils literal notranslate"><span class="pre">SmallVector</span></code> references, the immutable types like <code class="docutils literal notranslate"><span class="pre">Attribute</span></code>, etc.</p>
+<section id="background-the-llvm-const-model">
+<h2>Background: The LLVM Const Model<a class="headerlink" href="#background-the-llvm-const-model" title="此标题的永久链接">¶</a></h2>
+<p>The LLVM and MLIR data structures provide the IR data structures (like
+<code class="docutils literal notranslate"><span class="pre">mlir::Operation</span></code>s and their users) as a structured cyclic graph data structure.
+Clients of the IR typically walk up and down the graph, perform dynamic down
+casting (of various sorts) to check for patterns, and use some high-abstraction
+pattern matching and binding facilities to do their work.</p>
+<p>The basic idea of LLVM’s design is that these traversals of the IR should
+preserve the const’ness of a pointer: if you have a const pointer to an
+instruction and ask for its parent (or operand, users, etc), you should get a
+const pointer to the block containing the instruction (or value defining the
+operand, instruction using the instruction, etc). The instruction class looks
+like this:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">llvm</span><span class="w"> </span><span class="p">{</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Instruction</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">...</span><span class="w">  </span><span class="p">{</span>
+<span class="w">  </span><span class="n">BasicBlock</span><span class="w"> </span><span class="o">*</span><span class="n">Parent</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// A const instruction returns a const parent pointer.</span>
+<span class="w">  </span><span class="kr">inline</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">BasicBlock</span><span class="w"> </span><span class="o">*</span><span class="n">getParent</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">Parent</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// A non-const instruction returns a non-const parent pointer.</span>
+<span class="w">  </span><span class="kr">inline</span><span class="w">       </span><span class="n">BasicBlock</span><span class="w"> </span><span class="o">*</span><span class="n">getParent</span><span class="p">()</span><span class="w">       </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">Parent</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">...</span>
+<span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The rationale for this design is that it would be const-incorrect to return a
+non-const pointer from getParent, because you could then walk the block to find
+the instruction again and get non-const references to the same instruction - all
+without a <code class="docutils literal notranslate"><span class="pre">const_cast</span></code>.</p>
+<p>This <code class="docutils literal notranslate"><span class="pre">const</span></code> model is simple and the C++ type system generally supports it through
+code duplication of methods. That said, LLVM is actually inconsistent and buggy
+about this. Even the core classes have bugs: <code class="docutils literal notranslate"><span class="pre">llvm::Instruction::getOperand()</span></code>
+isn’t currently const correct! There are other subsystems (e.g. the
+<code class="docutils literal notranslate"><span class="pre">llvm/IR/PatternMatch.h</span></code> APIs) where you can perform a pattern match on a const
+IR object and bind a non-const IR object.</p>
+<p>LLVM is a mature technology with hundreds of people working on it. The fact that
+it still isn’t correctly following the const model it set out for strongly hints
+that one of: 1) The design is too complicated to be practical, 2) the benefits
+of the model aren’t worth the cost of the complexity, or 3) both 1 and 2,
+together in some combination.</p>
+</section>
+<section id="advantages-of-const-correctness-in-mlir">
+<h2>Advantages of Const-correctness in MLIR<a class="headerlink" href="#advantages-of-const-correctness-in-mlir" title="此标题的永久链接">¶</a></h2>
+<p>Even though this doc argues for eliminating const from MLIR, it is important to
+evaluate that as a tradeoff with the advantages the const model provides,
+allowing us to do a cost/benefit tradeoff. These are the benefits we see:</p>
+<p>The major advantage of allowing const on MLIR types is as a marker in APIs that
+indicate that the function will not modify the specified values. For example,
+the dominator APIs have a <code class="docutils literal notranslate"><span class="pre">dominates(const</span> <span class="pre">Block*,</span> <span class="pre">const</span> <span class="pre">Block*)</span></code> method, and
+the consts provide a way of indicating that the call won’t modify the blocks
+passed in - similarly predicates like <code class="docutils literal notranslate"><span class="pre">Instruction::isTerminator()</span> <span class="pre">const</span></code> do not
+modify the receiver object.</p>
+<p>It is also an advantage that MLIR follows the generally prevailing pattern of
+C++ code, which generally uses const. Consistency with the community norm is
+important.</p>
+</section>
+<section id="costs-of-const-correctness-in-mlir">
+<h2>Costs of Const-correctness in MLIR<a class="headerlink" href="#costs-of-const-correctness-in-mlir" title="此标题的永久链接">¶</a></h2>
+<p>As mentioned above, early work on MLIR adopted the same design as LLVM intended,
+allowing const-correct traversals in the APIs. Here we discuss the various costs
+of doing this by looking at some examples, listed in roughly increasing order of
+severity.</p>
+<section id="pervasively-duplicated-accessors">
+<h3>Pervasively duplicated accessors<a class="headerlink" href="#pervasively-duplicated-accessors" title="此标题的永久链接">¶</a></h3>
+<p>Just as the getParent() example above shows, achieving this const model requires
+that all of the graph traversal accessors be duplicated into const and non-const
+versions. This causes API bloat and slows compile time, but these are minor
+problems.</p>
+<p>The more significant issue is that this duplication can be so significant that
+the signal disappears in the noise, for example <code class="docutils literal notranslate"><span class="pre">mlir::Operation</span></code> ends up with
+things like this, which is twice as much API surface area just to try to satisfy
+const.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">operand_iterator</span><span class="w"> </span><span class="nf">operand_begin</span><span class="p">();</span>
+<span class="w">  </span><span class="n">operand_iterator</span><span class="w"> </span><span class="nf">operand_end</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">/// Returns an iterator on the underlying Value&#39;s (Value ).</span>
+<span class="w">  </span><span class="n">operand_range</span><span class="w"> </span><span class="nf">getOperands</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// Support const operand iteration.</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">const_operand_iterator</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">OperandIterator</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">Operation</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Value</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">const_operand_range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">llvm</span><span class="o">::</span><span class="n">iterator_range</span><span class="o">&lt;</span><span class="n">const_operand_iterator</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">const_operand_iterator</span><span class="w"> </span><span class="nf">operand_begin</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="w">  </span><span class="n">const_operand_iterator</span><span class="w"> </span><span class="nf">operand_end</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">/// Returns a const iterator on the underlying Value&#39;s (Value ).</span>
+<span class="w">  </span><span class="n">llvm</span><span class="o">::</span><span class="n">iterator_range</span><span class="o">&lt;</span><span class="n">const_operand_iterator</span><span class="o">&gt;</span><span class="w"> </span><span class="n">getOperands</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">OpOperand</span><span class="o">&gt;</span><span class="w"> </span><span class="n">getOpOperands</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">getOperandStorage</span><span class="p">().</span><span class="n">getOperands</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">MutableArrayRef</span><span class="o">&lt;</span><span class="n">OpOperand</span><span class="o">&gt;</span><span class="w"> </span><span class="n">getOpOperands</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">getOperandStorage</span><span class="p">().</span><span class="n">getOperands</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">OpOperand</span><span class="w"> </span><span class="o">&amp;</span><span class="n">getOpOperand</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">getOpOperands</span><span class="p">()[</span><span class="n">idx</span><span class="p">];</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">OpOperand</span><span class="w"> </span><span class="o">&amp;</span><span class="n">getOpOperand</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">getOpOperands</span><span class="p">()[</span><span class="n">idx</span><span class="p">];</span>
+<span class="w">  </span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="templated-accessors">
+<h3>Templated accessors<a class="headerlink" href="#templated-accessors" title="此标题的永久链接">¶</a></h3>
+<p>A related issue is that having to provide both const and non-const versions of
+accessors leads to us having to turn more code into templates than would
+otherwise be desirable. Things like <code class="docutils literal notranslate"><span class="pre">ResultIterator</span></code> and <code class="docutils literal notranslate"><span class="pre">ResultTypeIterator</span></code>
+are templates <em><em>only</em></em> because they are generic over const and non-const
+versions of types. This leads to them being defined inline in headers (instead
+of in .cpp files).</p>
+<p>Thus, our const model is leading to more code in headers and more complexity in
+the implementation.</p>
+</section>
+<section id="const-incorrect-in-practice">
+<h3>Const incorrect in practice<a class="headerlink" href="#const-incorrect-in-practice" title="此标题的永久链接">¶</a></h3>
+<p>For some things, const is more trouble than it is worth, so they never get
+updated.</p>
+<p>This means that certain API in practice don’t provide a const variant, leading
+to pervasive use of <code class="docutils literal notranslate"><span class="pre">const_cast</span></code> to drop the const qualifier. For example the
+logic in <code class="docutils literal notranslate"><span class="pre">Matchers.h</span></code> doesn’t support const pointers at all, even
+though matching and binding values themselves makes perfect sense for both const
+and non-const values. Actually fixing this would cause massive code bloat and
+complexity.</p>
+<p>Other parts of the code are just outright incorrect. For example, the operation
+cloning methods are defined on <code class="docutils literal notranslate"><span class="pre">Operation</span></code> like this:</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="n">Operation</span><span class="w"> </span><span class="o">*</span><span class="nf">clone</span><span class="p">(</span><span class="n">IRMapping</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mapper</span><span class="p">,</span><span class="w"> </span><span class="n">MLIRContext</span><span class="w"> </span><span class="o">*</span><span class="n">context</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
+<span class="n">Operation</span><span class="w"> </span><span class="o">*</span><span class="nf">clone</span><span class="p">(</span><span class="n">MLIRContext</span><span class="w"> </span><span class="o">*</span><span class="n">context</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>While it makes sense for a clone method to be <code class="docutils literal notranslate"><span class="pre">const</span></code> conceptually (the original
+operation isn’t modified) this is a violation of the model, since the returned
+operation must be mutable, and provides access to the full graph of operands as
+the original operation, violating the graph based const model we were shooting
+for.</p>
+</section>
+<section id="the-oppointer-and-constoppointer-classes">
+<h3>The <code class="docutils literal notranslate"><span class="pre">OpPointer</span></code> and <code class="docutils literal notranslate"><span class="pre">ConstOpPointer</span></code> Classes<a class="headerlink" href="#the-oppointer-and-constoppointer-classes" title="此标题的永久链接">¶</a></h3>
+<p>The “typed operation” classes for registered operations (e.g. like <code class="docutils literal notranslate"><span class="pre">DimOp</span></code> for
+the “memref.dim” operation in memref ops) contain a pointer to an operation and
+provide typed APIs for processing it.</p>
+<p>However, this is a problem for our current <code class="docutils literal notranslate"><span class="pre">const</span></code> design - <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">DimOp</span></code> means
+the pointer itself is immutable, not the pointee. The previous solution for this
+was the <code class="docutils literal notranslate"><span class="pre">OpPointer&lt;&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">ConstOpPointer&lt;&gt;</span></code> classes, which existed solely to
+provide const correctness when referring to a typed operation. Instead of
+referring to <code class="docutils literal notranslate"><span class="pre">DimOp</span></code> directly, we used <code class="docutils literal notranslate"><span class="pre">OpPointer&lt;DimOp&gt;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ConstOpPointer&lt;DimOp&gt;</span></code> to preserve this constness.</p>
+<p>While <code class="docutils literal notranslate"><span class="pre">auto</span></code> hides many instances of these <code class="docutils literal notranslate"><span class="pre">OpPointer</span></code> classes, their presence
+leads to extremely ugly APIs. It also obscures the fact that the user does not
+have a direct <code class="docutils literal notranslate"><span class="pre">DimOp</span></code> object, creating easy pitfalls with subtly incorrect
+semantics:</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// OpPointer encodes unnecessary and superfluous information into the API.</span>
+<span class="n">SmallVector</span><span class="o">&lt;</span><span class="n">OpPointer</span><span class="o">&lt;</span><span class="n">AffineForOp</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stripmineSink</span><span class="p">(</span>
+<span class="w">  </span><span class="n">OpPointer</span><span class="o">&lt;</span><span class="n">AffineForOp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">forOp</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">factor</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">OpPointer</span><span class="o">&lt;</span><span class="n">AffineForOp</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">targets</span><span class="p">);</span>
+<span class="c1">// Compared to the much cleaner and easier to read...</span>
+<span class="n">SmallVector</span><span class="o">&lt;</span><span class="n">AffineForOp</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stripmineSink</span><span class="p">(</span><span class="n">AffineForOp</span><span class="w"> </span><span class="n">forOp</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">factor</span><span class="p">,</span>
+<span class="w">                                          </span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">AffineForOp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">targets</span><span class="p">);</span>
+
+<span class="c1">// OpPointer is easy to misuse.</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="o">*</span><span class="n">dimOp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inst</span><span class="o">-&gt;</span><span class="n">dyn_cast</span><span class="o">&lt;</span><span class="n">DimOp</span><span class="o">&gt;</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// This is actually undefined behavior because dyn_cast actually returns</span>
+<span class="w">  </span><span class="c1">// OpPointer&lt;DimOp&gt;. OpPointer&lt;DimOp&gt; happily implicitly converts to DimOp *</span>
+<span class="w">  </span><span class="c1">// creating undefined behavior that will execute correctly most of the time.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It is much better to eliminate them entirely, and just pass around <code class="docutils literal notranslate"><span class="pre">DimOp</span></code>
+directly. For example, instead of:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">LogicalResult</span><span class="w"> </span><span class="nf">mlir::getIndexSet</span><span class="p">(</span><span class="n">MutableArrayRef</span><span class="o">&lt;</span><span class="n">OpPointer</span><span class="o">&lt;</span><span class="n">AffineForOp</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">forOps</span><span class="p">,</span>
+<span class="w">                                </span><span class="n">FlatAffineValueConstraints</span><span class="w"> </span><span class="o">*</span><span class="n">domain</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</pre></div>
+</div>
+<p>It is a lot nicer to just have:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">LogicalResult</span><span class="w"> </span><span class="nf">mlir::getIndexSet</span><span class="p">(</span><span class="n">MutableArrayRef</span><span class="o">&lt;</span><span class="n">AffineForOp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">forOps</span><span class="p">,</span>
+<span class="w">                                </span><span class="n">FlatAffineValueConstraints</span><span class="w"> </span><span class="o">*</span><span class="n">domain</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</pre></div>
+</div>
+<p>Particularly since all of the <code class="docutils literal notranslate"><span class="pre">FooOp</span></code> classes are already semantically a smart
+pointer to their underlying operation.</p>
+</section>
+</section>
+<section id="accepted-proposal-remove-const-from-ir-objects">
+<h2>(Accepted) Proposal: Remove <code class="docutils literal notranslate"><span class="pre">const</span></code> from IR objects<a class="headerlink" href="#accepted-proposal-remove-const-from-ir-objects" title="此标题的永久链接">¶</a></h2>
+<p>As we can see above, there is very little benefit to our const design and
+significant cost, and given that the primary purpose of an IR is to represent
+transformations of code, const is providing very little benefit.</p>
+<p>As such, we propose eliminating support for const references to IR objects in
+MLIR.  This implies the following changes to the codebase:</p>
+<ol class="simple">
+<li><p>All of the const-duplicated accessors would be eliminated, e.g.
+<code class="docutils literal notranslate"><span class="pre">Operation::getParent()</span> <span class="pre">const</span></code> would be removed. This is expected to remove
+approximately ~130 lines of code from just Operation.h alone.</p></li>
+<li><p>Const-only predicates would be changed to be non-const, e.g.
+<code class="docutils literal notranslate"><span class="pre">Operation::isTerminator()</span> <span class="pre">const</span></code> would have the const removed.</p></li>
+<li><p>Iterators and other types and functions that are templated to support
+<code class="docutils literal notranslate"><span class="pre">const</span></code> can have those template arguments removed.</p></li>
+<li><p>Types like <code class="docutils literal notranslate"><span class="pre">OpPointer</span></code> and <code class="docutils literal notranslate"><span class="pre">ConstOpPointer</span></code> that exist solely to propagate
+const can be entirely removed from the codebase.</p></li>
+<li><p>We can close bugs complaining about const incorrectness in the IR.</p></li>
+</ol>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>‘linalg’ Dialect</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../../../genindex.html" />
+  <link rel="search" title="搜索" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/DataFlowAnalysis.html" class="reference internal ">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/Toy/Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/Toy/Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/Toy/Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/Toy/Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/Toy/Ch-5.html" class="reference internal ">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/Toy/Ch-6.html" class="reference internal ">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/Toy/Ch-7.html" class="reference internal ">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/Toy/_index.html" class="reference internal ">Toy Tutorial</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../Tutorials/_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+    <li>‘linalg’ Dialect</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="linalg-dialect">
+<h1>‘linalg’ Dialect<a class="headerlink" href="#linalg-dialect" title="此标题的永久链接">¶</a></h1>
+<p>[TOC]</p>
+<section id="rationale">
+<h2>Rationale<a class="headerlink" href="#rationale" title="此标题的永久链接">¶</a></h2>
+<img width="90" align="left" alt="MLIR Codegen Flow" src="https://user-images.githubusercontent.com/10148468/73613629-c5586580-45c5-11ea-94b7-074aeea94c7b.png"><p>Linalg is designed to solve the High-level Hierarchical Optimization (HHO box)
+in MLIR and to interoperate nicely within a <em>Mixture Of Expert Compilers</em>
+environment (i.e. the <em>CGSel</em> box).</p>
+<p>The <a class="reference internal" href="../../Rationale/RationaleLinalgDialect.html"><span class="doc">Rationale Document</span></a> goes into
+significantly more design and architectural decision details.</p>
+</section>
+<section id="set-of-key-transformations-a-name-key-transformations-a">
+<h2>Set of Key Transformations<a name="key_transformations"></a><a class="headerlink" href="#set-of-key-transformations-a-name-key-transformations-a" title="此标题的永久链接">¶</a></h2>
+<p>The following key transformations have been central to driving the design of
+Linalg. They are all implemented in terms of the properties of the
+<code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> OpInterface and avoid the pitfall of relying on hardcoded
+one-off op knowledge.</p>
+<p>The textual form description of these transformations is left for future work.
+Still, it is useful to list the key transformations that are performed on the
+Linalg IR and that have influenced its design:</p>
+<ol class="simple">
+<li><p>Progressive Buffer Allocation.</p></li>
+<li><p>Parametric Tiling.</p></li>
+<li><p>Promotion to Temporary Buffer in Fast Memory.</p></li>
+<li><p>Tiled Producer-Consumer Fusion with Parametric Tile-And-Fuse.</p></li>
+<li><p>Map to Parallel and Reduction Loops and Hardware.</p></li>
+<li><p>Vectorization: Rewrite in Vector Form.</p></li>
+<li><p>Lower to Loops (Affine, Generic, and Parallel).</p></li>
+<li><p>Lower to Library Calls or Special Instructions, Intrinsics or ISA.</p></li>
+<li><p>Partially Lower to Iterations Over a Finer-Grained Linalg Op.</p></li>
+</ol>
+</section>
+<section id="high-level-description-of-linalg-ops-a-name-linalg-ops-a">
+<h2>High-Level Description of Linalg Ops<a name="linalg_ops"></a><a class="headerlink" href="#high-level-description-of-linalg-ops-a-name-linalg-ops-a" title="此标题的永久链接">¶</a></h2>
+<p>Linalg takes at least some inspiration from all previously
+<a class="reference external" href="../../Rationale/RationaleLinalgDialect.md/#prior-art">listed prior art</a>. The
+design enables the definition of <em><strong>CustomOps</strong></em> with generic properties that
+enable <a class="reference external" href="#key_transformations">key transformations</a>, including lowering to scalar
+load/store and other operations or to external library calls and intrinsics.</p>
+<p>These ops can have <em><strong>either tensor or buffer</strong></em> as both input and output
+operands. Output tensors operands serve the purpose of providing a unifying
+abstraction and give a shape to the results. Output tensors can come in 2
+flavors and are always associated with a corresponding op result:</p>
+<ol class="simple">
+<li><p>an “init tensor” output value which provides an initial value for a tensor
+that is created by iteratively updating the result (also called “destructive
+updates”). Such tensor is always materialized in some form. If enough fusion
+occurs it may end up being materialized only as a register-level SSA value.
+It is expected (but not required) that the destructive update pattern can be
+rewritten as an inplace update on buffers.</p></li>
+<li><p>a “shape-only” tensor output value whose underlying elements are not used in
+the payload computation and only serves the purpose of carrying shape
+information to lower levels of abstraction. In the future this will be
+replaced by an appropriate shape type when it is available as a builtin type
+(see the discourse discussion
+<a class="reference external" href="https://llvm.discourse.group/t/linalg-and-shapes/2421">Linalg and Shapes</a>
+for more details).</p></li>
+</ol>
+<section id="payload-carrying-ops-a-name-payload-ops-a">
+<h3>Payload-Carrying Ops<a name="payload_ops"></a><a class="headerlink" href="#payload-carrying-ops-a-name-payload-ops-a" title="此标题的永久链接">¶</a></h3>
+<p>Linalg defines a payload carrying operation that implements the
+<a class="reference external" href="https://docs.google.com/presentation/d/1P-j1GrH6Q5gLBjao0afQ-GfvcAeF-QU4GXXeSy0eJ9I/edit#slide=id.p">structured op</a>
+abstraction on tensors and buffers. This <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> operation can express
+custom operations that optionally have <em>indexing semantics</em> (by accessing the
+iteration indices using the <code class="docutils literal notranslate"><span class="pre">linalg.index</span></code> operation). The properties of
+<code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> are the result of applying the guiding principles described in
+the <a class="reference internal" href="../../Rationale/RationaleLinalgDialect.html"><span class="doc">Rationale Document</span></a>. They are
+listed next, with a brief example and discussion for each.</p>
+<section id="property-1-input-and-output-operands-define-the-iteration-space-a-name-prop1-a">
+<h4>Property 1: Input and Output Operands Define The Iteration Space<a name="prop1"></a><a class="headerlink" href="#property-1-input-and-output-operands-define-the-iteration-space-a-name-prop1-a" title="此标题的永久链接">¶</a></h4>
+<p>A <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> op fully <em>derives</em> the specification of its iteration space
+from its operands. The property enforces that a localized IR element (the op)
+<em>has</em> all the information needed to synthesize the control-flow required to
+iterate over its operands, according to their type. This notion of IR
+localization bears some resemblance to
+<a class="reference external" href="http://icps.u-strasbg.fr/~bastoul/research/papers/GVBCPST06-IJPP.pdf">URUK</a>.</p>
+<p>Consider the following fully specified <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> example. Here, the first
+operand is a <code class="docutils literal notranslate"><span class="pre">memref</span></code> of <code class="docutils literal notranslate"><span class="pre">f32</span></code> scalar elements that has an ordinary identity
+layout, and the second one is a <code class="docutils literal notranslate"><span class="pre">memref</span></code> of 4-element vectors with a 2-strided,
+1-offset layout.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// File name: example1.mlir
+#accesses = [
+  affine_map&lt;(m) -&gt; (m)&gt;,
+  affine_map&lt;(m) -&gt; (m)&gt;
+]
+
+#attrs = {
+  indexing_maps = #accesses,
+  iterator_types = [&quot;parallel&quot;]
+}
+
+func.func @example(%A: memref&lt;?xf32, strided&lt;[1]&gt;&gt;,
+              %B: memref&lt;?xvector&lt;4xf32&gt;, strided&lt;[2], offset: 1&gt;&gt;) {
+  linalg.generic #attrs
+  ins(%A: memref&lt;?xf32, strided&lt;[1]&gt;&gt;)
+  outs(%B: memref&lt;?xvector&lt;4xf32&gt;, strided&lt;[2], offset: 1&gt;&gt;) {
+  ^bb0(%a: f32, %b: vector&lt;4xf32&gt;):
+    %c = &quot;some_compute&quot;(%a, %b): (f32, vector&lt;4xf32&gt;) -&gt; (vector&lt;4xf32&gt;)
+    linalg.yield %c: vector&lt;4xf32&gt;
+  }
+  return
+}
+</pre></div>
+</div>
+<p>The property “<em>Input and Output Operands Define The Iteration Space</em>” is
+materialized by a lowering into a form that will resemble:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Run: mlir-opt example1.mlir -allow-unregistered-dialect -convert-linalg-to-loops
+// This converted representation is in the `scf` dialect.
+// It&#39;s syntax can be found here: https://mlir.llvm.org/docs/Dialects/SCFDialect/
+
+func.func @example(%arg0: memref&lt;?xf32&gt;,
+                   %arg1: memref&lt;?xvector&lt;4xf32&gt;, strided&lt;[2], offset: 1&gt;&gt;) {
+  %c0 = arith.constant 0 : index
+  %c1 = arith.constant 1 : index
+  %0 = memref.dim %arg0, %c0 : memref&lt;?xf32&gt;
+  scf.for %arg2 = %c0 to %0 step %c1 {
+    %1 = memref.load %arg0[%arg2] : memref&lt;?xf32&gt;
+    %2 = memref.load %arg1[%arg2]
+       : memref&lt;?xvector&lt;4xf32&gt;, strided&lt;[2], offset: 1&gt;&gt;
+    %3 = &quot;some_compute&quot;(%1, %2) : (f32, vector&lt;4xf32&gt;) -&gt; vector&lt;4xf32&gt;
+    memref.store %3, %arg1[%arg2]
+       : memref&lt;?xvector&lt;4xf32&gt;, strided&lt;[2], offset: 1&gt;&gt;
+  }
+  return
+}
+</pre></div>
+</div>
+<p>The property participates in simplifying analyses and transformations. For
+instance, it guarantees no out-of bounds access can occur by construction
+(assuming dynamic operand dimensions agree with each other, which is the purpose
+of the <code class="docutils literal notranslate"><span class="pre">assert</span></code> runtime check).</p>
+<p>Before lowering to loop form, loop induction variables and iterators are
+implicit (i.e. <em>not yet materialized</em>).</p>
+<p>The main implications are that:</p>
+<ol class="simple">
+<li><p>The semantics of the ops are <em>restricted to operate on structured data
+types</em>, on which we can define an iterator.</p></li>
+<li><p>This does not model arbitrary code with side-effects.</p></li>
+</ol>
+<p>We do not think these are serious limitations in practice because MLIR is all
+about mixing different levels of abstractions in the same IR. As long as Linalg
+can progressively lower to the next level of abstraction, it can also be just
+bypassed for things that do not fit.</p>
+<p>At the same time, conditioning op semantics on structured data types is a very
+promising path towards extensibility to non-dense tensors as experience with
+LIFT abstractions for
+<a class="reference external" href="https://www.lift-project.org/publications/2016/harries16sparse.pdf">sparse</a> and
+<a class="reference external" href="https://www.lift-project.org/publications/2019/pizzuti19positiondependentarrays.pdf">position-dependent arrays</a>,
+as well as <a class="reference external" href="http://tensor-compiler.org/">TACO</a>, has shown.</p>
+</section>
+<section id="property-2-reversible-mappings-between-control-and-data-structures-a-name-prop2-a">
+<h4>Property 2: Reversible Mappings Between Control and Data Structures<a name="prop2"></a><a class="headerlink" href="#property-2-reversible-mappings-between-control-and-data-structures-a-name-prop2-a" title="此标题的永久链接">¶</a></h4>
+<p>A <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> <em>defines</em> the mapping between the iteration space (i.e. the
+loops) and the data.</p>
+<p>Consider the following fully specified <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> example. Here, the first
+<code class="docutils literal notranslate"><span class="pre">memref</span></code> is a 2-strided one on both of its dimensions, and the second <code class="docutils literal notranslate"><span class="pre">memref</span></code>
+uses an identity layout.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// File name: example2.mlir
+#indexing_maps = [
+  affine_map&lt;(i, j) -&gt; (j, i)&gt;,
+  affine_map&lt;(i, j) -&gt; (j)&gt;
+]
+
+#attrs = {
+  indexing_maps = #indexing_maps,
+  iterator_types = [&quot;parallel&quot;, &quot;parallel&quot;]
+}
+
+func.func @example(%A: memref&lt;8x?xf32, strided&lt;[2, 2], offset: 0&gt;&gt;,
+              %B: memref&lt;?xvector&lt;4xf32&gt;&gt;) {
+  linalg.generic #attrs
+  ins(%A: memref&lt;8x?xf32, strided&lt;[2, 2], offset: 0&gt;&gt;)
+  outs(%B: memref&lt;?xvector&lt;4xf32&gt;&gt;) {
+  ^bb0(%a: f32, %b: vector&lt;4xf32&gt;):
+    %c = &quot;some_compute&quot;(%a, %b): (f32, vector&lt;4xf32&gt;) -&gt; (vector&lt;4xf32&gt;)
+    linalg.yield %c: vector&lt;4xf32&gt;
+  }
+  return
+}
+</pre></div>
+</div>
+<p>The property “<em>Reversible Mappings Between Control and Data Structures</em>” is
+materialized by a lowering into a form that will resemble:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Run: mlir-opt example2.mlir -allow-unregistered-dialect -convert-linalg-to-loops
+
+func.func @example(%arg0: memref&lt;8x?xf32, strided&lt;[2, 2]&gt;&gt;, %arg1: memref&lt;?xvector&lt;4xf32&gt;&gt;) {
+  %c8 = arith.constant 8 : index
+  %c0 = arith.constant 0 : index
+  %c1 = arith.constant 1 : index
+  %0 = memref.dim %arg0, %c1 : memref&lt;8x?xf32, strided&lt;[2, 2]&gt;&gt;
+  scf.for %arg2 = %c0 to %0 step %c1 {
+    scf.for %arg3 = %c0 to %c8 step %c1 {
+      %1 = memref.load %arg0[%arg3, %arg2] : memref&lt;8x?xf32, strided&lt;[2, 2]&gt;&gt;
+      %2 = memref.load %arg1[%arg3] : memref&lt;?xvector&lt;4xf32&gt;&gt;
+      %3 = &quot;some_compute&quot;(%1, %2) : (f32, vector&lt;4xf32&gt;) -&gt; vector&lt;4xf32&gt;
+      memref.store %3, %arg1[%arg3] : memref&lt;?xvector&lt;4xf32&gt;&gt;
+    }
+  }
+  return
+}
+</pre></div>
+</div>
+<p>This mapping needs to be reversible because we want to be able to go back and
+forth between the two and answer questions such as:</p>
+<ul class="simple">
+<li><p>Given a subset of the iteration space, what subset of data does it read and
+write?</p></li>
+<li><p>Given a subset of data read or written, what subset of the iteration space
+is responsible for this read or write?</p></li>
+</ul>
+<p>Answering these <code class="docutils literal notranslate"><span class="pre">2</span></code> questions is one of the main analyses that Linalg uses to
+implement transformations such as tiling, tiled producer-consumer fusion, and
+promotion to temporary buffers in fast memory.</p>
+<p>In the current implementation, <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> uses a list of
+<a class="reference external" href="https://mlir.llvm.org/docs/LangRef/#affinemap-attribute">AffineMaps</a> (see the
+<code class="docutils literal notranslate"><span class="pre">#indexing_maps</span></code> attribute in the previous examples). This is a pragmatic
+short-term solution, but in the longer term note that this property could be
+even evaluated dynamically, similarly to inspector-executor algorithms.</p>
+</section>
+<section id="property-3-the-type-of-iterators-is-defined-explicitly-a-name-prop3-a">
+<h4>Property 3: The Type Of Iterators is Defined Explicitly<a name="prop3"></a><a class="headerlink" href="#property-3-the-type-of-iterators-is-defined-explicitly-a-name-prop3-a" title="此标题的永久链接">¶</a></h4>
+<p>A <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> op fully <em>declares</em> the type of its iterators. This
+information is used in transformations.</p>
+<p>These properties are derived from established practice in the field and mirror
+the properties from Ken Kennedy’s
+<a class="reference external" href="https://www.elsevier.com/books/optimizing-compilers-for-modern-architectures/allen/978-0-08-051324-9">Optimizing Compilers for Modern Architectures</a>.
+The key idea of legality of loop transformations expressed by Kennedy is that
+<em><strong>the lexicographic order of all dependence vectors must be preserved</strong></em>.</p>
+<p>This can be better captured directly at the loop level thanks to specific
+iterator types, among which: <em>parallel</em>, <em>reduction</em>, <em>partition</em>,
+<em>permutable/monotonic</em>, <em>sequential</em>, <em>dependence distance</em>, …</p>
+<p>These types are traditionally the result of complex dependence analyses and have
+been referred to as “<em>bands</em>” in the polyhedral community (e.g. <em>parallel
+bands</em>, <em>permutable bands</em>, etc, in
+<a class="reference external" href="https://en.wikipedia.org/wiki/Integer_set_library">ISL</a> schedule tree
+parlance).</p>
+<p>Specifying the information declaratively in a <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> allows conveying
+properties that may be hard (or even impossible) to derive from lower-level
+information. These properties can be brought all the way to the moment when they
+are useful for transformations, used and then discarded.</p>
+<p>Additionally, these properties may also be viewed as a contract that the
+frontend/user guarantees and that the compiler may take advantage of. The common
+example is the use of data-dependent reduction semantics for specifying
+histogram computations. If the frontend has additional knowledge that proper
+atomic operations are available, it may be better to specify parallel semantics
+and use the special atomic in the computation region.</p>
+<p>At this time, Linalg only has an explicit use for <em>parallel</em> and <em>reduction</em>
+loops but previous experience shows that the abstraction generalizes.</p>
+</section>
+<section id="property-4-the-compute-payload-is-specified-with-a-region-a-name-prop4-a">
+<h4>Property 4: The Compute Payload is Specified With a Region<a name="prop4"></a><a class="headerlink" href="#property-4-the-compute-payload-is-specified-with-a-region-a-name-prop4-a" title="此标题的永久链接">¶</a></h4>
+<p>A <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> op has a compute payload that is fully generic thanks to the
+use of
+<a class="reference external" href="https://github.com/llvm/llvm-project/blob/58265ad42a90ae8905be6a447cb42e53529a54a0/mlir/docs/LangRef.md#regions">Regions</a>.</p>
+<p>The region takes as arguments the scalar elemental types of the tensor or buffer
+operands of the <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code>. For flexibility and ability to match library
+calls, additional special values may be passed. For instance, a <code class="docutils literal notranslate"><span class="pre">linalg.fill</span></code>
+operation takes a buffer and an additional scalar value.</p>
+<p>At this time there are no additional restrictions to the region semantics. This
+is meant to allow the exploration of various design tradeoffs at the
+intersection of regions and iterator types. In particular, the frontend is
+responsible for the semantics of iterator types to correspond to the operations
+inside the region: the region can capture buffers arbitrarily and write into
+them. If this conflicts with some parallel iterator requirement, this is
+undefined behavior.</p>
+<p>Previous examples already elaborate compute payloads with an unregistered
+function <code class="docutils literal notranslate"><span class="pre">&quot;some_compute&quot;</span></code>. The following code snippet shows what the result will
+be when using a concrete operation <code class="docutils literal notranslate"><span class="pre">addf</span></code>:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// File name: example3.mlir
+#map = affine_map&lt;(i, j) -&gt; (i, j)&gt;
+
+#attrs = {
+  indexing_maps = [#map, #map, #map],
+  iterator_types = [&quot;parallel&quot;, &quot;parallel&quot;]
+}
+
+func.func @example(%A: memref&lt;?x?xf32&gt;, %B: memref&lt;?x?xf32&gt;, %C: memref&lt;?x?xf32&gt;) {
+  linalg.generic #attrs
+  ins(%A, %B: memref&lt;?x?xf32&gt;, memref&lt;?x?xf32&gt;)
+  outs(%C: memref&lt;?x?xf32&gt;) {
+    ^bb0(%a: f32, %b: f32, %c: f32):
+      %d = arith.addf %a, %b : f32
+      linalg.yield %d : f32
+  }
+
+  return
+}
+</pre></div>
+</div>
+<p>This function basically element-wise adds up two matrices (<code class="docutils literal notranslate"><span class="pre">%A</span></code> and <code class="docutils literal notranslate"><span class="pre">%B</span></code>) and
+stores the result into another one (<code class="docutils literal notranslate"><span class="pre">%C</span></code>).</p>
+<p>The property “<em>The Compute Payload is Specified With a Region</em>” is materialized
+by a lowering into a form that will resemble:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>func.func @example(%arg0: memref&lt;?x?xf32&gt;, %arg1: memref&lt;?x?xf32&gt;, %arg2: memref&lt;?x?xf32&gt;) {
+  %c0 = arith.constant 0 : index
+  %c1 = arith.constant 1 : index
+  %0 = memref.dim %arg0, %c0 : memref&lt;?x?xf32&gt;
+  %1 = memref.dim %arg0, %c1 : memref&lt;?x?xf32&gt;
+  scf.for %arg3 = %c0 to %0 step %c1 {
+    scf.for %arg4 = %c0 to %1 step %c1 {
+      %2 = memref.load %arg0[%arg3, %arg4] : memref&lt;?x?xf32&gt;
+      %3 = memref.load %arg1[%arg3, %arg4] : memref&lt;?x?xf32&gt;
+      %4 = arith.addf %2, %3 : f32
+      memref.store %4, %arg2[%arg3, %arg4] : memref&lt;?x?xf32&gt;
+    }
+  }
+  return
+}
+</pre></div>
+</div>
+<p>In the process of lowering to loops and lower-level constructs, similar
+requirements are encountered, as are discussed in the
+<a class="reference external" href="https://llvm.discourse.group/t/introduce-std-inlined-call-op-proposal/282/2">inlined call op proposal</a>.
+We expect to be able to reuse the common lower-level infrastructure provided it
+evolves to support both region arguments and captures.</p>
+</section>
+<section id="property-5-may-map-to-an-external-library-call-a-name-prop5-a">
+<h4>Property 5: May Map To an External Library Call<a name="prop5"></a><a class="headerlink" href="#property-5-may-map-to-an-external-library-call-a-name-prop5-a" title="此标题的永久链接">¶</a></h4>
+<p>A <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> op may map to an external library call by specifying a
+<code class="docutils literal notranslate"><span class="pre">SymbolAttr</span></code>. At this level of abstraction, the important glue is the ability to
+perform transformations that preserve the structure necessary to <em><strong>call the
+external library after different transformations have been applied</strong></em>.</p>
+<p>This involves considerations related to preservation of op semantics and
+integration at the ABI level. Regardless of whether one wants to use external
+library calls or a custom ISA, the problem for codegen is similar: preservation
+of a fixed granularity.</p>
+<p>Consider the following example that adds an additional attribute
+<code class="docutils literal notranslate"><span class="pre">library_call=&quot;pointwise_add&quot;</span></code> that specifies the name of an external library
+call we intend to use:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// File name: example4.mlir
+#indexing_maps = [
+  affine_map&lt;(i, j) -&gt; (i, j)&gt;,
+  affine_map&lt;(i, j) -&gt; (i, j)&gt;,
+  affine_map&lt;(i, j) -&gt; (i, j)&gt;
+]
+
+#attrs = {
+  indexing_maps = #indexing_maps,
+  iterator_types = [&quot;parallel&quot;, &quot;parallel&quot;],
+  library_call = &quot;pointwise_add&quot;
+}
+
+func.func @example(%A: memref&lt;?x?xf32&gt;, %B: memref&lt;?x?xf32&gt;, %C: memref&lt;?x?xf32&gt;) {
+  linalg.generic #attrs
+  ins(%A, %B: memref&lt;?x?xf32&gt;, memref&lt;?x?xf32&gt;)
+  outs(%C: memref&lt;?x?xf32&gt;) {
+  ^bb0(%a: f32, %b: f32, %c: f32):
+    %d = arith.addf %a, %b : f32
+    linalg.yield %d : f32
+  }
+  return
+}
+</pre></div>
+</div>
+<p>The property “<em>Map To an External Library Call</em>” is materialized by a lowering
+into a form that will resemble:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Run: mlir-opt example4.mlir -convert-linalg-to-std
+
+func.func @example(%arg0: memref&lt;?x?xf32&gt;, %arg1: memref&lt;?x?xf32&gt;, %arg2: memref&lt;?x?xf32&gt;) {
+  %0 = memref.cast %arg0 : memref&lt;?x?xf32&gt; to memref&lt;?x?xf32, strided&lt;[?, ?], offset: ?&gt;&gt;
+  %1 = memref.cast %arg1 : memref&lt;?x?xf32&gt; to memref&lt;?x?xf32, strided&lt;[?, ?], offset: ?&gt;&gt;
+  %2 = memref.cast %arg2 : memref&lt;?x?xf32&gt; to memref&lt;?x?xf32, strided&lt;[?, ?], offset: ?&gt;&gt;
+  call @pointwise_add(%0, %1, %2) : (memref&lt;?x?xf32, strided&lt;[?, ?], offset: ?&gt;&gt;,
+    memref&lt;?x?xf32, strided&lt;[?, ?], offset: ?&gt;&gt;, memref&lt;?x?xf32, strided&lt;[?, ?], offset: ?&gt;&gt;) -&gt; ()
+  return
+}
+func.func @pointwise_add(memref&lt;?x?xf32, strided&lt;[?, ?], offset: ?&gt;&gt;,
+                         memref&lt;?x?xf32, strided&lt;[?, ?], offset: ?&gt;&gt;,
+                         memref&lt;?x?xf32, strided&lt;[?, ?], offset: ?&gt;&gt;) attributes {llvm.emit_c_interface}
+</pre></div>
+</div>
+<p>Which, after lowering to LLVM resembles:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Run: mlir-opt example4.mlir -convert-linalg-to-std | mlir-opt -convert-func-to-llvm
+// Some generated code are omitted here.
+func.func @example(%arg0: !llvm&lt;&quot;float*&quot;&gt;, ...) {
+  ...
+  llvm.call @pointwise_add(...) : (!llvm&lt;&quot;float*&quot;&gt;, ...) -&gt; ()
+  return
+}
+
+llvm.func @pointwise_add(%arg0: !llvm&lt;&quot;float*&quot;&gt;, ...) attributes {llvm.emit_c_interface} {
+  ...
+  llvm.call @_mlir_ciface_pointwise_add(%9, %19, %29) : (!llvm.&quot;{ float*, float*, i64, [2 x i64], [2 x i64] }*&quot;&gt;, !llvm&lt;&quot;{ f32*, f32*, i64, [2 x i64], [2 x i64] }*&quot;&gt;, !llvm&lt;&quot;{ float*, float*, i64, [2 x i64], [2 x i64] }
+*&quot;&gt;) -&gt; ()
+  llvm.return
+}
+llvm.func @_mlir_ciface_pointwise_add(!llvm.&quot;{ float*, float*, i64, [2 x i64], [2 x i64] }*&quot;&gt;, !llvm&lt;&quot;{ f32*, f32*, i64, [2 x i64], [2 x i64] }*&quot;&gt;, !llvm&lt;&quot;{ f32*, f32*, i64, [2 x i64], [2 x i64] }*&quot;&gt;) attributes {llvm.emit_c_interface}
+</pre></div>
+</div>
+<section id="convention-for-external-library-interoperability">
+<h5>Convention For External Library Interoperability<a class="headerlink" href="#convention-for-external-library-interoperability" title="此标题的永久链接">¶</a></h5>
+<p>The <code class="docutils literal notranslate"><span class="pre">linalg</span></code> dialect adopts a convention that is similar to <code class="docutils literal notranslate"><span class="pre">BLAS</span></code> when
+offloading operations to fast library implementations: pass a non-owning pointer
+to input and output data with additional metadata. This convention is also found
+in libraries such as <code class="docutils literal notranslate"><span class="pre">MKL</span></code>, <code class="docutils literal notranslate"><span class="pre">OpenBLAS</span></code>, <code class="docutils literal notranslate"><span class="pre">BLIS</span></code>, <code class="docutils literal notranslate"><span class="pre">cuBLAS</span></code>, <code class="docutils literal notranslate"><span class="pre">cuDNN</span></code>, etc.. and
+more generally at interface points across language boundaries (e.g. C++ /
+Python).</p>
+<p>Generally, <code class="docutils literal notranslate"><span class="pre">linalg</span></code> passes non-owning pointers to View data structures to
+pre-compiled library calls linked externally.</p>
+<p>There is an
+<a class="reference external" href="https://llvm.discourse.group/t/lowering-optional-attributes-in-linalg-structuredops-to-standard-dialect/333/3">ongoing discussion</a>
+on the topic of extending interoperability in the presence of key attributes.</p>
+</section>
+</section>
+<section id="property-6-perfectly-nested-writes-to-the-whole-output-operands-a-name-prop6-a">
+<h4>Property 6: Perfectly Nested Writes To The Whole Output Operands<a name="prop6"></a><a class="headerlink" href="#property-6-perfectly-nested-writes-to-the-whole-output-operands-a-name-prop6-a" title="此标题的永久链接">¶</a></h4>
+<p>Perfectly nested loops form a particularly important class of structure that
+enables key loop transformations such as tiling and mapping to library calls.
+Unfortunately, this type of structure is easily broken by transformations such
+as partial loop fusion. Tiling and mapping to library calls become more
+challenging, or even infeasible. Linalg ops adopt perfect-nestedness as a
+first-class property: the structure cannot be broken and is transported in the
+IR by construction.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> op represents a perfectly nested loop nest that writes the
+entire memory region. This is a structural constraint across regions and loops
+that has proven to be key in simplifying transformations.</p>
+<p>One particular point to mention is that converting imperfectly nested code into
+perfectly nested code can often be done with enough loop distribution and
+embedding of conditionals down to the innermost loop level.</p>
+<p>Previous experience with Tensor Comprehensions gave us the intuition that
+forcing innermost control-flow nesting is a lot like writing data-parallel code
+with arrays of boolean values and predication. This type of trick has also been
+used before in polyhedral compilers to convert non-affine control into affine
+compute dependencies.</p>
+<p>While it may be possible to automate such rewrites from generic IR,
+<code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> just forces the semantics for now.</p>
+<p>The key implication is that this conversion to deep predication needs to be
+undone once we are done with Linalg transformations. After iterators and
+induction variables are materialized (i.e. after lowering out of
+<code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> occurred), the overall performance will be greatly influenced
+by the quality of canonicalizations, foldings and <em>Loop Independent Code Motion</em>
+(LICM).</p>
+<p>In the grander scheme, the reliance on late LICM was deemed a necessary risk.</p>
+</section>
+<section id="putting-it-together-a-name-summary-a">
+<h4>Putting it Together<a name="summary"></a><a class="headerlink" href="#putting-it-together-a-name-summary-a" title="此标题的永久链接">¶</a></h4>
+<p>As it stands, the six properties above define the semantics of a
+<code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> op. It is an open question whether all of these semantics are
+strictly necessary in practice and whether some should or could be derived
+automatically while still maintaining the
+<a class="reference external" href="../../Rationale/RationaleLinalgDialect.md/#core-guiding-principlesa-nameguiding_principlesa">core guiding principles</a>.</p>
+<p>For the time being, we have settled on the combination of these properties
+because of empirical evidence building and working on multiple high-level
+compilers. As we lay those down and engage more with the community, we expect
+multiple rounds of discussions and design changes to the original architecture.</p>
+</section>
+</section>
+<section id="data-representation-views-a-name-views-a">
+<h3>Data Representation: Views<a name="views"></a><a class="headerlink" href="#data-representation-views-a-name-views-a" title="此标题的永久链接">¶</a></h3>
+<p>The current implementation uses the
+<a class="reference external" href="https://groups.google.com/a/tensorflow.org/forum/#%21topic/mlir/MaL8m2nXuio">Strided MemRef (a.k.a View)</a>
+abstraction. The name <em>View</em> is used interchangeably in <code class="docutils literal notranslate"><span class="pre">linalg</span></code> to signify
+<em>Strided MemRef</em>. In the future we expect to use other structured data types and
+support ragged, mixed-sparse and other types. We expect to draw on the
+experience from existing LIFT abstractions for
+<a class="reference external" href="https://www.lift-project.org/publications/2016/harries16sparse.pdf">sparse</a> and
+<a class="reference external" href="https://www.lift-project.org/publications/2019/pizzuti19positiondependentarrays.pdf">position-dependent arrays</a>.</p>
+</section>
+<section id="metadata-ops-a-name-metadata-ops-a">
+<h3>Metadata Ops<a name="metadata_ops"></a><a class="headerlink" href="#metadata-ops-a-name-metadata-ops-a" title="此标题的永久链接">¶</a></h3>
+<p>A set of ops that manipulate metadata but do not move memory. These ops take
+<code class="docutils literal notranslate"><span class="pre">view</span></code> operands + extra attributes and return new <code class="docutils literal notranslate"><span class="pre">view</span></code>s. The returned <code class="docutils literal notranslate"><span class="pre">view</span></code>s
+generally alias the operand <code class="docutils literal notranslate"><span class="pre">view</span></code>. At the moment the existing ops are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>* `memref.view`,
+* `memref.subview`,
+* `memref.transpose`.
+* `linalg.slice`,
+* `linalg.reshape`,
+</pre></div>
+</div>
+<p>Future ops are added on a per-need basis but should include:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>* `linalg.tile`,
+* `linalg.intersection`,
+* `linalg.convex_union`,
+* `linalg.difference` (would need to work on a list of views).
+</pre></div>
+</div>
+<p>These additional operations correspond to abstractions that have been known to
+work in the field of large-scale distributed stencil computations.</p>
+<p>In a longer-term future, the abstractions from
+<a class="reference external" href="https://legion.stanford.edu/overview/">Legion data-centric programming model</a>
+seem generally appealing.</p>
+</section>
+<section id="named-payload-carrying-ops-a-name-named-ops-a">
+<h3>Named Payload-Carrying Ops<a name="named_ops"></a><a class="headerlink" href="#named-payload-carrying-ops-a-name-named-ops-a" title="此标题的永久链接">¶</a></h3>
+<p>Additionally, <code class="docutils literal notranslate"><span class="pre">linalg</span></code> provides a small subset of commonly named operations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>* `linalg.fill`,
+* `linalg.dot`,
+* `linalg.matmul`,
+* `linalg.conv`.
+</pre></div>
+</div>
+<p>These named operations adhere to the <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> op interface. Work is in
+progress to define declarative mechanisms to automatically generate named ops
+from a description in terms of only the generic op interface.</p>
+<p>This is the main reason there are only a small number of ops today: we expect
+them to be auto-generated from Tablegen soon.</p>
+</section>
+<section id="named-payload-ops-specification">
+<h3>Named Payload Ops Specification<a class="headerlink" href="#named-payload-ops-specification" title="此标题的永久链接">¶</a></h3>
+<p>Linalg provides a declarative specification and a generation tool
+(<code class="docutils literal notranslate"><span class="pre">mlir-linalg-ods-gen</span></code>) to automatically produce named ops from a notation that
+is inspired by Einstein notation.</p>
+<p>The syntax and semantics used in <code class="docutils literal notranslate"><span class="pre">mlir-linalg-ods-gen</span></code> are very much in flight
+and borrow from Tensor Comprehensions (TC) but differ in a few dimensions, to
+better adapt to Linalg:</p>
+<ol class="simple">
+<li><p>The input and output tensor parameters are specified as <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">:</span> <span class="pre">type(symbolic-affine-expression-list)</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">:</span> <span class="pre">f32(M,</span> <span class="pre">N</span> <span class="pre">+</span> <span class="pre">M)</span></code>) and each
+new symbol is discovered eagerly. TC on the other hand does not allow
+general symbolic affine expressions.</p></li>
+<li><p>The output shapes are specified explicitly, in TC they are always derived
+from the input shapes.</p></li>
+<li><p>The operations used to specify computations use EDSC intrinsics so that they
+can easily be parsed and emitted into a simple region builder without
+resorting to more general MLIR parsing.</p></li>
+<li><p>Reduction dimensions are specified with angle bracket notation on the
+operation they apply to (e.g. <code class="docutils literal notranslate"><span class="pre">std_add&lt;k&gt;</span></code> specifies that <code class="docutils literal notranslate"><span class="pre">k</span></code> is a reduction
+dimension). In TC, the reduction dimensions are inferred. If one of the
+operand is not used in any expressions, it will be considered a shape-only
+operand, and the result of the indexing_map will be reduction dimensions.</p></li>
+<li><p>The parallel and reduction dimension are ordered by the textual program
+order. For instance, in the comprehension <code class="docutils literal notranslate"><span class="pre">O(i,</span> <span class="pre">j)</span> <span class="pre">=</span> <span class="pre">std_add&lt;k,</span> <span class="pre">l&gt;(...)</span></code>,
+<code class="docutils literal notranslate"><span class="pre">i</span></code> (resp. <code class="docutils literal notranslate"><span class="pre">j</span></code>) is a parallel iterator encoded by affine dimension of
+position <code class="docutils literal notranslate"><span class="pre">0</span></code> (resp. <code class="docutils literal notranslate"><span class="pre">1</span></code>); <code class="docutils literal notranslate"><span class="pre">k</span></code> (resp. <code class="docutils literal notranslate"><span class="pre">l</span></code>) is a reduction iterator encoded by
+an affine dimension of position <code class="docutils literal notranslate"><span class="pre">2</span></code> (resp. <code class="docutils literal notranslate"><span class="pre">3</span></code>).</p></li>
+<li><p>A list of attributes can be defined for the op with the format of <code class="docutils literal notranslate"><span class="pre">attr(</span> <span class="pre">strides:</span> <span class="pre">2xi32)</span></code> and referenced in comprehension like <code class="docutils literal notranslate"><span class="pre">strides[0]</span></code>. These
+attribute uses will be parsed as affine symbols to generate op definition
+and implementation. For a concrete op instance, the runtime constant values
+from the attributes will be used to replace the affine symbols and simplify
+the indexing maps.</p></li>
+</ol>
+<p>These decisions and syntax are subject to evolution and change. In particular,
+op-specific attributes, dynamic ranks, some form of templating, shape
+calculation function specification, etc. may be added in the future.</p>
+<p>At this time, the following restrictions are imposed on the syntax and
+semantics:</p>
+<ol class="simple">
+<li><p>Each def may only contain a single comprehension but each comprehension may
+perform multiple updates.</p></li>
+<li><p>Each tensor may only be used with a single indexing expression.</p></li>
+</ol>
+<p>A <code class="docutils literal notranslate"><span class="pre">&quot;&quot;&quot;</span></code>-wrapped doc string can be attached to the named op. It should contain a
+oneliner for summary first, followed by lengthy description.</p>
+<p>The following specification may be used to define a named <code class="docutils literal notranslate"><span class="pre">batchmatmul</span></code> op:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">batchmatmul</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="n">f32</span><span class="p">(</span><span class="n">Batch</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">K</span><span class="p">),</span> <span class="n">B</span><span class="p">:</span> <span class="n">f32</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">C</span><span class="p">:</span> <span class="n">f32</span><span class="p">(</span><span class="n">Batch</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+<span class="sd">&quot;&quot;&quot;Batch matrix-multiply operation.</span>
+
+<span class="sd">This operation performs batch matrix-multiply over ...</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="p">{</span>
+  <span class="n">C</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="n">std_addf</span><span class="o">&lt;</span><span class="n">k</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std_mulf</span><span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">k</span><span class="p">),</span> <span class="n">B</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">)));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">mlir-linalg-ods-gen</span> <span class="pre">-gen-ods-decl=1</span></code> is called, the following ODS is
+produced:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">batchmatmulOp</span> <span class="p">:</span> <span class="n">LinalgNamedStructured_Op</span><span class="o">&lt;</span><span class="s2">&quot;batchmatmul&quot;</span><span class="p">,</span> <span class="p">[</span>
+  <span class="n">NInputs</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">NOutputs</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">NamedStructuredOpTrait</span><span class="p">]</span><span class="o">&gt;</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">mlir-linalg-ods-gen</span> <span class="pre">-gen-impl=1</span></code> is called, the following C++ is produced:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">SmallVector</span><span class="o">&lt;</span><span class="n">StringRef</span><span class="p">,</span> <span class="mi">8</span><span class="o">&gt;&gt;</span> <span class="n">batchmatmul</span><span class="p">::</span><span class="n">referenceIterators</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">SmallVector</span><span class="o">&lt;</span><span class="n">StringRef</span><span class="p">,</span> <span class="mi">8</span><span class="o">&gt;</span><span class="p">{</span>
+    <span class="n">getParallelIteratorTypeName</span><span class="p">(),</span>
+    <span class="n">getParallelIteratorTypeName</span><span class="p">(),</span>
+    <span class="n">getParallelIteratorTypeName</span><span class="p">(),</span>
+    <span class="n">getReductionIteratorTypeName</span><span class="p">()</span> <span class="p">};</span>
+<span class="p">}</span>
+<span class="n">std</span><span class="p">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">SmallVector</span><span class="o">&lt;</span><span class="n">AffineMap</span><span class="p">,</span> <span class="mi">8</span><span class="o">&gt;&gt;</span> <span class="n">batchmatmul</span><span class="p">::</span><span class="n">referenceIndexingMaps</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">MLIRContext</span> <span class="o">*</span><span class="n">context</span> <span class="o">=</span> <span class="n">getContext</span><span class="p">();</span>
+  <span class="n">AffineExpr</span> <span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">;</span>
+  <span class="n">bindDims</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">);</span>
+  <span class="k">return</span> <span class="n">SmallVector</span><span class="o">&lt;</span><span class="n">AffineMap</span><span class="p">,</span> <span class="mi">8</span><span class="o">&gt;</span><span class="p">{</span>
+      <span class="n">AffineMap</span><span class="p">::</span><span class="n">get</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d3</span><span class="p">}),</span>
+      <span class="n">AffineMap</span><span class="p">::</span><span class="n">get</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{</span><span class="n">d3</span><span class="p">,</span> <span class="n">d2</span><span class="p">}),</span>
+      <span class="n">AffineMap</span><span class="p">::</span><span class="n">get</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">})</span> <span class="p">};</span>
+<span class="p">}</span>
+<span class="n">void</span> <span class="n">batchmatmul</span><span class="p">::</span><span class="n">regionBuilder</span><span class="p">(</span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">BlockArgument</span><span class="o">&gt;</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">using</span> <span class="n">namespace</span> <span class="n">edsc</span><span class="p">;</span>
+  <span class="n">using</span> <span class="n">namespace</span> <span class="n">intrinsics</span><span class="p">;</span>
+  <span class="n">Value</span> <span class="n">_0</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">_1</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">_2</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+  <span class="n">Value</span> <span class="n">_4</span> <span class="o">=</span> <span class="n">std_mulf</span><span class="p">(</span><span class="n">_0</span><span class="p">,</span> <span class="n">_1</span><span class="p">);</span>
+  <span class="n">Value</span> <span class="n">_5</span> <span class="o">=</span> <span class="n">std_addf</span><span class="p">(</span><span class="n">_2</span><span class="p">,</span> <span class="n">_4</span><span class="p">);</span>
+  <span class="p">(</span><span class="n">linalg_yield</span><span class="p">(</span><span class="n">ValueRange</span><span class="p">{</span> <span class="n">_5</span> <span class="p">}));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="yaml-based-named-structured-ops-a-name-yaml-gen-a">
+<h3>YAML Based Named Structured Ops<a name="yaml-gen"></a><a class="headerlink" href="#yaml-based-named-structured-ops-a-name-yaml-gen-a" title="此标题的永久链接">¶</a></h3>
+<p>Linalg provides a declarative generation tool (<code class="docutils literal notranslate"><span class="pre">mlir-linalg-ods-yaml-gen</span></code>) to
+automatically produce named ops from a YAML-based op description format intended
+to capture the structure of the named ops. The YAML-based op descriptions are
+generated from a higher level <a class="reference internal" href="OpDSL.html"><span class="doc">DSL</span></a> and are not meant to be edited
+directly.</p>
+<p>This facility is currently in flight and is intended to subsume the above when
+ready. See the C++ class to YAML mapping traits in
+<code class="docutils literal notranslate"><span class="pre">mlir-mlinalg-ods-yaml-gen.cpp</span></code> as the source of truth for the schema.</p>
+<p>Most of the above documentation roughly applies to this path and will be ported
+as migration continues.</p>
+</section>
+</section>
+<section id="open-issues-and-design-alternatives-a-name-open-issues-a">
+<h2>Open Issues and Design Alternatives<a name="open_issues"></a><a class="headerlink" href="#open-issues-and-design-alternatives-a-name-open-issues-a" title="此标题的永久链接">¶</a></h2>
+<p>Multiple open issues and design alternatives are in flight and it is time to lay
+them out for the community to discuss and pick apart:</p>
+<ol class="simple">
+<li><p>Should <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> support nesting?</p></li>
+<li><p>Should <code class="docutils literal notranslate"><span class="pre">linalg.generic</span></code> regions take views or only scalars?</p></li>
+<li><p>Should we try to solve automatic differentiation at this level of
+abstraction?</p></li>
+<li><p>Are all the six properties really necessary?</p></li>
+<li><p>Is this relying too much on declarative specification and would we be better
+off relying more on analyses?</p></li>
+<li><p>Is this general enough for the community’s needs? If not how should this be
+extended, if at all? …</p></li>
+</ol>
+<p>These key questions (and much more) should be really thought of in the general
+context of MLIR in which different levels of IR interoperate seamlessly. In
+practice, it is not necessary (or beneficial) to try and solve all problems in
+the same IR.</p>
+</section>
+<section id="operations">
+<h2>Operations<a class="headerlink" href="#operations" title="此标题的永久链接">¶</a></h2>
+<p>[include “Dialects/LinalgOps.md”]</p>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

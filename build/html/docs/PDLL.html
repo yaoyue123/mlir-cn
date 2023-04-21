@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>PDLL - PDL Language</title>
+    
+          <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../_static/theme-vendors.js"></script> -->
+      <script src="../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../genindex.html" />
+  <link rel="search" title="搜索" href="../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/DataFlowAnalysis.html" class="reference internal ">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-5.html" class="reference internal ">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-6.html" class="reference internal ">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-7.html" class="reference internal ">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/_index.html" class="reference internal ">Toy Tutorial</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+    
+    <li>PDLL - PDL Language</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="pdll-pdl-language">
+<h1>PDLL - PDL Language<a class="headerlink" href="#pdll-pdl-language" title="此标题的永久链接">¶</a></h1>
+<p>This document details the PDL Language (PDLL), a custom frontend language for
+writing pattern rewrites targeting MLIR.</p>
+<p>Note: This document assumes a familiarity with MLIR concepts; more specifically
+the concepts detailed within the
+<a class="reference external" href="https://mlir.llvm.org/docs/PatternRewriter/">MLIR Pattern Rewriting</a> and
+<a class="reference external" href="https://mlir.llvm.org/docs/OpDefinitions/">Operation Definition Specification (ODS)</a>
+documentation.</p>
+<p>[TOC]</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="此标题的永久链接">¶</a></h2>
+<p>Pattern matching is an extremely important component within MLIR, as it
+encompasses many different facets of the compiler. From canonicalization, to
+optimization, to conversion; every MLIR based compiler will heavily rely on the
+pattern matching infrastructure in some capacity.</p>
+<p>The PDL Language (PDLL) provides a declarative pattern language designed from
+the ground up for representing MLIR pattern rewrites. PDLL is designed to
+natively support writing matchers on all of MLIRs constructs via an intuitive
+interface that may be used for both ahead-of-time (AOT) and just-in-time (JIT)
+pattern compilation.</p>
+</section>
+<section id="rationale">
+<h2>Rationale<a class="headerlink" href="#rationale" title="此标题的永久链接">¶</a></h2>
+<p>This section provides details on various design decisions, their rationale, and
+alternatives considered when designing PDLL. Given the nature of software
+development, this section may include references to areas of the MLIR compiler
+that no longer exist.</p>
+<section id="why-build-a-new-language-instead-of-improving-tablegen-drr">
+<h3>Why build a new language instead of improving TableGen DRR?<a class="headerlink" href="#why-build-a-new-language-instead-of-improving-tablegen-drr" title="此标题的永久链接">¶</a></h3>
+<p>Note: This section assumes familiarity with
+<a class="reference external" href="https://mlir.llvm.org/docs/DeclarativeRewrites/">TDRR</a>, please refer the
+relevant documentation before continuing.</p>
+<p>Tablegen DRR (TDRR), i.e.
+<a class="reference external" href="https://mlir.llvm.org/docs/DeclarativeRewrites/">Table-driven Declarative Rewrite Rules</a>,
+is a declarative DSL for defining MLIR pattern rewrites within the
+<a class="reference external" href="https://llvm.org/docs/TableGen/index.html">TableGen</a> language. This
+infrastructure is currently the main way in which patterns may be defined
+declaratively within MLIR. TDRR utilizes TableGen’s <code class="docutils literal notranslate"><span class="pre">dag</span></code> support to enable
+defining MLIR patterns that fit nicely within a DAG structure; in a similar way
+in which tablegen has been used to defined patterns for LLVM’s backend
+infrastructure (SelectionDAG/Global Isel/etc.). Unfortunately however, the
+TableGen language is not as amenable to the structure of MLIR patterns as it has
+been for LLVM.</p>
+<p>The issues with TDRR largely stem from the use of TableGen as the host language
+for the DSL. These issues have risen from a mismatch in the structure of
+TableGen compared to the structure of MLIR, and from TableGen having different
+motivational goals than MLIR. A majority (or all depending on how stubborn you
+are) of the issues that we’ve come across with TDRR have been addressable in
+some form; the sticking point here is that the solutions to these problems have
+often been more “creative” than we’d like. This is a problem, and why we decided
+not to invest a larger effort into improving TDRR; users generally don’t want
+“creative” APIs, they want something that is intuitive to read/write.</p>
+<p>To highlight some of these issues, below we will take a tour through some of the
+problems that have arisen, and how we “fixed” them.</p>
+<section id="multi-result-operations">
+<h4>Multi-result operations<a class="headerlink" href="#multi-result-operations" title="此标题的永久链接">¶</a></h4>
+<p>MLIR natively supports a variable number of operation results. For the DAG based
+structure of TDRR, any form of multiple results (operations in this instance)
+creates a problem. This is because the DAG wants a single root node, and does
+not have nice facilities for indexing or naming the multiple results. Let’s take
+a look at a quick example to see how this manifests:</p>
+<div class="highlight-tablegen notranslate"><div class="highlight"><pre><span></span>// Suppose we have a three result operation, defined as seen below.
+def ThreeResultOp : Op&lt;&quot;three_result_op&quot;&gt; {
+    let arguments = (ins ...);
+
+    let results = (outs
+      AnyTensor:$output1,
+      AnyTensor:$output2,
+      AnyTensor:$output3
+    );
+}
+
+// To bind the results of `ThreeResultOp` in a TDRR pattern, we bind all results
+// to a single name and use a special naming convention: `__N`, where `N` is the
+// N-th result.
+def : Pattern&lt;(ThreeResultOp:$results ...),
+              [(... $results__0), ..., (... $results__2), ...]&gt;;
+</pre></div>
+</div>
+<p>In TDRR, we “solved” the problem of accessing multiple results, but this isn’t a
+very intuitive interface for users. Magical naming conventions obfuscate the
+code and can easily introduce bugs and other errors. There are various things
+that we could try to improve this situation, but there is a fundamental limit to
+what we can do given the limits of the TableGen dag structure. In PDLL, however,
+we have the freedom and flexibility to provide a proper interface into
+operations, regardless of their structure:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Import our definition of `ThreeResultOp`.
+#include &quot;ops.td&quot;
+
+Pattern {
+  ...
+
+  // In PDLL, we can directly reference the results of an operation variable.
+  // This provides a closer mental model to what the user expects.
+  let threeResultOp = op&lt;my_dialect.three_result_op&gt;;
+  let userOp = op&lt;my_dialect.user_op&gt;(threeResultOp.output1, ..., threeResultOp.output3);
+
+  ...
+}
+</pre></div>
+</div>
+</section>
+<section id="constraints">
+<h4>Constraints<a class="headerlink" href="#constraints" title="此标题的永久链接">¶</a></h4>
+<p>In TDRR, the match dag defines the general structure of the input IR to match.
+Any non-structural/non-type constraints on the input are generally relegated to
+a list of constraints specified after the rewrite dag. For very simple patterns
+this may suffice, but with larger patterns it becomes quite problematic as it
+separates the constraint from the entity it constrains and negatively impacts
+the readability of the pattern. As an example, let’s look at a simple pattern
+that adds additional constraints to its inputs:</p>
+<div class="highlight-tablegen notranslate"><div class="highlight"><pre><span></span>// Suppose we have a two result operation, defined as seen below.
+def TwoResultOp : Op&lt;&quot;two_result_op&quot;&gt; {
+    let arguments = (ins ...);
+
+    let results = (outs
+      AnyTensor:$output1,
+      AnyTensor:$output2
+    );
+}
+
+// A simple constraint to check if a value is use_empty.
+def HasNoUseOf: Constraint&lt;CPred&lt;&quot;$_self.use_empty()&quot;&gt;, &quot;has no use&quot;&gt;;
+
+// Check if two values have a ShapedType with the same element type.
+def HasSameElementType : Constraint&lt;
+    CPred&lt;&quot;$0.getType().cast&lt;ShapedType&gt;().getElementType() == &quot;
+          &quot;$1.getType().cast&lt;ShapedType&gt;().getElementType()&quot;&gt;,
+    &quot;values have same element type&quot;&gt;;
+
+def : Pattern&lt;(TwoResultOp:$results $input),
+              [(...), (...)],
+              [(HasNoUseOf:$results__1),
+               (HasSameElementType $results__0, $input)]&gt;;
+</pre></div>
+</div>
+<p>Above, when observing the constraints we need to search through the input dag
+for the inputs (also keeping in mind the magic naming convention for multiple
+results). For this simple pattern it may be just a few lines above, but complex
+patterns often grow to 10s of lines long. In PDLL, these constraints can be
+applied directly on or next to the entities they apply to:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// The same constraints that we defined above:
+Constraint HasNoUseOf(value: Value) [{
+  return success(value.use_empty());
+}];
+Constraint HasSameElementType(value1: Value, value2: Value) [{
+  return success(value1.getType().cast&lt;ShapedType&gt;().getElementType() ==
+                 value2.getType().cast&lt;ShapedType&gt;().getElementType());
+}];
+
+Pattern {
+  // In PDLL, we can apply the constraint as early (or as late) as we want. This
+  // enables better structuring of the matcher code, and improves the
+  // readability/maintainability of the pattern.
+  let op = op&lt;my_dialect.two_result_op&gt;(input: Value);
+  HasNoUseOf(op.output2);
+  HasSameElementType(input, op.output2);
+
+  // ...
+}
+</pre></div>
+</div>
+</section>
+<section id="replacing-multiple-operations">
+<h4>Replacing Multiple Operations<a class="headerlink" href="#replacing-multiple-operations" title="此标题的永久链接">¶</a></h4>
+<p>Often times a pattern will transform N number of input operations into N number
+of result operations. In PDLL, replacing multiple operations is as simple as
+adding two <a class="reference external" href="#replace-statement"><code class="docutils literal notranslate"><span class="pre">replace</span></code> statements</a>. In TDRR, the situation is
+a bit more nuanced. Given the single root structure of the TableGen dag,
+replacing a non-root operation is not nicely supported. It currently isn’t
+natively possible, and instead requires using multiple patterns. We could
+potentially add another special rewrite directive, or extend <code class="docutils literal notranslate"><span class="pre">replaceWithValue</span></code>,
+but this simply highlights how even a basic IR transformation is muddled by the
+complexity of the host language.</p>
+</section>
+</section>
+<section id="why-not-build-a-dsl-in-x">
+<h3>Why not build a DSL in “X”?<a class="headerlink" href="#why-not-build-a-dsl-in-x" title="此标题的永久链接">¶</a></h3>
+<p>Yes! Well yes and no. To understand why, we have to consider what types of users
+we are trying to serve and what constraints we enforce upon them. The goal of
+PDLL is to provide a default and effective pattern language for MLIR that all
+users of MLIR can interact with immediately, regardless of their host
+environment. This language is available with no extra dependencies and comes
+“free” along with MLIR. If we were to use an existing host language to build our
+new DSL, we would need to make compromises along with it depending on the
+language. For some, there are questions of how to enforce matching environments
+(python2 or python3?, which version?), performance considerations, integration,
+etc. As an LLVM project, this could also mean enforcing a new language
+dependency on the users of MLIR (many of which may not want/need such a
+dependency otherwise). Another issue that comes along with any DSL that is
+embeded in another language: mitigating the user impedance mismatch between what
+the user expects from the host language and what our “backend” supports. For
+example, the PDL IR abstraction only contains limited support for control flow.
+If we were to build a DSL in python, we would need to ensure that complex
+control flow is either handled completely or effectively errors out. Even with
+ideal error handling, not having the expected features available creates user
+frustration. In addition to the environment constraints, there is also the issue
+of language tooling. With PDLL we intend to build a very robust and modern
+toolset that is designed to cater the needs of pattern developers, including
+code completion, signature help, and many more features that are specific to the
+problem we are solving. Integrating custom language tooling into existing
+languages can be difficult, and in some cases impossible (as our DSL would
+merely be a small subset of the existing language).</p>
+<p>These various points have led us to the initial conclusion that the most
+effective tool we can provide for our users is a custom tool designed for the
+problem at hand. With all of that being said, we understand that not all users
+have the same constraints that we have placed upon ourselves. We absolutely
+encourage and support the existence of various PDL frontends defined in
+different languages. This is one of the original motivating factors around
+building the PDL IR abstraction in the first place; to enable innovation and
+flexibility for our users (and in turn their users). For some, such as those in
+research and the Machine Learning space, they may already have a certain
+language (such as Python) heavily integrated into their workflow. For these
+users, a PDL DSL in their language may be ideal and we will remain committed to
+supporting and endorsing that from an infrastructure point-of-view.</p>
+</section>
+</section>
+<section id="language-specification">
+<h2>Language Specification<a class="headerlink" href="#language-specification" title="此标题的永久链接">¶</a></h2>
+<p>Note: PDLL is still under active development, and the designs discussed below
+are not necessarily final and may be subject to change.</p>
+<p>The design of PDLL is heavily influenced and centered around the
+<a class="reference external" href="https://mlir.llvm.org/docs/Dialects/PDLOps/">PDL IR abstraction</a>, which in turn
+is designed as an abstract model of the core MLIR structures. This leads to a
+design and structure that feels very similar to if you were directly writing the
+IR you want to match.</p>
+<section id="includes">
+<h3>Includes<a class="headerlink" href="#includes" title="此标题的永久链接">¶</a></h3>
+<p>PDLL supports an <code class="docutils literal notranslate"><span class="pre">include</span></code> directive to import content defined within other
+source files. There are two types of files that may be included: <code class="docutils literal notranslate"><span class="pre">.pdll</span></code> and
+<code class="docutils literal notranslate"><span class="pre">.td</span></code> files.</p>
+<section id="pdll-includes">
+<h4><code class="docutils literal notranslate"><span class="pre">.pdll</span></code> includes<a class="headerlink" href="#pdll-includes" title="此标题的永久链接">¶</a></h4>
+<p>When including a <code class="docutils literal notranslate"><span class="pre">.pdll</span></code> file, the contents of that file are copied directly into
+the current file being processed. This means that any patterns, constraints,
+rewrites, etc., defined within that file are processed along with those within
+the current file.</p>
+</section>
+<section id="td-includes">
+<h4><code class="docutils literal notranslate"><span class="pre">.td</span></code> includes<a class="headerlink" href="#td-includes" title="此标题的永久链接">¶</a></h4>
+<p>When including a <code class="docutils literal notranslate"><span class="pre">.td</span></code> file, PDLL will automatically import any pertinent
+<a class="reference external" href="https://mlir.llvm.org/docs/OpDefinitions/">ODS</a> information within that file.
+This includes any defined operations, constraints, interfaces, and more, making
+them implicitly accessible within PDLL. This is important, as ODS information
+allows for certain PDLL constructs, such as the
+<a class="reference external" href="#operation"><code class="docutils literal notranslate"><span class="pre">operation</span></code> expression</a>, to become much more powerful.</p>
+</section>
+</section>
+<section id="patterns">
+<h3>Patterns<a class="headerlink" href="#patterns" title="此标题的永久链接">¶</a></h3>
+<p>In any pattern descriptor language, pattern definition is at the core. In PDLL,
+patterns start with <code class="docutils literal notranslate"><span class="pre">Pattern</span></code> optionally followed by a name and a set of pattern
+metadata, and finally terminated by a pattern body. A few simple examples are
+shown below:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Here we have defined an anonymous pattern:
+Pattern {
+  // Pattern bodies are separated into two components:
+  // * Match Section
+  //    - Describes the input IR.
+  let root = op&lt;toy.reshape&gt;(op&lt;toy.reshape&gt;(arg: Value));
+  
+  // * Rewrite Section
+  //    - Describes how to transform the IR.
+  //    - Last statement starts the rewrite.
+  replace root with op&lt;toy.reshape&gt;(arg);
+}
+
+// Here we have defined a pattern named `ReshapeReshapeOptPattern` with a
+// benefit of 10:
+Pattern ReshapeReshapeOptPattern with benefit(10) {
+  replace op&lt;toy.reshape&gt;(op&lt;toy.reshape&gt;(arg: Value))
+    with op&lt;toy.reshape&gt;(arg);
+}
+</pre></div>
+</div>
+<p>After the definition of the pattern metadata, we specify the pattern body. The
+structure of a pattern body is comprised of two main sections, the <code class="docutils literal notranslate"><span class="pre">match</span></code>
+section and the <code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section. The <code class="docutils literal notranslate"><span class="pre">match</span></code> section of a pattern describes
+the expected input IR, whereas the <code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section describes how to transform
+that IR. This distinction is an important one to make, as PDLL handles certain
+variables and expressions differently within the different sections. When
+relevant in each of the sections below, we shall explicitly call out any
+behavioral differences.</p>
+<p>The general layout of the <code class="docutils literal notranslate"><span class="pre">match</span></code> and <code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section is as follows: the
+<em>last</em> statement of the pattern body is required to be a
+<a class="reference external" href="#operation-rewrite-statements"><code class="docutils literal notranslate"><span class="pre">operation</span> <span class="pre">rewrite</span> <span class="pre">statement</span></code></a>, and denotes the
+<code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section; every statement before denotes the <code class="docutils literal notranslate"><span class="pre">match</span></code> section.</p>
+<section id="pattern-metadata">
+<h4>Pattern metadata<a class="headerlink" href="#pattern-metadata" title="此标题的永久链接">¶</a></h4>
+<p>Rewrite patterns in MLIR have a set of metadata that allow for controlling
+certain behaviors, and providing information to the rewrite driver applying the
+pattern. In PDLL, a pattern can provide a non-default value for this metadata
+after the pattern name. Below, examples are shown for the different types of
+metadata supported:</p>
+<section id="benefit">
+<h5>Benefit<a class="headerlink" href="#benefit" title="此标题的永久链接">¶</a></h5>
+<p>The benefit of a Pattern is an integer value that represents the “benefit” of
+matching that pattern. It is used by pattern drivers to determine the relative
+priorities of patterns during application; a pattern with a higher benefit is
+generally applied before one with a lower benefit.</p>
+<p>In PDLL, a pattern has a default benefit set to the number of input operations,
+i.e. the number of distinct <code class="docutils literal notranslate"><span class="pre">Op</span></code> expressions/variables, in the match section. This
+rule is driven by an observation that larger matches are more beneficial than smaller
+ones, and if a smaller one is applied first the larger one may not apply anymore.
+Patterns can override this behavior by specifying the benefit in the metadata section
+of the pattern:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Here we specify that this pattern has a benefit of `10`, overriding the
+// default behavior.
+Pattern with benefit(10) {
+  ...
+}
+</pre></div>
+</div>
+</section>
+<section id="bounded-rewrite-recursion">
+<h5>Bounded Rewrite Recursion<a class="headerlink" href="#bounded-rewrite-recursion" title="此标题的永久链接">¶</a></h5>
+<p>During pattern application, there are situations in which a pattern may be
+applicable to the result of a previous application of that same pattern. If the
+pattern does not properly handle this recusive application, the pattern driver
+could become stuck in an infinite loop of application. To prevent this, patterns
+by-default are assumed to not have proper recursive bounding and will not be
+recursively applied. A pattern can signal that it does have proper handling for
+recursion by specifying the <code class="docutils literal notranslate"><span class="pre">recusion</span></code> flag in the pattern metadata section:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Here we signal that this pattern properly bounds recursive application.
+Pattern with recusion {
+  ...
+}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="single-line-lambda-body">
+<h4>Single Line “Lambda” Body<a class="headerlink" href="#single-line-lambda-body" title="此标题的永久链接">¶</a></h4>
+<p>Patterns generally define their body using a compound block of statements, as
+shown below:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Pattern {
+  replace op&lt;my_dialect.foo&gt;(operands: ValueRange) with operands;
+}
+</pre></div>
+</div>
+<p>Patterns also support a lambda-like syntax for specifying simple single line
+bodies. The lambda body of a Pattern expects a single
+<a class="reference external" href="#operation-rewrite-statements">operation rewrite statement</a>:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Pattern =&gt; replace op&lt;my_dialect.foo&gt;(operands: ValueRange) with operands;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="variables">
+<h3>Variables<a class="headerlink" href="#variables" title="此标题的永久链接">¶</a></h3>
+<p>Variables in PDLL represent specific instances of IR entities, such as <code class="docutils literal notranslate"><span class="pre">Value</span></code>s,
+<code class="docutils literal notranslate"><span class="pre">Operation</span></code>s, <code class="docutils literal notranslate"><span class="pre">Type</span></code>s, etc. Consider the simple pattern below:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Pattern {
+  let value: Value;
+  let root = op&lt;mydialect.foo&gt;(value);
+
+  replace root with value;
+}
+</pre></div>
+</div>
+<p>In this pattern we define two variables, <code class="docutils literal notranslate"><span class="pre">value</span></code> and <code class="docutils literal notranslate"><span class="pre">root</span></code>, using the <code class="docutils literal notranslate"><span class="pre">let</span></code>
+statement. The <code class="docutils literal notranslate"><span class="pre">let</span></code> statement allows for defining variables and constraining
+them. Every variable in PDLL is of a certain type, which defines the type of IR
+entity the variable represents. The type of a variable may be determined via
+either a constraint, or an initializer expression.</p>
+<section id="variable-binding">
+<h4>Variable “Binding”<a class="headerlink" href="#variable-binding" title="此标题的永久链接">¶</a></h4>
+<p>In addition to having a type, variables must also be “bound”, either via an initializer
+expression or to a non-native constraint or rewrite use within the <code class="docutils literal notranslate"><span class="pre">match</span></code> section of the
+pattern. “Binding” a variable contextually identifies that variable within either the
+input (i.e. <code class="docutils literal notranslate"><span class="pre">match</span></code> section) or output (i.e. <code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section) IR. In the <code class="docutils literal notranslate"><span class="pre">match</span></code> section,
+this allows for building the match tree from the pattern’s root operation, which must be
+“bound” to the <a class="reference external" href="#operation-rewrite-statements">operation rewrite statement</a> that denotes the
+<code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section of the pattern. All non-root variables within the <code class="docutils literal notranslate"><span class="pre">match</span></code>
+section must be bound in some way to the “root” operation. To help illustrate
+the concept, let’s take a look at a quick example. Consider the <code class="docutils literal notranslate"><span class="pre">.mlir</span></code> snippet
+below:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>func.func @baz(%arg: i32) {
+  %result = my_dialect.foo %arg, %arg -&gt; i32
+}
+</pre></div>
+</div>
+<p>Say that we want to write a pattern that matches <code class="docutils literal notranslate"><span class="pre">my_dialect.foo</span></code> and replaces
+it with its unique input argument. A naive way to write this pattern in PDLL is
+shown below:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Pattern {
+  // ** match section ** //
+  let arg: Value;
+  let root = op&lt;my_dialect.foo&gt;(arg, arg);
+
+  // ** rewrite section ** //
+  replace root with arg;
+}
+</pre></div>
+</div>
+<p>In the above pattern, the <code class="docutils literal notranslate"><span class="pre">arg</span></code> variable is “bound” to the first and second operands
+of the <code class="docutils literal notranslate"><span class="pre">root</span></code> operation. Every use of <code class="docutils literal notranslate"><span class="pre">arg</span></code> is constrained to be the same <code class="docutils literal notranslate"><span class="pre">Value</span></code>, i.e.
+the first and second operands of <code class="docutils literal notranslate"><span class="pre">root</span></code> will be constrained to refer to the same input
+Value. The same is true for the <code class="docutils literal notranslate"><span class="pre">root</span></code> operation, it is bound to the “root” operation of the
+pattern as it is used in input of the top-level <a class="reference external" href="#replace-statement"><code class="docutils literal notranslate"><span class="pre">replace</span></code> statement</a>
+of the <code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section of the pattern. Writing this pattern using the C++ API, the concept
+of “binding” becomes more clear:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">Pattern</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">OpRewritePattern</span><span class="o">&lt;</span><span class="n">my_dialect</span><span class="o">::</span><span class="n">FooOp</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">LogicalResult</span><span class="w"> </span><span class="nf">matchAndRewrite</span><span class="p">(</span><span class="n">my_dialect</span><span class="o">::</span><span class="n">FooOp</span><span class="w"> </span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">PatternRewriter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rewriter</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Value</span><span class="w"> </span><span class="n">arg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">root</span><span class="o">-&gt;</span><span class="n">getOperand</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arg</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">root</span><span class="o">-&gt;</span><span class="n">getOperand</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">failure</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">rewriter</span><span class="p">.</span><span class="n">replaceOp</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>If a variable is not “bound” properly, PDLL won’t be able to identify what value
+it would correspond to in the IR. As a final example, let’s consider a variable
+that hasn’t been bound:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Pattern {
+  // ** match section ** //
+  let arg: Value;
+  let root = op&lt;my_dialect.foo&gt;
+
+  // ** rewrite section ** //
+  replace root with arg;
+}
+</pre></div>
+</div>
+<p>If we were to write this exact pattern in C++, we would end up with:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">Pattern</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">OpRewritePattern</span><span class="o">&lt;</span><span class="n">my_dialect</span><span class="o">::</span><span class="n">FooOp</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">LogicalResult</span><span class="w"> </span><span class="nf">matchAndRewrite</span><span class="p">(</span><span class="n">my_dialect</span><span class="o">::</span><span class="n">FooOp</span><span class="w"> </span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">PatternRewriter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rewriter</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// `arg` was never bound, so we don&#39;t know what input Value it was meant to</span>
+<span class="w">    </span><span class="c1">// correspond to.</span>
+<span class="w">    </span><span class="n">Value</span><span class="w"> </span><span class="n">arg</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">rewriter</span><span class="p">.</span><span class="n">replaceOp</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</section>
+<section id="variable-constraints">
+<h4>Variable Constraints<a class="headerlink" href="#variable-constraints" title="此标题的永久链接">¶</a></h4>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// This statement defines a variable `value` that is constrained to be a `Value`.
+let value: Value;
+
+// This statement defines a variable `value` that is constrained to be a `Value`
+// *and* constrained to have a single use.
+let value: [Value, HasOneUse];
+</pre></div>
+</div>
+<p>Any number of single entity constraints may be attached directly to a variable
+upon declaration. Within the <code class="docutils literal notranslate"><span class="pre">matcher</span></code> section, these constraints may add
+additional checks on the input IR. Within the <code class="docutils literal notranslate"><span class="pre">rewriter</span></code> section, constraints
+are <em>only</em> used to define the type of the variable. There are a number of
+builtin constraints that correlate to the core MLIR constructs: <code class="docutils literal notranslate"><span class="pre">Attr</span></code>, <code class="docutils literal notranslate"><span class="pre">Op</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Type</span></code>, <code class="docutils literal notranslate"><span class="pre">TypeRange</span></code>, <code class="docutils literal notranslate"><span class="pre">Value</span></code>, <code class="docutils literal notranslate"><span class="pre">ValueRange</span></code>. Along with these, users may define
+custom constraints that are implemented within PDLL, or natively (i.e. outside
+of PDLL). See the general <a class="reference external" href="#constraints">Constraints</a> section for more detailed
+information.</p>
+</section>
+<section id="inline-variable-definition">
+<h4>Inline Variable Definition<a class="headerlink" href="#inline-variable-definition" title="此标题的永久链接">¶</a></h4>
+<p>Along with the <code class="docutils literal notranslate"><span class="pre">let</span></code> statement, variables may also be defined inline by
+specifying the constraint list along with the desired variable name in the first
+place that the variable would be used. After definition, the variable is visible
+from all points forward. See below for an example:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// `value` is used as an operand to the operation `root`:
+let value: Value;
+let root = op&lt;my_dialect.foo&gt;(value);
+replace root with value;
+
+// `value` could also be defined &quot;inline&quot;:
+let root = op&lt;my_dialect.foo&gt;(value: Value);
+replace root with value;
+</pre></div>
+</div>
+<p>Note that the point of definition of an inline variable is the point of reference,
+meaning that an inline variable can be used immediately in the same parent
+expression within which it was defined:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>let root = op&lt;my_dialect.foo&gt;(value: Value, _: Value, value);
+replace root with value;
+</pre></div>
+</div>
+<section id="wildcard-variable-definition">
+<h5>Wildcard Variable Definition<a class="headerlink" href="#wildcard-variable-definition" title="此标题的永久链接">¶</a></h5>
+<p>Often times when defining a variable inline, the variable isn’t intended to be
+used anywhere else in the pattern. For example, this may happen if you want to
+attach constraints to a variable but have no other use for it. In these
+situations, the “wildcard” variable can be used to remove the need to provide a
+name, as “wildcard” variables are not visible outside of the point of
+definition. An example is shown below:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Pattern {
+  let root = op&lt;my_dialect.foo&gt;(arg: Value, _: Value, _: [Value, I64Value], arg);
+  replace root with arg;
+}
+</pre></div>
+</div>
+<p>In the above example, the second operand isn’t needed for the pattern but we
+need to provide it to signal that a second operand does exist (we just don’t
+care what it is in this pattern).</p>
+</section>
+</section>
+</section>
+<section id="operation-expression">
+<h3>Operation Expression<a class="headerlink" href="#operation-expression" title="此标题的永久链接">¶</a></h3>
+<p>An operation expression in PDLL represents an MLIR operation. In the <code class="docutils literal notranslate"><span class="pre">match</span></code>
+section of the pattern, this expression models one of the input operations to
+the pattern. In the <code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section of the pattern, this expression models one
+of the operations to create. The general structure of the operation expression
+is very similar to that of the “generic form” of textual MLIR assembly:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>let root = op&lt;my_dialect.foo&gt;(operands: ValueRange) {attr = attr: Attr} -&gt; (resultTypes: TypeRange);
+</pre></div>
+</div>
+<p>Let’s walk through each of the different components of the expression:</p>
+<section id="operation-name">
+<h4>Operation name<a class="headerlink" href="#operation-name" title="此标题的永久链接">¶</a></h4>
+<p>The operation name signifies which type of MLIR Op this operation corresponds
+to. In the <code class="docutils literal notranslate"><span class="pre">match</span></code> section of the pattern, the name may be elided. This would
+cause this pattern to match <em>any</em> operation type that satifies the rest of the
+constraints of the operation. In the <code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section, the name is required.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// `root` corresponds to an instance of a `my_dialect.foo` operation.
+let root = op&lt;my_dialect.foo&gt;;
+
+// `root` could be an instance of any operation type.
+let root = op&lt;&gt;;
+</pre></div>
+</div>
+</section>
+<section id="operands">
+<h4>Operands<a class="headerlink" href="#operands" title="此标题的永久链接">¶</a></h4>
+<p>The operands section corresponds to the operands of the operation. This section
+of an operation expression may be elided, which within a <code class="docutils literal notranslate"><span class="pre">match</span></code> section means
+that the operands are not constrained in any way. If elided within a <code class="docutils literal notranslate"><span class="pre">rewrite</span></code>
+section, the operation is treated as having no operands. When present, the
+operands of an operation expression are interpreted in the following ways:</p>
+<ol class="simple">
+<li><p>A single instance of type <code class="docutils literal notranslate"><span class="pre">ValueRange</span></code>:</p></li>
+</ol>
+<p>In this case, the single range is treated as all of the operands of the
+operation:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Define an instance with single range of operands.
+let root = op&lt;my_dialect.foo&gt;(allOperands: ValueRange);
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>A variadic number of either <code class="docutils literal notranslate"><span class="pre">Value</span></code> or <code class="docutils literal notranslate"><span class="pre">ValueRange</span></code>:</p></li>
+</ol>
+<p>In this case, the inputs are expected to correspond with the operand groups as
+defined on the operation in ODS.</p>
+<p>Given the following operation definition in ODS:</p>
+<div class="highlight-tablegen notranslate"><div class="highlight"><pre><span></span>def MyIndirectCallOp {
+  let arguments = (ins FunctionType:$call, Variadic&lt;AnyType&gt;:$args);
+}
+</pre></div>
+</div>
+<p>We can match the operands as so:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>let root = op&lt;my_dialect.indirect_call&gt;(call: Value, args: ValueRange);
+</pre></div>
+</div>
+</section>
+<section id="results">
+<h4>Results<a class="headerlink" href="#results" title="此标题的永久链接">¶</a></h4>
+<p>The results section corresponds to the result types of the operation. This section
+of an operation expression may be elided, which within a <code class="docutils literal notranslate"><span class="pre">match</span></code> section means
+that the result types are not constrained in any way. If elided within a <code class="docutils literal notranslate"><span class="pre">rewrite</span></code>
+section, the results of the operation are <a class="reference external" href="#inferred-results">inferred</a>. When present,
+the result types of an operation expression are interpreted in the following ways:</p>
+<ol class="simple">
+<li><p>A single instance of type <code class="docutils literal notranslate"><span class="pre">TypeRange</span></code>:</p></li>
+</ol>
+<p>In this case, the single range is treated as all of the result types of the
+operation:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Define an instance with single range of types.
+let root = op&lt;my_dialect.foo&gt; -&gt; (allResultTypes: TypeRange);
+</pre></div>
+</div>
+<ol class="simple">
+<li><p>A variadic number of either <code class="docutils literal notranslate"><span class="pre">Type</span></code> or <code class="docutils literal notranslate"><span class="pre">TypeRange</span></code>:</p></li>
+</ol>
+<p>In this case, the inputs are expected to correspond with the result groups as
+defined on the operation in ODS.</p>
+<p>Given the following operation definition in ODS:</p>
+<div class="highlight-tablegen notranslate"><div class="highlight"><pre><span></span>def MyOp {
+  let results = (outs SomeType:$result, Variadic&lt;SomeType&gt;:$otherResults);
+}
+</pre></div>
+</div>
+<p>We can match the result types as so:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>let root = op&lt;my_dialect.op&gt; -&gt; (result: Type, otherResults: TypeRange);
+</pre></div>
+</div>
+</section>
+<section id="inferred-results">
+<h4>Inferred Results<a class="headerlink" href="#inferred-results" title="此标题的永久链接">¶</a></h4>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section of a pattern, the result types of an
+operation are inferred if they are elided or otherwise not
+previously bound. The <a class="reference external" href="#variable-binding">“variable binding”</a> section above
+discusses the concept of “binding” in more detail. Below are various examples
+that build upon this to help showcase how a result type may be “bound”:</p>
+<ul class="simple">
+<li><p>Binding to a <a class="reference external" href="#type-expression">constant</a>:</p></li>
+</ul>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>op&lt;my_dialect.op&gt; -&gt; (type&lt;&quot;i32&quot;&gt;);
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Binding to types within the <code class="docutils literal notranslate"><span class="pre">match</span></code> section:</p></li>
+</ul>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Pattern {
+  replace op&lt;dialect.inputOp&gt; -&gt; (resultTypes: TypeRange)
+    with op&lt;dialect.outputOp&gt; -&gt; (resultTypes);
+}
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Binding to previously inferred types:</p></li>
+</ul>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Pattern {
+  rewrite root: Op with {
+    // `resultTypes` here is *not* yet bound, and will be inferred when
+    // creating `dialect.op`. Any uses of `resultTypes` after this expression,
+    // will use the types inferred when creating this operation.
+    op&lt;dialect.op&gt; -&gt; (resultTypes: TypeRange);
+
+    // `resultTypes` here is bound to the types inferred when creating `dialect.op`.
+    op&lt;dialect.bar&gt; -&gt; (resultTypes);
+  };
+}
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Binding to a <a class="reference external" href="#native-rewriters"><code class="docutils literal notranslate"><span class="pre">Native</span> <span class="pre">Rewrite</span></code></a> method result:</p></li>
+</ul>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Rewrite BuildTypes() -&gt; TypeRange;
+
+Pattern {
+  rewrite root: Op with {
+    op&lt;dialect.op&gt; -&gt; (BuildTypes());
+  };
+}
+</pre></div>
+</div>
+<p>Below are the set of contexts in which result type inferrence is supported:</p>
+<section id="inferred-results-of-replacement-operation">
+<h5>Inferred Results of Replacement Operation<a class="headerlink" href="#inferred-results-of-replacement-operation" title="此标题的永久链接">¶</a></h5>
+<p>Replacements have the invariant that the types of the replacement values must
+match the result types of the input operation. This means that when replacing
+one operation with another, the result types of the replacement operation may
+be inferred from the result types of the operation being replaced. For example,
+consider the following pattern:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Pattern =&gt; replace op&lt;dialect.inputOp&gt; with op&lt;dialect.outputOp&gt;;
+</pre></div>
+</div>
+<p>This pattern could be written in a more explicit way as:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Pattern {
+  replace op&lt;dialect.inputOp&gt; -&gt; (resultTypes: TypeRange)
+    with op&lt;dialect.outputOp&gt; -&gt; (resultTypes);
+}
+</pre></div>
+</div>
+</section>
+<section id="inferred-results-with-infertypeopinterface">
+<h5>Inferred Results with InferTypeOpInterface<a class="headerlink" href="#inferred-results-with-infertypeopinterface" title="此标题的永久链接">¶</a></h5>
+<p><code class="docutils literal notranslate"><span class="pre">InferTypeOpInterface</span></code> is an interface that enables operations to infer its result
+types from its input attributes, operands, regions, etc. When the result types of
+an operation cannot be inferred from any other context, this interface is invoked
+to infer the result types of the operation.</p>
+</section>
+</section>
+<section id="attributes">
+<h4>Attributes<a class="headerlink" href="#attributes" title="此标题的永久链接">¶</a></h4>
+<p>The attributes section of the operation expression corresponds to the attribute
+dictionary of the operation. This section of an operation expression may be
+elided, in which case the attributes are not constrained in any way. The
+composition of this component maps exactly to how attribute dictionaries are
+structured in the MLIR textual assembly format:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>let root = op&lt;my_dialect.foo&gt; {attr1 = attrValue: Attr, attr2 = attrValue2: Attr};
+</pre></div>
+</div>
+<p>Within the <code class="docutils literal notranslate"><span class="pre">{}</span></code> attribute entries are specified by an identifier or string name,
+corresponding to the attribute name, followed by an assignment to the attribute
+value. If the attribute value is elided, the value of the attribute is
+implicitly defined as a
+<a class="reference external" href="https://mlir.llvm.org/docs/Dialects/Builtin/#unitattr"><code class="docutils literal notranslate"><span class="pre">UnitAttr</span></code></a>.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>let unitConstant = op&lt;my_dialect.constant&gt; {value};
+</pre></div>
+</div>
+<section id="accessing-operation-results">
+<h5>Accessing Operation Results<a class="headerlink" href="#accessing-operation-results" title="此标题的永久链接">¶</a></h5>
+<p>In multi-operation patterns, the result of one operation often feeds as an input
+into another. The result groups of an operation may be accessed by name or by
+index via the <code class="docutils literal notranslate"><span class="pre">.</span></code> operator:</p>
+<p>Note: Remember to import the definition of your operation via
+<a class="reference external" href="#%60.td%60_includes">include</a> to ensure it is visible to PDLL.</p>
+<p>Given the following operation definition in ODS:</p>
+<div class="highlight-tablegen notranslate"><div class="highlight"><pre><span></span>def MyResultOp {
+  let results = (outs SomeType:$result);
+}
+def MyInputOp {
+  let arguments = (ins SomeType:$input, SomeType:$input);
+}
+</pre></div>
+</div>
+<p>We can write a pattern where <code class="docutils literal notranslate"><span class="pre">MyResultOp</span></code> feeds into <code class="docutils literal notranslate"><span class="pre">MyInputOp</span></code> as so:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// In this example, we use both `result`(the name) and `0`(the index) to refer to
+// the first result group of `resultOp`.
+// Note: If we elide the result types section within the match section, it means
+//       they aren&#39;t constrained, not that the operation has no results.
+let resultOp = op&lt;my_dialect.result_op&gt;;
+let inputOp = op&lt;my_dialect.input_op&gt;(resultOp.result, resultOp.0);
+</pre></div>
+</div>
+<p>Along with result name access, variables of <code class="docutils literal notranslate"><span class="pre">Op</span></code> type may implicitly convert to
+<code class="docutils literal notranslate"><span class="pre">Value</span></code> or <code class="docutils literal notranslate"><span class="pre">ValueRange</span></code>. If these variables are registered (has ODS entry), they
+are converted to <code class="docutils literal notranslate"><span class="pre">Value</span></code> when they are known to only have one result, otherwise
+they will be converted to <code class="docutils literal notranslate"><span class="pre">ValueRange</span></code>:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// `resultOp` may also convert implicitly to a Value for use in `inputOp`:
+let resultOp = op&lt;my_dialect.result_op&gt;;
+let inputOp = op&lt;my_dialect.input_op&gt;(resultOp);
+
+// We could also inline `resultOp` directly:
+let inputOp = op&lt;my_dialect.input_op&gt;(op&lt;my_dialect.result_op&gt;);
+</pre></div>
+</div>
+</section>
+</section>
+<section id="unregistered-operations">
+<h4>Unregistered Operations<a class="headerlink" href="#unregistered-operations" title="此标题的永久链接">¶</a></h4>
+<p>A variable of unregistered op is still available for numeric result indexing.
+Given that we don’t have knowledge of its result groups, numeric indexing
+returns a Value corresponding to the individual result at the given index.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Use the index `0` to refer to the first result value of the unregistered op.
+let inputOp = op&lt;my_dialect.input_op&gt;(op&lt;my_dialect.unregistered_op&gt;.0);
+</pre></div>
+</div>
+</section>
+</section>
+<section id="attribute-expression">
+<h3>Attribute Expression<a class="headerlink" href="#attribute-expression" title="此标题的永久链接">¶</a></h3>
+<p>An attribute expression represents a literal MLIR attribute. It allows for
+statically specifying an MLIR attribute to use, by specifying the textual form
+of that attribute.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>let trueConstant = op&lt;arith.constant&gt; {value = attr&lt;&quot;true&quot;&gt;};
+
+let applyResult = op&lt;affine.apply&gt;(args: ValueRange) {map = attr&lt;&quot;affine_map&lt;(d0, d1) -&gt; (d1 - 3)&gt;&quot;&gt;}
+</pre></div>
+</div>
+</section>
+<section id="type-expression">
+<h3>Type Expression<a class="headerlink" href="#type-expression" title="此标题的永久链接">¶</a></h3>
+<p>A type expression represents a literal MLIR type. It allows for statically
+specifying an MLIR type to use, by specifying the textual form of that type.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>let i32Constant = op&lt;arith.constant&gt; -&gt; (type&lt;&quot;i32&quot;&gt;);
+</pre></div>
+</div>
+</section>
+<section id="tuples">
+<h3>Tuples<a class="headerlink" href="#tuples" title="此标题的永久链接">¶</a></h3>
+<p>PDLL provides native support for tuples, which are used to group multiple
+elements into a single compound value. The values in a tuple can be of any type,
+and do not need to be of the same type. There is also no limit to the number of
+elements held by a tuple. The elements of a tuple can be accessed by index:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>let tupleValue = (op&lt;my_dialect.foo&gt;, attr&lt;&quot;10 : i32&quot;&gt;, type&lt;&quot;i32&quot;&gt;);
+
+let opValue = tupleValue.0;
+let attrValue = tupleValue.1;
+let typeValue = tupleValue.2;
+</pre></div>
+</div>
+<p>You can also name the elements of a tuple and use those names to refer to the
+values of the individual elements. An element name consists of an identifier
+followed immediately by an equal (=).</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>let tupleValue = (
+  opValue = op&lt;my_dialect.foo&gt;,
+  attr&lt;&quot;10 : i32&quot;&gt;,
+  typeValue = type&lt;&quot;i32&quot;&gt;
+);
+
+let opValue = tupleValue.opValue;
+let attrValue = tupleValue.1;
+let typeValue = tupleValue.typeValue;
+</pre></div>
+</div>
+<p>Tuples are used to represent multiple results from a
+<a class="reference external" href="#constraints-with-multiple-results">constraint</a> or
+<a class="reference external" href="#rewrites-with-multiple-results">rewrite</a>.</p>
+</section>
+<section id="id1">
+<h3>Constraints<a class="headerlink" href="#id1" title="此标题的永久链接">¶</a></h3>
+<p>Constraints provide the ability to inject additional checks on the input IR
+within the <code class="docutils literal notranslate"><span class="pre">match</span></code> section of a pattern. Constraints can be applied anywhere
+within the <code class="docutils literal notranslate"><span class="pre">match</span></code> section, and depending on the type can either be applied via
+the constraint list of a <a class="reference external" href="#variables">variable</a> or via the call operator (e.g.
+<code class="docutils literal notranslate"><span class="pre">MyConstraint(...)</span></code>). There are three main categories of constraints:</p>
+<section id="core-constraints">
+<h4>Core Constraints<a class="headerlink" href="#core-constraints" title="此标题的永久链接">¶</a></h4>
+<p>PDLL defines a number of core constraints that constrain the type of the IR
+entity. These constraints can only be applied via the
+<a class="reference external" href="#variable-constraints">constraint list</a> of a variable.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Attr</span></code> (<code class="docutils literal notranslate"><span class="pre">&lt;</span></code> type <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>)?</p></li>
+</ul>
+<p>A single entity constraint that corresponds to an <code class="docutils literal notranslate"><span class="pre">mlir::Attribute</span></code>. This
+constraint optionally takes a type component that constrains the result type of
+the attribute.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Define a simple variable using the `Attr` constraint.
+let attr: Attr;
+let constant = op&lt;arith.constant&gt; {value = attr};
+
+// Define a simple variable using the `Attr` constraint, that has its type
+// constrained as well.
+let attrType: Type;
+let attr: Attr&lt;attrType&gt;;
+let constant = op&lt;arith.constant&gt; {value = attr};
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Op</span></code> (<code class="docutils literal notranslate"><span class="pre">&lt;</span></code> op-name <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>)?</p></li>
+</ul>
+<p>A single entity constraint that corresponds to an <code class="docutils literal notranslate"><span class="pre">mlir::Operation</span> <span class="pre">*</span></code>.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Match only when the input is from another operation.
+let inputOp: Op;
+let root = op&lt;my_dialect.foo&gt;(inputOp);
+
+// Match only when the input is from another `my_dialect.foo` operation.
+let inputOp: Op&lt;my_dialect.foo&gt;;
+let root = op&lt;my_dialect.foo&gt;(inputOp);
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Type</span></code></p></li>
+</ul>
+<p>A single entity constraint that corresponds to an <code class="docutils literal notranslate"><span class="pre">mlir::Type</span></code>.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Define a simple variable using the `Type` constraint.
+let resultType: Type;
+let root = op&lt;my_dialect.foo&gt; -&gt; (resultType);
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TypeRange</span></code></p></li>
+</ul>
+<p>A single entity constraint that corresponds to a <code class="docutils literal notranslate"><span class="pre">mlir::TypeRange</span></code>.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Define a simple variable using the `TypeRange` constraint.
+let resultTypes: TypeRange;
+let root = op&lt;my_dialect.foo&gt; -&gt; (resultTypes);
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Value</span></code> (<code class="docutils literal notranslate"><span class="pre">&lt;</span></code> type-expr <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>)?</p></li>
+</ul>
+<p>A single entity constraint that corresponds to an <code class="docutils literal notranslate"><span class="pre">mlir::Value</span></code>. This constraint
+optionally takes a type component that constrains the result type of the value.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Define a simple variable using the `Value` constraint.
+let value: Value;
+let root = op&lt;my_dialect.foo&gt;(value);
+
+// Define a variable using the `Value` constraint, that has its type constrained
+// to be same as the result type of the `root` op.
+let valueType: Type;
+let input: Value&lt;valueType&gt;;
+let root = op&lt;my_dialect.foo&gt;(input) -&gt; (valueType);
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ValueRange</span></code> (<code class="docutils literal notranslate"><span class="pre">&lt;</span></code> type-expr <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>)?</p></li>
+</ul>
+<p>A single entity constraint that corresponds to a <code class="docutils literal notranslate"><span class="pre">mlir::ValueRange</span></code>. This
+constraint optionally takes a type component that constrains the result types of
+the value range.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Define a simple variable using the `ValueRange` constraint.
+let inputs: ValueRange;
+let root = op&lt;my_dialect.foo&gt;(inputs);
+
+// Define a variable using the `ValueRange` constraint, that has its types
+// constrained to be same as the result types of the `root` op.
+let valueTypes: TypeRange;
+let inputs: ValueRange&lt;valueTypes&gt;;
+let root = op&lt;my_dialect.foo&gt;(inputs) -&gt; (valueTypes);
+</pre></div>
+</div>
+</section>
+<section id="defining-constraints-in-pdll">
+<h4>Defining Constraints in PDLL<a class="headerlink" href="#defining-constraints-in-pdll" title="此标题的永久链接">¶</a></h4>
+<p>Aside from the core constraints, additional constraints can also be defined
+within PDLL. This allows for building matcher fragments that can be composed
+across many different patterns. A constraint in PDLL is defined similarly to a
+function in traditional programming languages; it contains a name, a set of
+input arguments, a set of result types, and a body. Results of a constraint are
+returned via a <code class="docutils literal notranslate"><span class="pre">return</span></code> statement. A few examples are shown below:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>/// A constraint that takes an input and constrains the use to an operation of
+/// a given type.
+Constraint UsedByFooOp(value: Value) {
+  op&lt;my_dialect.foo&gt;(value);
+}
+
+/// A constraint that returns a result of an existing operation.
+Constraint ExtractResult(op: Op&lt;my_dialect.foo&gt;) -&gt; Value {
+  return op.result;
+}
+
+Pattern {
+  let value = ExtractResult(op&lt;my_dialect.foo&gt;);
+  UsedByFooOp(value);
+}
+</pre></div>
+</div>
+<section id="constraints-with-multiple-results">
+<h5>Constraints with multiple results<a class="headerlink" href="#constraints-with-multiple-results" title="此标题的永久链接">¶</a></h5>
+<p>Constraints can return multiple results by returning a tuple of values. When
+returning multiple results, each result can also be assigned a name to use when
+indexing that tuple element. Tuple elements can be referenced by their index
+number, or by name if they were assigned one.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// A constraint that returns multiple results, with some of the results assigned
+// a more readable name.
+Constraint ExtractMultipleResults(op: Op&lt;my_dialect.foo&gt;) -&gt; (Value, result1: Value) {
+  return (op.result1, op.result2);
+}
+
+Pattern {
+  // Return a tuple of values.
+  let result = ExtractMultipleResults(op: op&lt;my_dialect.foo&gt;);
+
+  // Index the tuple elements by index, or by name. 
+  replace op&lt;my_dialect.foo&gt; with (result.0, result.1, result.result1);
+}
+</pre></div>
+</div>
+</section>
+<section id="constraint-result-type-inference">
+<h5>Constraint result type inference<a class="headerlink" href="#constraint-result-type-inference" title="此标题的永久链接">¶</a></h5>
+<p>In addition to explicitly specifying the results of the constraint via the
+constraint signature, PDLL defined constraints also support inferring the result
+type from the return statement. Result type inference is active whenever the
+constraint is defined with no result constraints:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// This constraint returns a derived operation.
+Constraint ReturnSelf(op: Op&lt;my_dialect.foo&gt;) {
+  return op;
+}
+// This constraint returns a tuple of two Values.
+Constraint ExtractMultipleResults(op: Op&lt;my_dialect.foo&gt;) {
+  return (result1 = op.result1, result2 = op.result2);
+}
+
+Pattern {
+  let values = ExtractMultipleResults(op&lt;my_dialect.foo&gt;);
+  replace op&lt;my_dialect.foo&gt; with (values.result1, values.result2);
+}
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h5>Single Line “Lambda” Body<a class="headerlink" href="#id2" title="此标题的永久链接">¶</a></h5>
+<p>Constraints generally define their body using a compound block of statements, as
+shown below:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Constraint ReturnSelf(op: Op&lt;my_dialect.foo&gt;) {
+  return op;
+}
+Constraint ExtractMultipleResults(op: Op&lt;my_dialect.foo&gt;) {
+  return (result1 = op.result1, result2 = op.result2);
+}
+</pre></div>
+</div>
+<p>Constraints also support a lambda-like syntax for specifying simple single line
+bodies. The lambda body of a Constraint expects a single expression, which is
+implicitly returned:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Constraint ReturnSelf(op: Op&lt;my_dialect.foo&gt;) =&gt; op;
+
+Constraint ExtractMultipleResults(op: Op&lt;my_dialect.foo&gt;)
+  =&gt; (result1 = op.result1, result2 = op.result2);
+</pre></div>
+</div>
+</section>
+</section>
+<section id="native-constraints">
+<h4>Native Constraints<a class="headerlink" href="#native-constraints" title="此标题的永久链接">¶</a></h4>
+<p>Constraints may also be defined outside of PDLL, and registered natively within
+the C++ API.</p>
+<section id="importing-existing-native-constraints">
+<h5>Importing existing Native Constraints<a class="headerlink" href="#importing-existing-native-constraints" title="此标题的永久链接">¶</a></h5>
+<p>Constraints defined externally can be imported into PDLL by specifying a
+constraint “declaration”. This is similar to the PDLL form of defining a
+constraint but omits the body. Importing the declaration in this form allows for
+PDLL to statically know the expected input and output types.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Import a single entity value native constraint that checks if the value has a
+// single use. This constraint must be registered by the consumer of the
+// compiled PDL.
+Constraint HasOneUse(value: Value);
+
+// Import a multi-entity type constraint that checks if two values have the same
+// element type.
+Constraint HasSameElementType(value1: Value, value2: Value);
+
+Pattern {
+  // A single entity constraint can be applied via the variable argument list.
+  let value: HasOneUse;
+
+  // Otherwise, constraints can be applied via the call operator:
+  let value: Value = ...;
+  let value2: Value = ...;
+  HasOneUse(value);
+  HasSameElementType(value, value2);
+}
+</pre></div>
+</div>
+<p>External constraints are those registered explicitly with the <code class="docutils literal notranslate"><span class="pre">RewritePatternSet</span></code> via
+the C++ PDL API. For example, the constraints above may be registered as:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="n">LogicalResult</span><span class="w"> </span><span class="nf">hasOneUseImpl</span><span class="p">(</span><span class="n">PatternRewriter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rewriter</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">hasOneUse</span><span class="p">());</span>
+<span class="p">}</span>
+<span class="k">static</span><span class="w"> </span><span class="n">LogicalResult</span><span class="w"> </span><span class="nf">hasSameElementTypeImpl</span><span class="p">(</span><span class="n">PatternRewriter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rewriter</span><span class="p">,</span>
+<span class="w">                                            </span><span class="n">Value</span><span class="w"> </span><span class="n">value1</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="n">Value2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">(</span><span class="n">value1</span><span class="p">.</span><span class="n">getType</span><span class="p">().</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">ShapedType</span><span class="o">&gt;</span><span class="p">().</span><span class="n">getElementType</span><span class="p">()</span><span class="w"> </span><span class="o">==</span>
+<span class="w">                 </span><span class="n">value2</span><span class="p">.</span><span class="n">getType</span><span class="p">().</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">ShapedType</span><span class="o">&gt;</span><span class="p">().</span><span class="n">getElementType</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">registerNativeConstraints</span><span class="p">(</span><span class="n">RewritePatternSet</span><span class="w"> </span><span class="o">&amp;</span><span class="n">patterns</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">patternList</span><span class="p">.</span><span class="n">getPDLPatterns</span><span class="p">().</span><span class="n">registerConstraintFunction</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;HasOneUse&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">hasOneUseImpl</span><span class="p">);</span>
+<span class="w">    </span><span class="n">patternList</span><span class="p">.</span><span class="n">getPDLPatterns</span><span class="p">().</span><span class="n">registerConstraintFunction</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;HasSameElementType&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">hasSameElementTypeImpl</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-native-constraints-in-pdll">
+<h5>Defining Native Constraints in PDLL<a class="headerlink" href="#defining-native-constraints-in-pdll" title="此标题的永久链接">¶</a></h5>
+<p>In addition to importing native constraints, PDLL also supports defining native
+constraints directly when compiling ahead-of-time (AOT) for C++. These
+constraints can be defined by specifying a string code block after the
+constraint declaration:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Constraint HasOneUse(value: Value) [{
+  return success(value.hasOneUse());
+}];
+Constraint HasSameElementType(value1: Value, value2: Value) [{
+  return success(value1.getType().cast&lt;ShapedType&gt;().getElementType() ==
+                 value2.getType().cast&lt;ShapedType&gt;().getElementType());
+}];
+
+Pattern {
+  // A single entity constraint can be applied via the variable argument list.
+  let value: HasOneUse;
+
+  // Otherwise, constraints can be applied via the call operator:
+  let value: Value = ...;
+  let value2: Value = ...;
+  HasOneUse(value);
+  HasSameElementType(value, value2);
+}
+</pre></div>
+</div>
+<p>The arguments of the constraint are accessible within the code block via the
+same name. See the <a class="reference external" href="#native-constraint-type-translations">“type translation”</a> below for
+detailed information on how PDLL types are converted to native types. In addition to the
+PDLL arguments, the code block may also access the current <code class="docutils literal notranslate"><span class="pre">PatternRewriter</span></code> using
+<code class="docutils literal notranslate"><span class="pre">rewriter</span></code>. The result type of the native constraint function is implicitly defined
+as a <code class="docutils literal notranslate"><span class="pre">::mlir::LogicalResult</span></code>.</p>
+<p>Taking the constraints defined above as an example, these function would roughly be
+translated into:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">LogicalResult</span><span class="w"> </span><span class="nf">HasOneUse</span><span class="p">(</span><span class="n">PatternRewriter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rewriter</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">hasOneUse</span><span class="p">());</span>
+<span class="p">}</span>
+<span class="n">LogicalResult</span><span class="w"> </span><span class="nf">HasSameElementType</span><span class="p">(</span><span class="n">Value</span><span class="w"> </span><span class="n">value1</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="n">value2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">(</span><span class="n">value1</span><span class="p">.</span><span class="n">getType</span><span class="p">().</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">ShapedType</span><span class="o">&gt;</span><span class="p">().</span><span class="n">getElementType</span><span class="p">()</span><span class="w"> </span><span class="o">==</span>
+<span class="w">                 </span><span class="n">value2</span><span class="p">.</span><span class="n">getType</span><span class="p">().</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">ShapedType</span><span class="o">&gt;</span><span class="p">().</span><span class="n">getElementType</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>TODO: Native constraints should also be allowed to return values in certain cases.</p>
+<section id="native-constraint-type-translations">
+<h6>Native Constraint Type Translations<a class="headerlink" href="#native-constraint-type-translations" title="此标题的永久链接">¶</a></h6>
+<p>The types of argument and result variables are generally mapped to the corresponding
+MLIR type of the <a class="reference external" href="#constraints">constraint</a> used. Below is a detailed description
+of how the mapped type of a variable is determined for the various different types of
+constraints.</p>
+<ul class="simple">
+<li><p>Attr, Op, Type, TypeRange, Value, ValueRange:</p></li>
+</ul>
+<p>These are all core constraints, and are mapped directly to the MLIR equivalent
+(that their names suggest), namely:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Attr</span></code>       -&gt; “::mlir::Attribute”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Op</span></code>         -&gt; “::mlir::Operation *”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Type</span></code>       -&gt; “::mlir::Type”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TypeRange</span></code>  -&gt; “::mlir::TypeRange”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Value</span></code>      -&gt; “::mlir::Value”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ValueRange</span></code> -&gt; “::mlir::ValueRange”</p></li>
+<li><p>Op&lt;dialect.name&gt;</p></li>
+</ul>
+<p>A named operation constraint has a unique translation. If the ODS registration of the
+referenced operation has been included, the qualified C++ is used. If the ODS information
+is not available, this constraint maps to “::mlir::Operation *”, similarly to the unnamed
+variant. For example, given the following:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// `my_ops.td` provides the ODS definition of the `my_dialect` operations, such as
+// `my_dialect.bar` used below.
+#include &quot;my_ops.td&quot;
+
+Constraint Cst(op: Op&lt;my_dialect.bar&gt;) [{
+  return success(op ... );
+}];
+</pre></div>
+</div>
+<p>The native type used for <code class="docutils literal notranslate"><span class="pre">op</span></code> may be of the form <code class="docutils literal notranslate"><span class="pre">my_dialect::BarOp</span></code>, as opposed to the
+default <code class="docutils literal notranslate"><span class="pre">::mlir::Operation</span> <span class="pre">*</span></code>. Below is a sample translation of the above constraint:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">LogicalResult</span><span class="w"> </span><span class="nf">Cst</span><span class="p">(</span><span class="n">my_dialect</span><span class="o">::</span><span class="n">BarOp</span><span class="w"> </span><span class="n">op</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">(</span><span class="n">op</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Imported ODS Constraints</p></li>
+</ul>
+<p>Aside from the core constraints, certain constraints imported from ODS may use a unique
+native type. How to enable this unique type depends on the ODS constraint construct that
+was imported:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Attr</span></code> constraints</p>
+<ul>
+<li><p>Imported <code class="docutils literal notranslate"><span class="pre">Attr</span></code> constraints utilize the <code class="docutils literal notranslate"><span class="pre">storageType</span></code> field for native type translation.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Type</span></code> constraints</p>
+<ul>
+<li><p>Imported <code class="docutils literal notranslate"><span class="pre">Type</span></code> constraints utilize the <code class="docutils literal notranslate"><span class="pre">cppClassName</span></code> field for native type translation.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AttrInterface</span></code>/<code class="docutils literal notranslate"><span class="pre">OpInterface</span></code>/<code class="docutils literal notranslate"><span class="pre">TypeInterface</span></code> constraints</p>
+<ul>
+<li><p>Imported interfaces utilize the <code class="docutils literal notranslate"><span class="pre">cppInterfaceName</span></code> field for native type translation.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="defining-constraints-inline">
+<h4>Defining Constraints Inline<a class="headerlink" href="#defining-constraints-inline" title="此标题的永久链接">¶</a></h4>
+<p>In addition to global scope, PDLL Constraints and Native Constraints defined in
+PDLL may be specified <em>inline</em> at any level of nesting. This means that they may
+be defined in Patterns, other Constraints, Rewrites, etc:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Constraint GlobalConstraint() {
+  Constraint LocalConstraint(value: Value) {
+    ...
+  };
+  Constraint LocalNativeConstraint(value: Value) [{
+    ...
+  }];
+  let someValue: [LocalConstraint, LocalNativeConstraint] = ...;
+}
+</pre></div>
+</div>
+<p>Constraints that are defined inline may also elide the name when used directly:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Constraint GlobalConstraint(inputValue: Value) {
+  Constraint(value: Value) { ... }(inputValue);
+  Constraint(value: Value) [{ ... }](inputValue);
+}
+</pre></div>
+</div>
+<p>When defined inline, PDLL constraints may reference any previously defined
+variable:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Constraint GlobalConstraint(op: Op&lt;my_dialect.foo&gt;) {
+  Constraint LocalConstraint() {
+    let results = op.results;
+  };
+}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="rewriters">
+<h3>Rewriters<a class="headerlink" href="#rewriters" title="此标题的永久链接">¶</a></h3>
+<p>Rewriters define the set of transformations to be performed within the <code class="docutils literal notranslate"><span class="pre">rewrite</span></code>
+section of a pattern, and, more specifically, how to transform the input IR
+after a successful pattern match. All PDLL rewrites must be defined within the
+<code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section of the pattern. The <code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section is denoted by the last
+statement within the body of the <code class="docutils literal notranslate"><span class="pre">Pattern</span></code>, which is required to be an
+<a class="reference external" href="#operation-rewrite-statements">operation rewrite statement</a>. There are two main
+categories of rewrites in PDLL: operation rewrite statements, and user defined
+rewrites.</p>
+<section id="operation-rewrite-statements">
+<h4>Operation Rewrite statements<a class="headerlink" href="#operation-rewrite-statements" title="此标题的永久链接">¶</a></h4>
+<p>Operation rewrite statements are builtin PDLL statements that perform an IR
+transformation given a root operation. These statements are the only ones able
+to start the <code class="docutils literal notranslate"><span class="pre">rewrite</span></code> section of a pattern, as they allow for properly
+<a class="reference external" href="#variable-binding">“binding”</a> the root operation of the pattern.</p>
+<section id="erase-statement">
+<h5><code class="docutils literal notranslate"><span class="pre">erase</span></code> statement<a class="headerlink" href="#erase-statement" title="此标题的永久链接">¶</a></h5>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// A pattern that erases all `my_dialect.foo` operations.
+Pattern =&gt; erase op&lt;my_dialect.foo&gt;;
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">erase</span></code> statement erases a given operation.</p>
+</section>
+<section id="replace-statement">
+<h5><code class="docutils literal notranslate"><span class="pre">replace</span></code> statement<a class="headerlink" href="#replace-statement" title="此标题的永久链接">¶</a></h5>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// A pattern that replaces the root operation with its input value.
+Pattern {
+  let root = op&lt;my_dialect.foo&gt;(input: Value);
+  replace root with input;
+}
+
+// A pattern that replaces the root operation with multiple input values.
+Pattern {
+  let root = op&lt;my_dialect.foo&gt;(input: Value, _: Value, input2: Value);
+  replace root with (input, input2);
+}
+
+// A pattern that replaces the root operation with another operation.
+// Note that when an operation is used as the replacement, we can infer its
+// result types from the input operation. In these cases, the result
+// types of replacement operation may be elided. 
+Pattern {
+  // Note: In this pattern we also inlined the `root` expression.
+  replace op&lt;my_dialect.foo&gt; with op&lt;my_dialect.bar&gt;;
+}
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">replace</span></code> statement allows for replacing a given root operation with either
+another operation, or a set of input <code class="docutils literal notranslate"><span class="pre">Value</span></code> and <code class="docutils literal notranslate"><span class="pre">ValueRange</span></code> values. When an operation
+is used as the replacement, we allow infering the result types from the input operation.
+In these cases, the result types of replacement operation may be elided. Note that no
+other components aside from the result types will be inferred from the input operation
+during the replacement.</p>
+</section>
+<section id="rewrite-statement">
+<h5><code class="docutils literal notranslate"><span class="pre">rewrite</span></code> statement<a class="headerlink" href="#rewrite-statement" title="此标题的永久链接">¶</a></h5>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// A simple pattern that replaces the root operation with its input value.
+Pattern {
+  let root = op&lt;my_dialect.foo&gt;(input: Value);
+  rewrite root with {
+    ...
+
+    replace root with input;
+  };
+}
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">rewrite</span></code> statement allows for rewriting a given root operation with a block
+of nested rewriters. The root operation is not implicitly erased or replaced,
+and any transformations to it must be expressed within the nested rewrite block.
+The inner body may contain any number of other rewrite statements, variables, or
+expressions.</p>
+</section>
+</section>
+<section id="defining-rewriters-in-pdll">
+<h4>Defining Rewriters in PDLL<a class="headerlink" href="#defining-rewriters-in-pdll" title="此标题的永久链接">¶</a></h4>
+<p>Additional rewrites can also be defined within PDLL, which allows for building
+rewrite fragments that can be composed across many different patterns. A
+rewriter in PDLL is defined similarly to a function in traditional programming
+languages; it contains a name, a set of input arguments, a set of result types,
+and a body. Results of a rewrite are returned via a <code class="docutils literal notranslate"><span class="pre">return</span></code> statement. A few
+examples are shown below:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// A rewrite that constructs and returns a new operation, given an input value.
+Rewrite BuildFooOp(value: Value) -&gt; Op {
+  return op&lt;my_dialect.foo&gt;(value);
+}
+
+Pattern {
+  // We invoke the rewrite in the same way as functions in traditional
+  // languages.
+  replace op&lt;my_dialect.old_op&gt;(input: Value) with BuildFooOp(input);
+}
+</pre></div>
+</div>
+<section id="rewrites-with-multiple-results">
+<h5>Rewrites with multiple results<a class="headerlink" href="#rewrites-with-multiple-results" title="此标题的永久链接">¶</a></h5>
+<p>Rewrites can return multiple results by returning a tuple of values. When
+returning multiple results, each result can also be assigned a name to use when
+indexing that tuple element. Tuple elements can be referenced by their index
+number, or by name if they were assigned one.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// A rewrite that returns multiple results, with some of the results assigned
+// a more readable name.
+Rewrite CreateRewriteOps() -&gt; (Op, result1: ValueRange) {
+  return (op&lt;my_dialect.bar&gt;, op&lt;my_dialect.foo&gt;);
+}
+
+Pattern {
+  rewrite root: Op&lt;my_dialect.foo&gt; with {
+    // Invoke the rewrite, which returns a tuple of values.
+    let result = CreateRewriteOps();
+
+    // Index the tuple elements by index, or by name. 
+    replace root with (result.0, result.1, result.result1);
+  }
+}
+</pre></div>
+</div>
+</section>
+<section id="rewrite-result-type-inference">
+<h5>Rewrite result type inference<a class="headerlink" href="#rewrite-result-type-inference" title="此标题的永久链接">¶</a></h5>
+<p>In addition to explicitly specifying the results of the rewrite via the rewrite
+signature, PDLL defined rewrites also support inferring the result type from the
+return statement. Result type inference is active whenever the rewrite is
+defined with no result constraints:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// This rewrite returns a derived operation.
+Rewrite ReturnSelf(op: Op&lt;my_dialect.foo&gt;) =&gt; op;
+// This rewrite returns a tuple of two Values.
+Rewrite ExtractMultipleResults(op: Op&lt;my_dialect.foo&gt;) {
+  return (result1 = op.result1, result2 = op.result2);
+}
+
+Pattern {
+  rewrite root: Op&lt;my_dialect.foo&gt; with {
+    let values = ExtractMultipleResults(op&lt;my_dialect.foo&gt;);
+    replace root with (values.result1, values.result2);
+  }
+}
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h5>Single Line “Lambda” Body<a class="headerlink" href="#id3" title="此标题的永久链接">¶</a></h5>
+<p>Rewrites generally define their body using a compound block of statements, as
+shown below:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Rewrite ReturnSelf(op: Op&lt;my_dialect.foo&gt;) {
+  return op;
+}
+Rewrite EraseOp(op: Op) {
+  erase op;
+}
+</pre></div>
+</div>
+<p>Rewrites also support a lambda-like syntax for specifying simple single line
+bodies. The lambda body of a Rewrite expects a single expression, which is
+implicitly returned, or a single
+<a class="reference external" href="#operation-rewrite-statements">operation rewrite statement</a>:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Rewrite ReturnSelf(op: Op&lt;my_dialect.foo&gt;) =&gt; op;
+Rewrite EraseOp(op: Op) =&gt; erase op;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="native-rewriters">
+<h4>Native Rewriters<a class="headerlink" href="#native-rewriters" title="此标题的永久链接">¶</a></h4>
+<p>Rewriters may also be defined outside of PDLL, and registered natively within
+the C++ API.</p>
+<section id="importing-existing-native-rewrites">
+<h5>Importing existing Native Rewrites<a class="headerlink" href="#importing-existing-native-rewrites" title="此标题的永久链接">¶</a></h5>
+<p>Rewrites defined externally can be imported into PDLL by specifying a
+rewrite “declaration”. This is similar to the PDLL form of defining a
+rewrite but omits the body. Importing the declaration in this form allows for
+PDLL to statically know the expected input and output types.</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>// Import a single input native rewrite that returns a new operation. This
+// rewrite must be registered by the consumer of the compiled PDL.
+Rewrite BuildOp(value: Value) -&gt; Op;
+
+Pattern {
+  replace op&lt;my_dialect.old_op&gt;(input: Value) with BuildOp(input);
+}
+</pre></div>
+</div>
+<p>External rewrites are those registered explicitly with the <code class="docutils literal notranslate"><span class="pre">RewritePatternSet</span></code> via
+the C++ PDL API. For example, the rewrite above may be registered as:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="n">Operation</span><span class="w"> </span><span class="o">*</span><span class="nf">buildOpImpl</span><span class="p">(</span><span class="n">PDLResultList</span><span class="w"> </span><span class="o">&amp;</span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// insert special rewrite logic here.</span>
+<span class="w">  </span><span class="n">Operation</span><span class="w"> </span><span class="o">*</span><span class="n">resultOp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...;</span><span class="w"> </span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">resultOp</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">registerNativeRewrite</span><span class="p">(</span><span class="n">RewritePatternSet</span><span class="w"> </span><span class="o">&amp;</span><span class="n">patterns</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">patterns</span><span class="p">.</span><span class="n">getPDLPatterns</span><span class="p">().</span><span class="n">registerRewriteFunction</span><span class="p">(</span><span class="s">&quot;BuildOp&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">buildOpImpl</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-native-rewrites-in-pdll">
+<h5>Defining Native Rewrites in PDLL<a class="headerlink" href="#defining-native-rewrites-in-pdll" title="此标题的永久链接">¶</a></h5>
+<p>In addition to importing native rewrites, PDLL also supports defining native
+rewrites directly when compiling ahead-of-time (AOT) for C++. These rewrites can
+be defined by specifying a string code block after the rewrite declaration:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Rewrite BuildOp(value: Value) -&gt; (foo: Op&lt;my_dialect.foo&gt;, bar: Op&lt;my_dialect.bar&gt;) [{
+  return {rewriter.create&lt;my_dialect::FooOp&gt;(value), rewriter.create&lt;my_dialect::BarOp&gt;()};
+}];
+
+Pattern {
+  let root = op&lt;my_dialect.foo&gt;(input: Value);
+  rewrite root with {
+    // Invoke the native rewrite and use the results when replacing the root.
+    let results = BuildOp(input);
+    replace root with (results.foo, results.bar);
+  }
+}
+</pre></div>
+</div>
+<p>The arguments of the rewrite are accessible within the code block via the
+same name. See the <a class="reference external" href="#native-rewrite-type-translations">“type translation”</a> below for
+detailed information on how PDLL types are converted to native types. In addition to the
+PDLL arguments, the code block may also access the current <code class="docutils literal notranslate"><span class="pre">PatternRewriter</span></code> using
+<code class="docutils literal notranslate"><span class="pre">rewriter</span></code>. See the <a class="reference external" href="#native-rewrite-result-translation">“result translation”</a> section
+for detailed information on how the result type of the native function is determined.</p>
+<p>Taking the rewrite defined above as an example, this function would roughly be
+translated into:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">my_dialect</span><span class="o">::</span><span class="n">FooOp</span><span class="p">,</span><span class="w"> </span><span class="n">my_dialect</span><span class="o">::</span><span class="n">BarOp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">BuildOp</span><span class="p">(</span><span class="n">Value</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">rewriter</span><span class="p">.</span><span class="n">create</span><span class="o">&lt;</span><span class="n">my_dialect</span><span class="o">::</span><span class="n">FooOp</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">),</span><span class="w"> </span><span class="n">rewriter</span><span class="p">.</span><span class="n">create</span><span class="o">&lt;</span><span class="n">my_dialect</span><span class="o">::</span><span class="n">BarOp</span><span class="o">&gt;</span><span class="p">()};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="native-rewrite-type-translations">
+<h6>Native Rewrite Type Translations<a class="headerlink" href="#native-rewrite-type-translations" title="此标题的永久链接">¶</a></h6>
+<p>The types of argument and result variables are generally mapped to the corresponding
+MLIR type of the <a class="reference external" href="#constraints">constraint</a> used. The rules of native <code class="docutils literal notranslate"><span class="pre">Rewrite</span></code> type translation
+are identical to those of native <code class="docutils literal notranslate"><span class="pre">Constraint</span></code>s, please view the corresponding
+<a class="reference external" href="#native-constraint-type-translations">native <code class="docutils literal notranslate"><span class="pre">Constraint</span></code> type translation</a> section for a
+detailed description of how the mapped type of a variable is determined.</p>
+</section>
+<section id="native-rewrite-result-translation">
+<h6>Native Rewrite Result Translation<a class="headerlink" href="#native-rewrite-result-translation" title="此标题的永久链接">¶</a></h6>
+<p>The results of a native rewrite are directly translated to the results of the native function,
+using the type translation rules <a class="reference external" href="#native-rewrite-type-translations">described above</a>. The section
+below describes the various result translation scenarios:</p>
+<ul class="simple">
+<li><p>Zero Result</p></li>
+</ul>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Rewrite createOp() [{
+  rewriter.create&lt;my_dialect::FooOp&gt;();
+}];
+</pre></div>
+</div>
+<p>In the case where a native <code class="docutils literal notranslate"><span class="pre">Rewrite</span></code> has no results, the native function returns <code class="docutils literal notranslate"><span class="pre">void</span></code>:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">createOp</span><span class="p">(</span><span class="n">PatternRewriter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rewriter</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">rewriter</span><span class="p">.</span><span class="n">create</span><span class="o">&lt;</span><span class="n">my_dialect</span><span class="o">::</span><span class="n">FooOp</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Single Result</p></li>
+</ul>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Rewrite createOp() -&gt; Op&lt;my_dialect.foo&gt; [{
+  return rewriter.create&lt;my_dialect::FooOp&gt;();
+}];
+</pre></div>
+</div>
+<p>In the case where a native <code class="docutils literal notranslate"><span class="pre">Rewrite</span></code> has a single result, the native function returns the corresponding
+native type for that single result:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">my_dialect</span><span class="o">::</span><span class="n">FooOp</span><span class="w"> </span><span class="nf">createOp</span><span class="p">(</span><span class="n">PatternRewriter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rewriter</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">rewriter</span><span class="p">.</span><span class="n">create</span><span class="o">&lt;</span><span class="n">my_dialect</span><span class="o">::</span><span class="n">FooOp</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Multi Result</p></li>
+</ul>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Rewrite complexRewrite(value: Value) -&gt; (Op&lt;my_dialect.foo&gt;, FunctionOpInterface) [{
+  ...
+}];
+</pre></div>
+</div>
+<p>In the case where a native <code class="docutils literal notranslate"><span class="pre">Rewrite</span></code> has multiple results, the native function returns a <code class="docutils literal notranslate"><span class="pre">std::tuple&lt;...&gt;</span></code>
+containing the corresponding native types for each of the results:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">my_dialect</span><span class="o">::</span><span class="n">FooOp</span><span class="p">,</span><span class="w"> </span><span class="n">FunctionOpInterface</span><span class="o">&gt;</span>
+<span class="n">complexRewrite</span><span class="p">(</span><span class="n">PatternRewriter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rewriter</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="defining-rewrites-inline">
+<h4>Defining Rewrites Inline<a class="headerlink" href="#defining-rewrites-inline" title="此标题的永久链接">¶</a></h4>
+<p>In addition to global scope, PDLL Rewrites and Native Rewrites defined in PDLL
+may be specified <em>inline</em> at any level of nesting. This means that they may be
+defined in Patterns, other Rewrites, etc:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Rewrite GlobalRewrite(inputValue: Value) {
+  Rewrite localRewrite(value: Value) {
+    ...
+  };
+  Rewrite localNativeRewrite(value: Value) [{
+    ...
+  }];
+  localRewrite(inputValue);
+  localNativeRewrite(inputValue);
+}
+</pre></div>
+</div>
+<p>Rewrites that are defined inline may also elide the name when used directly:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Rewrite GlobalRewrite(inputValue: Value) {
+  Rewrite(value: Value) { ... }(inputValue);
+  Rewrite(value: Value) [{ ... }](inputValue);
+}
+</pre></div>
+</div>
+<p>When defined inline, PDLL rewrites may reference any previously defined
+variable:</p>
+<div class="highlight-pdll notranslate"><div class="highlight"><pre><span></span>Rewrite GlobalRewrite(op: Op&lt;my_dialect.foo&gt;) {
+  Rewrite localRewrite() {
+    let results = op.results;
+  };
+}
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

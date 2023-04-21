@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Writing DataFlow Analyses in MLIR</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../../genindex.html" />
+  <link rel="search" title="搜索" href="../../search.html" />
+  <link rel="next" title="Quickstart tutorial to adding MLIR graph rewrite" href="QuickstartRewrites.html" />
+  <link rel="prev" title="Creating a Dialect" href="CreatingADialect.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#forward-dataflow-analysis" class="reference internal">Forward Dataflow Analysis</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Toy/Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Toy/Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Toy/Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Toy/Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Toy/Ch-5.html" class="reference internal ">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Toy/Ch-6.html" class="reference internal ">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Toy/Ch-7.html" class="reference internal ">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Toy/_index.html" class="reference internal ">Toy Tutorial</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+    <li>Writing DataFlow Analyses in MLIR</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="CreatingADialect.html"
+       title="上一章">← Creating a Dialect</a>
+  </li>
+  <li class="next">
+    <a href="QuickstartRewrites.html"
+       title="下一章">Quickstart tutorial to adding MLIR graph rewrite →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="writing-dataflow-analyses-in-mlir">
+<h1>Writing DataFlow Analyses in MLIR<a class="headerlink" href="#writing-dataflow-analyses-in-mlir" title="此标题的永久链接">¶</a></h1>
+<p>Writing dataflow analyses in MLIR, or well any compiler, can often seem quite
+daunting and/or complex. A dataflow analysis generally involves propagating
+information about the IR across various different types of control flow
+constructs, of which MLIR has many (Block-based branches, Region-based branches,
+CallGraph, etc), and it isn’t always clear how best to go about performing the
+propagation. To help writing these types of analyses in MLIR, this document
+details several utilities that simplify the process and make it a bit more
+approachable.</p>
+<section id="forward-dataflow-analysis">
+<h2>Forward Dataflow Analysis<a class="headerlink" href="#forward-dataflow-analysis" title="此标题的永久链接">¶</a></h2>
+<p>One type of dataflow analysis is a forward propagation analysis. This type of
+analysis, as the name may suggest, propagates information forward (e.g. from
+definitions to uses). To provide a bit of concrete context, let’s go over
+writing a simple forward dataflow analysis in MLIR. Let’s say for this analysis
+that we want to propagate information about a special “metadata” dictionary
+attribute. The contents of this attribute are simply a set of metadata that
+describe a specific value, e.g. <code class="docutils literal notranslate"><span class="pre">metadata</span> <span class="pre">=</span> <span class="pre">{</span> <span class="pre">likes_pizza</span> <span class="pre">=</span> <span class="pre">true</span> <span class="pre">}</span></code>. We will
+collect the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> for operations in the IR and propagate them about.</p>
+<section id="lattices">
+<h3>Lattices<a class="headerlink" href="#lattices" title="此标题的永久链接">¶</a></h3>
+<p>Before going into how one might setup the analysis itself, it is important to
+first introduce the concept of a <code class="docutils literal notranslate"><span class="pre">Lattice</span></code> and how we will use it for the
+analysis. A lattice represents all of the possible values or results of the
+analysis for a given value. A lattice element holds the set of information
+computed by the analysis for a given value, and is what gets propagated across
+the IR. For our analysis, this would correspond to the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> dictionary
+attribute.</p>
+<p>Regardless of the value held within, every type of lattice contains two special
+element states:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">uninitialized</span></code></p>
+<ul>
+<li><p>The element has not been initialized.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">top</span></code>/<code class="docutils literal notranslate"><span class="pre">overdefined</span></code>/<code class="docutils literal notranslate"><span class="pre">unknown</span></code></p>
+<ul>
+<li><p>The element encompasses every possible value.</p></li>
+<li><p>This is a very conservative state, and essentially means “I can’t make
+any assumptions about the value, it could be anything”</p></li>
+</ul>
+</li>
+</ul>
+<p>These two states are important when merging, or <code class="docutils literal notranslate"><span class="pre">join</span></code>ing as we will refer to it
+further in this document, information as part of the analysis. Lattice elements
+are <code class="docutils literal notranslate"><span class="pre">join</span></code>ed whenever there are two different source points, such as an argument
+to a block with multiple predecessors. One important note about the <code class="docutils literal notranslate"><span class="pre">join</span></code>
+operation, is that it is required to be monotonic (see the <code class="docutils literal notranslate"><span class="pre">join</span></code> method in the
+example below for more information). This ensures that <code class="docutils literal notranslate"><span class="pre">join</span></code>ing elements is
+consistent. The two special states mentioned above have unique properties during
+a <code class="docutils literal notranslate"><span class="pre">join</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">uninitialized</span></code></p>
+<ul>
+<li><p>If one of the elements is <code class="docutils literal notranslate"><span class="pre">uninitialized</span></code>, the other element is used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uninitialized</span></code> in the context of a <code class="docutils literal notranslate"><span class="pre">join</span></code> essentially means “take the
+other thing”.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">top</span></code>/<code class="docutils literal notranslate"><span class="pre">overdefined</span></code>/<code class="docutils literal notranslate"><span class="pre">unknown</span></code></p>
+<ul>
+<li><p>If one of the elements being joined is <code class="docutils literal notranslate"><span class="pre">overdefined</span></code>, the result is
+<code class="docutils literal notranslate"><span class="pre">overdefined</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+<p>For our analysis in MLIR, we will need to define a class representing the value
+held by an element of the lattice used by our dataflow analysis:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">/// The value of our lattice represents the inner structure of a DictionaryAttr,</span>
+<span class="c1">/// for the `metadata`.</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">MetadataLatticeValue</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">MetadataLatticeValue</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">/// Compute a lattice value from the provided dictionary.</span>
+<span class="w">  </span><span class="n">MetadataLatticeValue</span><span class="p">(</span><span class="n">DictionaryAttr</span><span class="w"> </span><span class="n">attr</span><span class="p">)</span>
+<span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">metadata</span><span class="p">(</span><span class="n">attr</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">attr</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">  </span><span class="c1">/// Return a pessimistic value state, i.e. the `top`/`overdefined`/`unknown`</span>
+<span class="w">  </span><span class="c1">/// state, for our value type. The resultant state should not assume any</span>
+<span class="w">  </span><span class="c1">/// information about the state of the IR.</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">MetadataLatticeValue</span><span class="w"> </span><span class="n">getPessimisticValueState</span><span class="p">(</span><span class="n">MLIRContext</span><span class="w"> </span><span class="o">*</span><span class="n">context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// The `top`/`overdefined`/`unknown` state is when we know nothing about any</span>
+<span class="w">    </span><span class="c1">// metadata, i.e. an empty dictionary.</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">MetadataLatticeValue</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">/// Return a pessimistic value state for our value type using only information</span>
+<span class="w">  </span><span class="c1">/// about the state of the provided IR. This is similar to the above method,</span>
+<span class="w">  </span><span class="c1">/// but may produce a slightly more refined result. This is okay, as the</span>
+<span class="w">  </span><span class="c1">/// information is already encoded as fact in the IR.</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">MetadataLatticeValue</span><span class="w"> </span><span class="n">getPessimisticValueState</span><span class="p">(</span><span class="n">Value</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Check to see if the parent operation has metadata.</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Operation</span><span class="w"> </span><span class="o">*</span><span class="n">parentOp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">.</span><span class="n">getDefiningOp</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parentOp</span><span class="o">-&gt;</span><span class="n">getAttrOfType</span><span class="o">&lt;</span><span class="n">DictionaryAttr</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;metadata&quot;</span><span class="p">))</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">MetadataLatticeValue</span><span class="p">(</span><span class="n">metadata</span><span class="p">);</span>
+
+<span class="w">      </span><span class="c1">// If no metadata is present, fallback to the</span>
+<span class="w">      </span><span class="c1">// `top`/`overdefined`/`unknown` state.</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">MetadataLatticeValue</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">/// This method conservatively joins the information held by `lhs` and `rhs`</span>
+<span class="w">  </span><span class="c1">/// into a new value. This method is required to be monotonic. `monotonicity`</span>
+<span class="w">  </span><span class="c1">/// is implied by the satisfaction of the following axioms:</span>
+<span class="w">  </span><span class="c1">///   * idempotence:   join(x,x) == x</span>
+<span class="w">  </span><span class="c1">///   * commutativity: join(x,y) == join(y,x)</span>
+<span class="w">  </span><span class="c1">///   * associativity: join(x,join(y,z)) == join(join(x,y),z)</span>
+<span class="w">  </span><span class="c1">///</span>
+<span class="w">  </span><span class="c1">/// When the above axioms are satisfied, we achieve `monotonicity`:</span>
+<span class="w">  </span><span class="c1">///   * monotonicity: join(x, join(x,y)) == join(x,y)</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">MetadataLatticeValue</span><span class="w"> </span><span class="n">join</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">MetadataLatticeValue</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lhs</span><span class="p">,</span>
+<span class="w">                                   </span><span class="k">const</span><span class="w"> </span><span class="n">MetadataLatticeValue</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rhs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// To join `lhs` and `rhs` we will define a simple policy, which is that we</span>
+<span class="w">    </span><span class="c1">// only keep information that is the same. This means that we only keep</span>
+<span class="w">    </span><span class="c1">// facts that are true in both.</span>
+<span class="w">    </span><span class="n">MetadataLatticeValue</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lhsIt</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">lhs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// As noted above, we only merge if the values are the same.</span>
+<span class="w">      </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rhs</span><span class="p">.</span><span class="n">metadata</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">lhsIt</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">rhs</span><span class="p">.</span><span class="n">metadata</span><span class="p">.</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">lhsIt</span><span class="p">.</span><span class="n">second</span><span class="p">)</span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">      </span><span class="n">result</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">lhsIt</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">/// A simple comparator that checks to see if this value is equal to the one</span>
+<span class="w">  </span><span class="c1">/// provided.</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">MetadataLatticeValue</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rhs</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">rhs</span><span class="p">.</span><span class="n">metadata</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Check that the &#39;rhs&#39; contains the same metadata.</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">llvm</span><span class="o">::</span><span class="n">all_of</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">it</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">rhs</span><span class="p">.</span><span class="n">metadata</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">it</span><span class="p">.</span><span class="n">second</span><span class="p">);</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">/// Our value represents the combined metadata, which is originally a</span>
+<span class="w">  </span><span class="c1">/// DictionaryAttr, so we use a map.</span>
+<span class="w">  </span><span class="n">DenseMap</span><span class="o">&lt;</span><span class="n">StringAttr</span><span class="p">,</span><span class="w"> </span><span class="n">Attribute</span><span class="o">&gt;</span><span class="w"> </span><span class="n">metadata</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>One interesting thing to note above is that we don’t have an explicit method for
+the <code class="docutils literal notranslate"><span class="pre">uninitialized</span></code> state. This state is handled by the <code class="docutils literal notranslate"><span class="pre">LatticeElement</span></code> class,
+which manages a lattice value for a given IR entity. A quick overview of this
+class, and the API that will be interesting to us while writing our analysis, is
+shown below:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">/// This class represents a lattice element holding a specific value of type</span>
+<span class="c1">/// `ValueT`.</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">ValueT</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LatticeElement</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">/// Return the value held by this element. This requires that a value is</span>
+<span class="w">  </span><span class="c1">/// known, i.e. not `uninitialized`.</span>
+<span class="w">  </span><span class="n">ValueT</span><span class="w"> </span><span class="o">&amp;</span><span class="n">getValue</span><span class="p">();</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">ValueT</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">getValue</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">/// Join the information contained in the &#39;rhs&#39; element into this</span>
+<span class="w">  </span><span class="c1">/// element. Returns if the state of the current element changed.</span>
+<span class="w">  </span><span class="n">ChangeResult</span><span class="w"> </span><span class="nf">join</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">LatticeElement</span><span class="o">&lt;</span><span class="n">ValueT</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rhs</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">/// Join the information contained in the &#39;rhs&#39; value into this</span>
+<span class="w">  </span><span class="c1">/// lattice. Returns if the state of the current lattice changed.</span>
+<span class="w">  </span><span class="n">ChangeResult</span><span class="w"> </span><span class="nf">join</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">ValueT</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rhs</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">/// Mark the lattice element as having reached a pessimistic fixpoint. This</span>
+<span class="w">  </span><span class="c1">/// means that the lattice may potentially have conflicting value states, and</span>
+<span class="w">  </span><span class="c1">/// only the conservatively known value state should be relied on.</span>
+<span class="w">  </span><span class="n">ChangeResult</span><span class="w"> </span><span class="nf">markPessimisticFixPoint</span><span class="p">();</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>With our lattice defined, we can now define the driver that will compute and
+propagate our lattice across the IR.</p>
+</section>
+<section id="forwarddataflowanalysis-driver">
+<h3>ForwardDataflowAnalysis Driver<a class="headerlink" href="#forwarddataflowanalysis-driver" title="此标题的永久链接">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">ForwardDataFlowAnalysis</span></code> class represents the driver of the dataflow
+analysis, and performs all of the related analysis computation. When defining
+our analysis, we will inherit from this class and implement some of its hooks.
+Before that, let’s look at a quick overview of this class and some of the
+important API for our analysis:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">/// This class represents the main driver of the forward dataflow analysis. It</span>
+<span class="c1">/// takes as a template parameter the value type of lattice being computed.</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">ValueT</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForwardDataFlowAnalysis</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">ForwardDataFlowAnalysis</span><span class="p">(</span><span class="n">MLIRContext</span><span class="w"> </span><span class="o">*</span><span class="n">context</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">/// Compute the analysis on operations rooted under the given top-level</span>
+<span class="w">  </span><span class="c1">/// operation. Note that the top-level operation is not visited.</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">Operation</span><span class="w"> </span><span class="o">*</span><span class="n">topLevelOp</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">/// Return the lattice element attached to the given value. If a lattice has</span>
+<span class="w">  </span><span class="c1">/// not been added for the given value, a new &#39;uninitialized&#39; value is</span>
+<span class="w">  </span><span class="c1">/// inserted and returned.</span>
+<span class="w">  </span><span class="n">LatticeElement</span><span class="o">&lt;</span><span class="n">ValueT</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">getLatticeElement</span><span class="p">(</span><span class="n">Value</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">/// Return the lattice element attached to the given value, or nullptr if no</span>
+<span class="w">  </span><span class="c1">/// lattice element for the value has yet been created.</span>
+<span class="w">  </span><span class="n">LatticeElement</span><span class="o">&lt;</span><span class="n">ValueT</span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="n">lookupLatticeElement</span><span class="p">(</span><span class="n">Value</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">/// Mark all of the lattice elements for the given range of Values as having</span>
+<span class="w">  </span><span class="c1">/// reached a pessimistic fixpoint.</span>
+<span class="w">  </span><span class="n">ChangeResult</span><span class="w"> </span><span class="nf">markAllPessimisticFixPoint</span><span class="p">(</span><span class="n">ValueRange</span><span class="w"> </span><span class="n">values</span><span class="p">);</span>
+
+<span class="k">protected</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">/// Visit the given operation, and join any necessary analysis state</span>
+<span class="w">  </span><span class="c1">/// into the lattice elements for the results and block arguments owned by</span>
+<span class="w">  </span><span class="c1">/// this operation using the provided set of operand lattice elements</span>
+<span class="w">  </span><span class="c1">/// (all pointer values are guaranteed to be non-null). Returns if any result</span>
+<span class="w">  </span><span class="c1">/// or block argument value lattice elements changed during the visit. The</span>
+<span class="w">  </span><span class="c1">/// lattice element for a result or block argument value can be obtained, and</span>
+<span class="w">  </span><span class="c1">/// join&#39;ed into, by using `getLatticeElement`.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">ChangeResult</span><span class="w"> </span><span class="n">visitOperation</span><span class="p">(</span>
+<span class="w">      </span><span class="n">Operation</span><span class="w"> </span><span class="o">*</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">LatticeElement</span><span class="o">&lt;</span><span class="n">ValueT</span><span class="o">&gt;</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">operands</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>NOTE: Some API has been redacted for our example. The <code class="docutils literal notranslate"><span class="pre">ForwardDataFlowAnalysis</span></code>
+contains various other hooks that allow for injecting custom behavior when
+applicable.</p>
+<p>The main API that we are responsible for defining is the <code class="docutils literal notranslate"><span class="pre">visitOperation</span></code>
+method. This method is responsible for computing new lattice elements for the
+results and block arguments owned by the given operation. This is where we will
+inject the lattice element computation logic, also known as the transfer
+function for the operation, that is specific to our analysis. A simple
+implementation for our example is shown below:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MetadataAnalysis</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">ForwardDataFlowAnalysis</span><span class="o">&lt;</span><span class="n">MetadataLatticeValue</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">ForwardDataFlowAnalysis</span><span class="o">&lt;</span><span class="n">MetadataLatticeValue</span><span class="o">&gt;::</span><span class="n">ForwardDataFlowAnalysis</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">ChangeResult</span><span class="w"> </span><span class="nf">visitOperation</span><span class="p">(</span>
+<span class="w">      </span><span class="n">Operation</span><span class="w"> </span><span class="o">*</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">LatticeElement</span><span class="o">&lt;</span><span class="n">ValueT</span><span class="o">&gt;</span><span class="w"> </span><span class="o">*&gt;</span><span class="w"> </span><span class="n">operands</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">DictionaryAttr</span><span class="w"> </span><span class="n">metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">op</span><span class="o">-&gt;</span><span class="n">getAttrOfType</span><span class="o">&lt;</span><span class="n">DictionaryAttr</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;metadata&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// If we have no metadata for this operation, we will conservatively mark</span>
+<span class="w">    </span><span class="c1">// all of the results as having reached a pessimistic fixpoint.</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">metadata</span><span class="p">)</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">markAllPessimisticFixPoint</span><span class="p">(</span><span class="n">op</span><span class="o">-&gt;</span><span class="n">getResults</span><span class="p">());</span>
+
+<span class="w">    </span><span class="c1">// Otherwise, we will compute a lattice value for the metadata and join it</span>
+<span class="w">    </span><span class="c1">// into the current lattice element for all of our results.</span>
+<span class="w">    </span><span class="n">MetadataLatticeValue</span><span class="w"> </span><span class="n">latticeValue</span><span class="p">(</span><span class="n">metadata</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ChangeResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ChangeResult</span><span class="o">::</span><span class="n">NoChange</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Value</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">op</span><span class="o">-&gt;</span><span class="n">getResults</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// We grab the lattice element for `value` via `getLatticeElement` and</span>
+<span class="w">      </span><span class="c1">// then join it with the lattice value for this operation&#39;s metadata. Note</span>
+<span class="w">      </span><span class="c1">// that during the analysis phase, it is fine to freely create a new</span>
+<span class="w">      </span><span class="c1">// lattice element for a value. This is why we don&#39;t use the</span>
+<span class="w">      </span><span class="c1">// `lookupLatticeElement` method here.</span>
+<span class="w">      </span><span class="n">result</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">getLatticeElement</span><span class="p">(</span><span class="n">value</span><span class="p">).</span><span class="n">join</span><span class="p">(</span><span class="n">latticeValue</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>With that, we have all of the necessary components to compute our analysis.
+After the analysis has been computed, we can grab any computed information for
+values by using <code class="docutils literal notranslate"><span class="pre">lookupLatticeElement</span></code>. We use this function over
+<code class="docutils literal notranslate"><span class="pre">getLatticeElement</span></code> as the analysis is not guaranteed to visit all values, e.g.
+if the value is in a unreachable block, and we don’t want to create a new
+uninitialized lattice element in this case. See below for a quick example:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">MyPass::runOnOperation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">MetadataAnalysis</span><span class="w"> </span><span class="n">analysis</span><span class="p">(</span><span class="o">&amp;</span><span class="n">getContext</span><span class="p">());</span>
+<span class="w">  </span><span class="n">analysis</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">getOperation</span><span class="p">());</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">MyPass::useAnalysisOn</span><span class="p">(</span><span class="n">MetadataAnalysis</span><span class="w"> </span><span class="o">&amp;</span><span class="n">analysis</span><span class="p">,</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">LatticeElement</span><span class="o">&lt;</span><span class="n">MetadataLatticeValue</span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="n">latticeElement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">analysis</span><span class="p">.</span><span class="n">lookupLatticeElement</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// If we don&#39;t have an element, the `value` wasn&#39;t visited during our analysis</span>
+<span class="w">  </span><span class="c1">// meaning that it could be dead. We need to treat this conservatively.</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">lattice</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Our lattice element has a value, use it:</span>
+<span class="w">  </span><span class="n">MetadataLatticeValue</span><span class="w"> </span><span class="o">&amp;</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lattice</span><span class="o">-&gt;</span><span class="n">getValue</span><span class="p">();</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="CreatingADialect.html"
+       title="上一章">← Creating a Dialect</a>
+  </li>
+  <li class="next">
+    <a href="QuickstartRewrites.html"
+       title="下一章">Quickstart tutorial to adding MLIR graph rewrite →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

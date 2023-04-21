@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Toy Tutorial</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../../../genindex.html" />
+  <link rel="search" title="搜索" href="../../../search.html" />
+  <link rel="next" title="Understanding the IR Structure" href="../UnderstandingTheIRStructure.html" />
+  <link rel="prev" title="Chapter 7: Adding a Composite Type to Toy" href="Ch-7.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../DataFlowAnalysis.html" class="reference internal ">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-5.html" class="reference internal ">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-6.html" class="reference internal ">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-7.html" class="reference internal ">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Toy Tutorial</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#toy-tutorial" class="reference internal">Toy Tutorial</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+    <li>Toy Tutorial</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="Ch-7.html"
+       title="上一章">← Chapter 7: Adding a Composite Type to Toy</a>
+  </li>
+  <li class="next">
+    <a href="../UnderstandingTheIRStructure.html"
+       title="下一章">Understanding the IR Structure →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="toy-tutorial">
+<h1>Toy Tutorial<a class="headerlink" href="#toy-tutorial" title="此标题的永久链接">¶</a></h1>
+<p>This tutorial runs through the implementation of a basic toy language on top of
+MLIR. The goal of this tutorial is to introduce the concepts of MLIR; in
+particular, how <a class="reference external" href="../../LangRef.md/#dialects">dialects</a> can help easily support
+language specific constructs and transformations while still offering an easy
+path to lower to LLVM or other codegen infrastructure. This tutorial is based on
+the model of the
+<a class="reference external" href="https://llvm.org/docs/tutorial/MyFirstLanguageFrontend/index.html">LLVM Kaleidoscope Tutorial</a>.</p>
+<p>Another good source of introduction is the online <a class="reference external" href="https://www.youtube.com/watch?v=Y4SvqTtOIDk">recording</a>
+from the 2020 LLVM Dev Conference (<a class="reference external" href="https://llvm.org/devmtg/2020-09/slides/MLIR_Tutorial.pdf">slides</a>).</p>
+<p>This tutorial assumes you have cloned and built MLIR; if you have not yet done
+so, see
+<a class="reference external" href="../../../getting_started/">Getting started with MLIR</a>.</p>
+<p>This tutorial is divided in the following chapters:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="Ch-1.html"><span class="doc">Chapter #1</span></a>: Introduction to the Toy language and the definition
+of its AST.</p></li>
+<li><p><a class="reference internal" href="Ch-2.html"><span class="doc">Chapter #2</span></a>: Traversing the AST to emit a dialect in MLIR,
+introducing base MLIR concepts. Here we show how to start attaching
+semantics to our custom operations in MLIR.</p></li>
+<li><p><a class="reference internal" href="Ch-3.html"><span class="doc">Chapter #3</span></a>: High-level language-specific optimization using
+pattern rewriting system.</p></li>
+<li><p><a class="reference internal" href="Ch-4.html"><span class="doc">Chapter #4</span></a>: Writing generic dialect-independent transformations
+with Interfaces. Here we will show how to plug dialect specific information
+into generic transformations like shape inference and inlining.</p></li>
+<li><p><a class="reference internal" href="Ch-5.html"><span class="doc">Chapter #5</span></a>: Partially lowering to lower-level dialects. We’ll
+convert some of our high level language specific semantics towards a generic
+affine oriented dialect for optimization.</p></li>
+<li><p><a class="reference internal" href="Ch-6.html"><span class="doc">Chapter #6</span></a>: Lowering to LLVM and code generation. Here we’ll
+target LLVM IR for code generation, and detail more of the lowering
+framework.</p></li>
+<li><p><a class="reference internal" href="Ch-7.html"><span class="doc">Chapter #7</span></a>: Extending Toy: Adding support for a composite type.
+We’ll demonstrate how to add a custom type to MLIR, and how it fits in the
+existing pipeline.</p></li>
+</ul>
+<p>The <a class="reference internal" href="Ch-1.html"><span class="doc">first chapter</span></a> will introduce the Toy language and AST.</p>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="Ch-7.html"
+       title="上一章">← Chapter 7: Adding a Composite Type to Toy</a>
+  </li>
+  <li class="next">
+    <a href="../UnderstandingTheIRStructure.html"
+       title="下一章">Understanding the IR Structure →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
