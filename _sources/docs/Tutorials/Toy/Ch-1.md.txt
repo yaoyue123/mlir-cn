@@ -1,45 +1,36 @@
-# Chapter 1: Toy Language and AST
+# 第1章：Toy语言和AST（抽象语法树）
 
 [TOC]
 
-## The Language
+## 语言
 
-This tutorial will be illustrated with a toy language that we’ll call “Toy”
-(naming is hard...). Toy is a tensor-based language that allows you to define
-functions, perform some math computation, and print results.
+本教程将使用一个我们称之为“Toy”的玩具语言来进行说明（命名很难……）。Toy是一种基于张量的语言，允许您定义函数、执行一些数学计算并输出结果。
 
-Given that we want to keep things simple, the codegen will be limited to tensors
-of rank <= 2, and the only datatype in Toy is a 64-bit floating point type (aka
-‘double’ in C parlance). As such, all values are implicitly double precision,
-`Values` are immutable (i.e. every operation returns a newly allocated value),
-and deallocation is automatically managed. But enough with the long description;
-nothing is better than walking through an example to get a better understanding:
+为了保持简单，代码生成将仅限于秩<=2的张量，而Toy中唯一的数据类型是64位浮点数类型（在C语言中称为“double”）。因此，所有值都是隐式的双精度，值是不可变的（即每个操作都返回一个新分配的值），并且自动管理内存释放。但是，足够长的描述了，最好通过一个例子来更好地理解：
 
 ```toy
 def main() {
-  # Define a variable `a` with shape <2, 3>, initialized with the literal value.
-  # The shape is inferred from the supplied literal.
+  #在这段代码中使用字面值初始化一个变量a，并且没有显式地指定变量的形状。
+  #编译器会从提供的字面值中推断出变量的形状为<2, 3>
   var a = [[1, 2, 3], [4, 5, 6]];
 
-  # b is identical to a, the literal tensor is implicitly reshaped: defining new
-  # variables is the way to reshape tensors (element count must match).
+  #在这段代码中使用相同的字面值初始化了变量b和a。
+  #由于变量b被显式地声明为形状为<2, 3>的张量，编译器会将字面值隐式地重塑为该形状。
+  #需要注意的是，如果我们想要重塑张量，我们需要定义一个新变量，
+  #并确保新变量的元素数量与原始张量相同。
   var b<2, 3> = [1, 2, 3, 4, 5, 6];
 
-  # transpose() and print() are the only builtin, the following will transpose
-  # a and b and perform an element-wise multiplication before printing the result.
+  #在这段代码中使用transpose()函数将变量a和b进行转置，它们进行逐元素乘法运算。
+  #最后，使用print()函数打印结果。transpose()和print()是该语言唯一的内置函数
+  # 其他函数都需要用户定义
   print(transpose(a) * transpose(b));
 }
 ```
 
-Type checking is statically performed through type inference; the language only
-requires type declarations to specify tensor shapes when needed. Functions are
-generic: their parameters are unranked (in other words, we know these are
-tensors, but we don't know their dimensions). They are specialized for every
-newly discovered signature at call sites. Let's revisit the previous example by
-adding a user-defined function:
+类型检查是通过类型推断静态执行的；语言只在需要时才需要指定张量形状的类型声明。函数是通用的：它们的参数是未排序的（换句话说，我们知道这些是张量，但我们不知道它们的维度）。它们在调用站点为每个新发现的签名进行专门化。让我们通过添加一个用户定义的函数来重新审视上一个例子：
 
 ```toy
-# User defined generic function that operates on unknown shaped arguments.
+# 这是一个操作未知形状参数的用户定义通用函数的示例.
 def multiply_transpose(a, b) {
   return transpose(a) * transpose(b);
 }
@@ -69,7 +60,7 @@ def main() {
 
 ## The AST
 
-The AST from the above code is fairly straightforward; here is a dump of it:
+上面代码的AST（抽象语法树）非常简单，以下是它的输出：:
 
 ```
 Module:
@@ -119,15 +110,13 @@ Module:
     } // Block
 ```
 
-You can reproduce this result and play with the example in the
-`examples/toy/Ch1/` directory; try running `path/to/BUILD/bin/toyc-ch1
-test/Examples/Toy/Ch1/ast.toy -emit=ast`.
+你可以在examples/toy/Ch1/目录下复现这个结果，并尝试运行以下命令进行测试。
+```
+path/to/BUILD/bin/toyc-ch1 test/Examples/Toy/Ch1/ast.toy -emit=ast
+```
+词法分析器的代码非常简单，全部都在单个头文件:
+`examples/toy/Ch1/include/toy/Lexer.h`. 解析器的代码可以在
+`examples/toy/Ch1/include/toy/Parser.h`中找到; 它是一个递归下降解析器。如果你不熟悉这样的词法分析器和解析器, 它们与LLVM Kaleidoscope非常相似，这些内容在
+[Kaleidoscope Tutorial教程](https://llvm.org/docs/tutorial/MyFirstLanguageFrontend/LangImpl02.html)的前两章中有详细介绍。
 
-The code for the lexer is fairly straightforward; it is all in a single header:
-`examples/toy/Ch1/include/toy/Lexer.h`. The parser can be found in
-`examples/toy/Ch1/include/toy/Parser.h`; it is a recursive descent parser. If
-you are not familiar with such a Lexer/Parser, these are very similar to the
-LLVM Kaleidoscope equivalent that are detailed in the first two chapters of the
-[Kaleidoscope Tutorial](https://llvm.org/docs/tutorial/MyFirstLanguageFrontend/LangImpl02.html).
-
-The [next chapter](Ch-2.md) will demonstrate how to convert this AST into MLIR.
+[下一章](Ch-2.md) 将演示如何将这个AST转换为MLIR。

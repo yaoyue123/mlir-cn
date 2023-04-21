@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-      <title>开始使用</title>
+      <title>开始使用MLIR</title>
     
           <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
           <link rel="stylesheet" href="_static/theme.css " type="text/css" />
@@ -76,15 +76,15 @@
         
           <li class="toctree-l1 current">
             
-              <a href="#" class="reference internal current">开始使用</a>
+              <a href="#" class="reference internal current">开始使用MLIR</a>
             
 
             
               <ul>
                 
-                  <li class="toctree-l2"><a href="#unix-like-compile-testing" class="reference internal">Unix-like compile/testing:</a></li>
+                  <li class="toctree-l2"><a href="#unix" class="reference internal">在类Unix系统上进行编译测试:</a></li>
                 
-                  <li class="toctree-l2"><a href="#windows-compile-testing" class="reference internal">Windows compile/testing:</a></li>
+                  <li class="toctree-l2"><a href="#windows" class="reference internal">在Windows系统上进行编译测试:</a></li>
                 
               </ul>
             
@@ -120,7 +120,7 @@
         
           <li class="toctree-l1 ">
             
-              <a href="docs/Tutorials/Toy/Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+              <a href="docs/Tutorials/Toy/Ch-1.html" class="reference internal ">第1章：Toy语言和AST（抽象语法树）</a>
             
 
             
@@ -183,7 +183,7 @@
         
           <li class="toctree-l1 ">
             
-              <a href="docs/Tutorials/Toy/_index.html" class="reference internal ">Toy Tutorial</a>
+              <a href="docs/Tutorials/Toy/_index.html" class="reference internal ">Toy 入门教程</a>
             
 
             
@@ -220,7 +220,7 @@
   <ul class="breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
     
-    <li>开始使用</li>
+    <li>开始使用MLIR</li>
   </ul>
   
 
@@ -240,28 +240,19 @@
           <div class="content" role="main" v-pre>
             
   <hr class="docutils" />
-<section id="id1">
-<h1>开始使用<a class="headerlink" href="#id1" title="此标题的永久链接">¶</a></h1>
-<p>不要错过MLIR教程！
-<a class="reference external" href="https://llvm.org/devmtg/2020-09/slides/MLIR_Tutorial.pdf">slides</a> -
-<a class="reference external" href="https://www.youtube.com/watch?v=Y4SvqTtOIDk">recording</a> -
-<a class="reference external" href="https://mlir.llvm.org/docs/Tutorials/Toy/">online step-by-step</a></p>
-<p>Please refer to the <a class="reference external" href="https://llvm.org/docs/GettingStarted.html">LLVM Getting Started</a>
-in general to build LLVM. Below are quick instructions to build MLIR with LLVM.</p>
-<p>The following instructions for compiling and testing MLIR assume that you have
-<code class="docutils literal notranslate"><span class="pre">git</span></code>, <a class="reference external" href="https://ninja-build.org/"><code class="docutils literal notranslate"><span class="pre">ninja</span></code></a>, and a working C++ toolchain (see
-<a class="reference external" href="https://llvm.org/docs/GettingStarted.html#requirements">LLVM requirements</a>).</p>
-<p>As a starter, you may try <a class="reference internal" href="docs/Tutorials/Toy/Ch-1.html"><span class="doc">the tutorial</span></a> on
-building a compiler for a Toy language.</p>
-<hr class="docutils" />
-<p><strong>TIP</strong></p>
-<p>See the
-<a class="reference external" href="TestingGuide/#command-line-incantations">Testing Guide - CLI Incantations</a>
-section for additional ways to invoke and filter tests that can help you be more
-efficient for regular development.</p>
-<hr class="docutils" />
-<section id="unix-like-compile-testing">
-<h2>Unix-like compile/testing:<a class="headerlink" href="#unix-like-compile-testing" title="此标题的永久链接">¶</a></h2>
+<section id="mlir">
+<h1>开始使用MLIR<a class="headerlink" href="#mlir" title="此标题的永久链接">¶</a></h1>
+<p>MLIR教程相关！
+<a class="reference external" href="https://llvm.org/devmtg/2020-09/slides/MLIR_Tutorial.pdf">幻灯片</a> -
+<a class="reference external" href="https://www.youtube.com/watch?v=Y4SvqTtOIDk">视频</a> -
+<a class="reference external" href="https://mlir.llvm.org/docs/Tutorials/Toy/">入门教程</a></p>
+<p>LLVM相关请参考<a class="reference external" href="https://llvm.org/docs/GettingStarted.html">LLVM Getting Started</a></p>
+<p>通常情况下，构建LLVM需要一些时间。以下是构建带有LLVM的MLIR的快速指南</p>
+<p>以下编译和测试MLIR的流程需要您具备以下条件：
+<code class="docutils literal notranslate"><span class="pre">git</span></code>, <a class="reference external" href="https://ninja-build.org/"><code class="docutils literal notranslate"><span class="pre">ninja</span></code></a>,和C++工具链(可参考<a class="reference external" href="https://llvm.org/docs/GettingStarted.html#requirements">LLVM requirements</a>).</p>
+<p>作为初学者, 你可以尝试 <a class="reference internal" href="docs/Tutorials/Toy/Ch-1.html"><span class="doc">入门教程</span></a>, 该教程将帮助您构建一个Toy编译器。</p>
+<section id="unix">
+<h2>在类Unix系统上进行编译测试:<a class="headerlink" href="#unix" title="此标题的永久链接">¶</a></h2>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/llvm/llvm-project.git
 mkdir<span class="w"> </span>llvm-project/build
 <span class="nb">cd</span><span class="w"> </span>llvm-project/build
@@ -271,25 +262,24 @@ cmake<span class="w"> </span>-G<span class="w"> </span>Ninja<span class="w"> </s
 <span class="w">   </span>-DLLVM_TARGETS_TO_BUILD<span class="o">=</span><span class="s2">&quot;X86;NVPTX;AMDGPU&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">   </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release<span class="w"> </span><span class="se">\</span>
 <span class="w">   </span>-DLLVM_ENABLE_ASSERTIONS<span class="o">=</span>ON
-<span class="c1"># Using clang and lld speeds up the build, we recommend adding:</span>
+<span class="c1"># 使用clang和lld可以加快构建速度，我们建议添加以下选项:</span>
 <span class="c1">#  -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DLLVM_ENABLE_LLD=ON</span>
-<span class="c1"># CCache can drastically speed up further rebuilds, try adding:</span>
+<span class="c1"># CCache可以大幅加快重建速度，可以尝试添加以下选项:</span>
 <span class="c1">#  -DLLVM_CCACHE_BUILD=ON</span>
-<span class="c1"># Optionally, using ASAN/UBSAN can find bugs early in development, enable with:</span>
+<span class="c1"># 可选项，使用ASAN/UBSAN可以在开发早期发现错误，可以通过以下选项启用:</span>
 <span class="c1"># -DLLVM_USE_SANITIZER=&quot;Address;Undefined&quot; </span>
-<span class="c1"># Optionally, enabling integration tests as well</span>
+<span class="c1"># 可选项，还可以启用集成测试</span>
 <span class="c1"># -DMLIR_INCLUDE_INTEGRATION_TESTS=ON</span>
 cmake<span class="w"> </span>--build<span class="w"> </span>.<span class="w"> </span>--target<span class="w"> </span>check-mlir
 </pre></div>
 </div>
-<p>It is recommended that you install <code class="docutils literal notranslate"><span class="pre">clang</span></code> and <code class="docutils literal notranslate"><span class="pre">lld</span></code> on your machine (<code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">clang</span> <span class="pre">lld</span></code> on Ubuntu for example) and uncomment the last part of the
-cmake invocation above.</p>
+<p>建议您在计算机上安装clang和lld（例如，在Ubuntu上运行sudo apt-get install clang lld），然后取消上面cmake命令中的最后一部分的注释。</p>
 </section>
 <hr class="docutils" />
-<section id="windows-compile-testing">
-<h2>Windows compile/testing:<a class="headerlink" href="#windows-compile-testing" title="此标题的永久链接">¶</a></h2>
-<p>To compile and test on Windows using Visual Studio 2017:</p>
-<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="c1">REM In shell with Visual Studio environment set up, e.g., with command such as</span>
+<section id="windows">
+<h2>在Windows系统上进行编译测试:<a class="headerlink" href="#windows" title="此标题的永久链接">¶</a></h2>
+<p>要在Windows上使用Visual Studio 2017进行编译和测试，可以按照以下步骤操作:</p>
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span><span class="c1">REM 在已设置Visual Studio环境的Shell中执行以下命令，例如</span>
 <span class="c1">REM   $visual-studio-install\Auxiliary\Build\vcvarsall.bat&quot; x64</span>
 <span class="c1">REM invoked.</span>
 git clone https://github.com/llvm/llvm-project.git
