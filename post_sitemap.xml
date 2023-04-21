@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+<url>
+  <loc>https://mlir.wiki/_index.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/CreatingADialect.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/DataFlowAnalysis.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/QuickstartRewrites.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-1.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-2.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-3.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-4.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-5.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-6.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-7.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/_index.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/UnderstandingTheIRStructure.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/_index.html</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/_index.html#unix-like-compile-testing</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/_index.html#windows-compile-testing</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/CreatingADialect.html#cmake-best-practices</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/CreatingADialect.html#tablegen-targets</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/CreatingADialect.html#library-targets</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/CreatingADialect.html#dialect-conversions</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/CreatingADialect.html#id1</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/DataFlowAnalysis.html#forward-dataflow-analysis</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/DataFlowAnalysis.html#lattices</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/DataFlowAnalysis.html#forwarddataflowanalysis-driver</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/QuickstartRewrites.html#adding-operation</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/QuickstartRewrites.html#adding-patterns</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/QuickstartRewrites.html#tablegen-patterns</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/QuickstartRewrites.html#register-the-pattern</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/QuickstartRewrites.html#simple-c-matchandrewrite-style-specifications</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/QuickstartRewrites.html#fully-general-c-rewritepattern-specifications</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/QuickstartRewrites.html#testing</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/QuickstartRewrites.html#adding-optimization-pass</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-1.html#the-language</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-1.html#the-ast</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-2.html#introduction-multi-level-intermediate-representation</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-2.html#interfacing-with-mlir</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-2.html#opaque-api</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-2.html#defining-a-toy-dialect</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-2.html#defining-toy-operations</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-2.html#op-vs-operation-using-mlir-operations</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-2.html#using-the-operation-definition-specification-ods-framework</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-2.html#complete-toy-example</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-3.html#optimize-transpose-using-c-style-pattern-match-and-rewrite</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-3.html#optimize-reshapes-using-drr</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-4.html#background-grappling-with-an-extensible-ir</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-4.html#shape-inference-preparing-for-code-generation</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-4.html#inlining</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-4.html#intraprocedural-shape-inference</loc>
+</url>
+<url>
+  <loc>https://mlir.wiki/docs/Tutorials/Toy/Ch-5.html#dialect-conversions</loc>
+</url>
+</urlset>
