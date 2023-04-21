@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>http://mlir.wiki/</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/_index.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/CreatingADialect.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/DataFlowAnalysis.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/QuickstartRewrites.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/Toy/Ch-1.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/Toy/Ch-2.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/Toy/Ch-3.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/Toy/Ch-4.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/Toy/Ch-5.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/Toy/Ch-6.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/Toy/Ch-7.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/Toy/_index.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/UnderstandingTheIRStructure.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Tutorials/_index.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/genindex.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/search.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/index.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/DefiningDialects/Operations.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/DeclarativeRewrites.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/LangRef.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/PassManagement.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Dialects/Builtin.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Traits.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/PatternRewriter.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Canonicalization.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Interfaces.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/DialectConversion.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Dialects/LLVM.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/TargetLLVMIR.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/DefiningDialects/AttributesAndTypes.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/ShapeInference.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Rationale/Rationale.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Passes.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/SymbolsAndSymbolTables.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Dialects/Affine.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Dialects/Func.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Dialects/GPU.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Dialects/SPIR-V.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Dialects/Vector.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Dialects/MemRef.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Rationale/RationaleGenericDAGRewriter.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/DefiningDialects/_index.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/SPIRVToLLVMDialectConversion.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/DataLayout.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Bufferization.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/Rationale/RationaleSimplifiedPolyhedralForm.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+<url>
+  <loc>http://mlir.wiki/docs/BufferDeallocationInternals.html</loc>
+  <lastmod>2023-04-21T08:30:27+00:00</lastmod>
+  <priority>0.41</priority>
+</url>
+
+
+</urlset>
