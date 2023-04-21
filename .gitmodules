@@ -1,4 +1,0 @@
-[submodule "build/build/html"]
-	path = build/build/html
-	url = https://github.com/yaoyue123/mlir-cn.git
-	branch = gh-pages
