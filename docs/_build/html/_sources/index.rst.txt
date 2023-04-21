@@ -10,10 +10,6 @@ Welcome to MLIR 中文文档's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   main
-   hello.md
-
-
 
 Indices and tables
 ==================
