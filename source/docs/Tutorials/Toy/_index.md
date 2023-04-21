@@ -1,40 +1,21 @@
-# Toy Tutorial
+# Toy 入门教程
 
-This tutorial runs through the implementation of a basic toy language on top of
-MLIR. The goal of this tutorial is to introduce the concepts of MLIR; in
-particular, how [dialects](../../LangRef.md/#dialects) can help easily support
-language specific constructs and transformations while still offering an easy
-path to lower to LLVM or other codegen infrastructure. This tutorial is based on
-the model of the
-[LLVM Kaleidoscope Tutorial](https://llvm.org/docs/tutorial/MyFirstLanguageFrontend/index.html).
+本教程演示了如何在MLIR之上实现一个基本的toy语言。该教程的目标是介绍MLIR的概念，特别是如何使用[dialects](../../LangRef.md/#dialects)来轻松支持特定于语言的结构和转换，同时仍然提供一个方便的路径到LLVM或其他codegen基础设施。本教程基于[LLVM Kaleidoscope Tutorial教程](https://llvm.org/docs/tutorial/MyFirstLanguageFrontend/index.html)..
 
-Another good source of introduction is the online [recording](https://www.youtube.com/watch?v=Y4SvqTtOIDk)
-from the 2020 LLVM Dev Conference ([slides](https://llvm.org/devmtg/2020-09/slides/MLIR_Tutorial.pdf)).
+另一个很好的介绍来源是网上[视频](https://www.youtube.com/watch?v=Y4SvqTtOIDk)
+来自2020年LLVM开发大会([幻灯片](https://llvm.org/devmtg/2020-09/slides/MLIR_Tutorial.pdf)).
 
-This tutorial assumes you have cloned and built MLIR; if you have not yet done
-so, see
-[Getting started with MLIR](../../../getting_started/).
+本教程假设您已经克隆并构建了MLIR；如果您还没有这样做，请参阅以下链接以获取有关如何构建MLIR的说明
+[开始使用MLIR](../../../_index.md).
 
-This tutorial is divided in the following chapters:
+本教程分为以下章节:
 
--   [Chapter #1](Ch-1.md): Introduction to the Toy language and the definition
-    of its AST.
--   [Chapter #2](Ch-2.md): Traversing the AST to emit a dialect in MLIR,
-    introducing base MLIR concepts. Here we show how to start attaching
-    semantics to our custom operations in MLIR.
--   [Chapter #3](Ch-3.md): High-level language-specific optimization using
-    pattern rewriting system.
--   [Chapter #4](Ch-4.md): Writing generic dialect-independent transformations
-    with Interfaces. Here we will show how to plug dialect specific information
-    into generic transformations like shape inference and inlining.
--   [Chapter #5](Ch-5.md): Partially lowering to lower-level dialects. We'll
-    convert some of our high level language specific semantics towards a generic
-    affine oriented dialect for optimization.
--   [Chapter #6](Ch-6.md): Lowering to LLVM and code generation. Here we'll
-    target LLVM IR for code generation, and detail more of the lowering
-    framework.
--   [Chapter #7](Ch-7.md): Extending Toy: Adding support for a composite type.
-    We'll demonstrate how to add a custom type to MLIR, and how it fits in the
-    existing pipeline.
+-   [第1章](Ch-1.md): 介绍Toy语言及其AST的定义。
+-   [第2章](Ch-2.md): 遍历AST以在MLIR中发出一个dialect，介绍基本的MLIR概念。在这里，我们将展示如何开始在MLIR中为我们的自定义操作附加语义。
+-   [第3章](Ch-3.md): 使用模式重写系统进行高级语言特定的优化。
+-   [第4章](Ch-4.md): 使用接口编写通用的dialect无关变换。在这里，我们将展示如何将dialect中特定的信息插入到通用变换中，如形状推断和内联。
+-   [第5章](Ch-5.md): 部分转换到较低级别的方言。我们将把一些高级语言特定的语义转换为一个面向优化的通用dialect方言。
+-   [第6章](Ch-6.md): 底层到LLVM和代码生成。在这里，我们将以LLVM IR为目标进行代码生成，并详细介绍底层框架。
+-   [第7章](Ch-7.md): 扩展Toy：添加对复合类型的支持。我们将演示如何向MLIR添加自定义类型以及它如何适应现有的流水线。
 
-The [first chapter](Ch-1.md) will introduce the Toy language and AST.
+[第一章](Ch-1.md) 将介绍Toy语言和AST。

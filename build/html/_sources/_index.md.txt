@@ -1,35 +1,24 @@
 ---
-开始使用
+开始使用MLIR
 ---
 
-不要错过MLIR教程！
-[slides](https://llvm.org/devmtg/2020-09/slides/MLIR_Tutorial.pdf) -
-[recording](https://www.youtube.com/watch?v=Y4SvqTtOIDk) -
-[online step-by-step](https://mlir.llvm.org/docs/Tutorials/Toy/)
+MLIR教程相关！
+[幻灯片](https://llvm.org/devmtg/2020-09/slides/MLIR_Tutorial.pdf) -
+[视频](https://www.youtube.com/watch?v=Y4SvqTtOIDk) -
+[入门教程](https://mlir.llvm.org/docs/Tutorials/Toy/)
 
 
-Please refer to the [LLVM Getting Started](https://llvm.org/docs/GettingStarted.html)
-in general to build LLVM. Below are quick instructions to build MLIR with LLVM.
+LLVM相关请参考[LLVM Getting Started](https://llvm.org/docs/GettingStarted.html)
 
-The following instructions for compiling and testing MLIR assume that you have
-`git`, [`ninja`](https://ninja-build.org/), and a working C++ toolchain (see
-[LLVM requirements](https://llvm.org/docs/GettingStarted.html#requirements)).
+通常情况下，构建LLVM需要一些时间。以下是构建带有LLVM的MLIR的快速指南
 
-As a starter, you may try [the tutorial](docs/Tutorials/Toy/Ch-1.md) on
-building a compiler for a Toy language.
+以下编译和测试MLIR的流程需要您具备以下条件：
+`git`, [`ninja`](https://ninja-build.org/),和C++工具链(可参考[LLVM requirements](https://llvm.org/docs/GettingStarted.html#requirements)).
 
----
+作为初学者, 你可以尝试 [入门教程](docs/Tutorials/Toy/Ch-1.md), 该教程将帮助您构建一个Toy编译器。
 
-**TIP**
 
-See the
-[Testing Guide - CLI Incantations](TestingGuide/#command-line-incantations)
-section for additional ways to invoke and filter tests that can help you be more
-efficient for regular development.
-
----
-
-### Unix-like compile/testing:
+### 在类Unix系统上进行编译测试:
 
 ```sh
 git clone https://github.com/llvm/llvm-project.git
@@ -41,28 +30,26 @@ cmake -G Ninja ../llvm \
    -DLLVM_TARGETS_TO_BUILD="X86;NVPTX;AMDGPU" \
    -DCMAKE_BUILD_TYPE=Release \
    -DLLVM_ENABLE_ASSERTIONS=ON
-# Using clang and lld speeds up the build, we recommend adding:
+# 使用clang和lld可以加快构建速度，我们建议添加以下选项:
 #  -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DLLVM_ENABLE_LLD=ON
-# CCache can drastically speed up further rebuilds, try adding:
+# CCache可以大幅加快重建速度，可以尝试添加以下选项:
 #  -DLLVM_CCACHE_BUILD=ON
-# Optionally, using ASAN/UBSAN can find bugs early in development, enable with:
+# 可选项，使用ASAN/UBSAN可以在开发早期发现错误，可以通过以下选项启用:
 # -DLLVM_USE_SANITIZER="Address;Undefined" 
-# Optionally, enabling integration tests as well
+# 可选项，还可以启用集成测试
 # -DMLIR_INCLUDE_INTEGRATION_TESTS=ON
 cmake --build . --target check-mlir
 ```
 
-It is recommended that you install `clang` and `lld` on your machine (`sudo apt-get
-install clang lld` on Ubuntu for example) and uncomment the last part of the
-cmake invocation above.
+建议您在计算机上安装clang和lld（例如，在Ubuntu上运行sudo apt-get install clang lld），然后取消上面cmake命令中的最后一部分的注释。
 
 ---
 
-### Windows compile/testing:
-To compile and test on Windows using Visual Studio 2017:
+### 在Windows系统上进行编译测试:
+要在Windows上使用Visual Studio 2017进行编译和测试，可以按照以下步骤操作:
 
 ```bat
-REM In shell with Visual Studio environment set up, e.g., with command such as
+REM 在已设置Visual Studio环境的Shell中执行以下命令，例如
 REM   $visual-studio-install\Auxiliary\Build\vcvarsall.bat" x64
 REM invoked.
 git clone https://github.com/llvm/llvm-project.git
