@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>‘llvm’ Dialect</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../../genindex.html" />
+  <link rel="search" title="搜索" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/DataFlowAnalysis.html" class="reference internal ">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-5.html" class="reference internal ">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-6.html" class="reference internal ">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-7.html" class="reference internal ">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/_index.html" class="reference internal ">Toy Tutorial</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+    <li>‘llvm’ Dialect</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="llvm-dialect">
+<h1>‘llvm’ Dialect<a class="headerlink" href="#llvm-dialect" title="此标题的永久链接">¶</a></h1>
+<p>This dialect maps <a class="reference external" href="https://llvm.org/docs/LangRef.html">LLVM IR</a> into MLIR by
+defining the corresponding operations and types. LLVM IR metadata is usually
+represented as MLIR attributes, which offer additional structure verification.</p>
+<p>We use “LLVM IR” to designate the
+<a class="reference external" href="https://llvm.org/docs/LangRef.html">intermediate representation of LLVM</a> and
+“LLVM <em>dialect</em>” or “LLVM IR <em>dialect</em>” to refer to this MLIR dialect.</p>
+<p>Unless explicitly stated otherwise, the semantics of the LLVM dialect operations
+must correspond to the semantics of LLVM IR instructions and any divergence is
+considered a bug. The dialect also contains auxiliary operations that smoothen
+the differences in the IR structure, e.g., MLIR does not have <code class="docutils literal notranslate"><span class="pre">phi</span></code> operations
+and LLVM IR does not have a <code class="docutils literal notranslate"><span class="pre">constant</span></code> operation. These auxiliary operations are
+systematically prefixed with <code class="docutils literal notranslate"><span class="pre">mlir</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">llvm.mlir.constant</span></code> where <code class="docutils literal notranslate"><span class="pre">llvm.</span></code> is
+the dialect namespace prefix.</p>
+<p>[TOC]</p>
+<section id="dependency-on-llvm-ir">
+<h2>Dependency on LLVM IR<a class="headerlink" href="#dependency-on-llvm-ir" title="此标题的永久链接">¶</a></h2>
+<p>LLVM dialect is not expected to depend on any object that requires an
+<code class="docutils literal notranslate"><span class="pre">LLVMContext</span></code>, such as an LLVM IR instruction or type. Instead, MLIR provides
+thread-safe alternatives compatible with the rest of the infrastructure. The
+dialect is allowed to depend on the LLVM IR objects that don’t require a
+context, such as data layout and triple description.</p>
+</section>
+<section id="module-structure">
+<h2>Module Structure<a class="headerlink" href="#module-structure" title="此标题的永久链接">¶</a></h2>
+<p>IR modules use the built-in MLIR <code class="docutils literal notranslate"><span class="pre">ModuleOp</span></code> and support all its features. In
+particular, modules can be named, nested and are subject to symbol visibility.
+Modules can contain any operations, including LLVM functions and globals.</p>
+<section id="data-layout-and-triple">
+<h3>Data Layout and Triple<a class="headerlink" href="#data-layout-and-triple" title="此标题的永久链接">¶</a></h3>
+<p>An IR module may have an optional data layout and triple information attached
+using MLIR attributes <code class="docutils literal notranslate"><span class="pre">llvm.data_layout</span></code> and <code class="docutils literal notranslate"><span class="pre">llvm.triple</span></code>, respectively. Both
+are string attributes with the
+<a class="reference external" href="https://llvm.org/docs/LangRef.html#data-layout">same syntax</a> as in LLVM IR and
+are verified to be correct. They can be defined as follows.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>module attributes {llvm.data_layout = &quot;e&quot;,
+                   llvm.target_triple = &quot;aarch64-linux-android&quot;} {
+  // module contents
+}
+</pre></div>
+</div>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="此标题的永久链接">¶</a></h3>
+<p>LLVM functions are represented by a special operation, <code class="docutils literal notranslate"><span class="pre">llvm.func</span></code>, that has
+syntax similar to that of the built-in function operation but supports
+LLVM-related features such as linkage and variadic argument lists. See detailed
+description in the operation list <a class="reference external" href="#llvmfunc-mlirllvmllvmfuncop">below</a>.</p>
+</section>
+<section id="phi-nodes-and-block-arguments">
+<h3>PHI Nodes and Block Arguments<a class="headerlink" href="#phi-nodes-and-block-arguments" title="此标题的永久链接">¶</a></h3>
+<p>MLIR uses block arguments instead of PHI nodes to communicate values between
+blocks. Therefore, the LLVM dialect has no operation directly equivalent to
+<code class="docutils literal notranslate"><span class="pre">phi</span></code> in LLVM IR. Instead, all terminators can pass values as successor operands
+as these values will be forwarded as block arguments when the control flow is
+transferred.</p>
+<p>For example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>^bb1:
+  %0 = llvm.addi %arg0, %cst : i32
+  llvm.br ^bb2[%0: i32]
+
+// If the control flow comes from ^bb1, %arg1 == %0.
+^bb2(%arg1: i32)
+  // ...
+</pre></div>
+</div>
+<p>is equivalent to LLVM IR</p>
+<div class="highlight-llvm notranslate"><div class="highlight"><pre><span></span>%0:
+  %1 = add i32 %arg0, %cst
+  br %3
+
+%3:
+  %arg1 = phi [%1, %0], //...
+</pre></div>
+</div>
+<p>Since there is no need to use the block identifier to differentiate the source
+of different values, the LLVM dialect supports terminators that transfer the
+control flow to the same block with different arguments. For example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>^bb1:
+  llvm.cond_br %cond, ^bb2[%0: i32], ^bb2[%1: i32]
+
+^bb2(%arg0: i32):
+  // ...
+</pre></div>
+</div>
+</section>
+<section id="context-level-values">
+<h3>Context-Level Values<a class="headerlink" href="#context-level-values" title="此标题的永久链接">¶</a></h3>
+<p>Some value kinds in LLVM IR, such as constants and undefs, are uniqued in
+context and used directly in relevant operations. MLIR does not support such
+values for thread-safety and concept parsimony reasons. Instead, regular values
+are produced by dedicated operations that have the corresponding semantics:
+<a class="reference external" href="#llvmmlirconstant-mlirllvmconstantop"><code class="docutils literal notranslate"><span class="pre">llvm.mlir.constant</span></code></a>,
+<a class="reference external" href="#llvmmlirundef-mlirllvmundefop"><code class="docutils literal notranslate"><span class="pre">llvm.mlir.undef</span></code></a>,
+<a class="reference external" href="#llvmmlirpoison-mlirllvmpoisonop"><code class="docutils literal notranslate"><span class="pre">llvm.mlir.poison</span></code></a>,
+<a class="reference external" href="#llvmmlirnull-mlirllvmnullop"><code class="docutils literal notranslate"><span class="pre">llvm.mlir.null</span></code></a>. Note how these operations are
+prefixed with <code class="docutils literal notranslate"><span class="pre">mlir.</span></code> to indicate that they don’t belong to LLVM IR but are only
+necessary to model it in MLIR. The values produced by these operations are
+usable just like any other value.</p>
+<p>Examples:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Create an undefined value of structure type with a 32-bit integer followed
+// by a float.
+%0 = llvm.mlir.undef : !llvm.struct&lt;(i32, f32)&gt;
+
+// Null pointer to i8.
+%1 = llvm.mlir.null : !llvm.ptr&lt;i8&gt;
+
+// Null pointer to a function with signature void().
+%2 = llvm.mlir.null : !llvm.ptr&lt;func&lt;void ()&gt;&gt;
+
+// Constant 42 as i32.
+%3 = llvm.mlir.constant(42 : i32) : i32
+
+// Splat dense vector constant.
+%3 = llvm.mlir.constant(dense&lt;1.0&gt; : vector&lt;4xf32&gt;) : vector&lt;4xf32&gt;
+</pre></div>
+</div>
+<p>Note that constants list the type twice. This is an artifact of the LLVM dialect
+not using built-in types, which are used for typed MLIR attributes. The syntax
+will be reevaluated after considering composite constants.</p>
+</section>
+<section id="globals">
+<h3>Globals<a class="headerlink" href="#globals" title="此标题的永久链接">¶</a></h3>
+<p>Global variables are also defined using a special operation,
+<a class="reference external" href="#llvmmlirglobal-mlirllvmglobalop"><code class="docutils literal notranslate"><span class="pre">llvm.mlir.global</span></code></a>, located at the module
+level. Globals are MLIR symbols and are identified by their name.</p>
+<p>Since functions need to be isolated-from-above, i.e. values defined outside the
+function cannot be directly used inside the function, an additional operation,
+<a class="reference external" href="#llvmmliraddressof-mlirllvmaddressofop"><code class="docutils literal notranslate"><span class="pre">llvm.mlir.addressof</span></code></a>, is provided to
+locally define a value containing the <em>address</em> of a global. The actual value
+can then be loaded from that pointer, or a new value can be stored into it if
+the global is not declared constant. This is similar to LLVM IR where globals
+are accessed through name and have a pointer type.</p>
+</section>
+<section id="linkage">
+<h3>Linkage<a class="headerlink" href="#linkage" title="此标题的永久链接">¶</a></h3>
+<p>Module-level named objects in the LLVM dialect, namely functions and globals,
+have an optional <em>linkage</em> attribute derived from LLVM IR
+<a class="reference external" href="https://llvm.org/docs/LangRef.html#linkage-types">linkage types</a>. Linkage is
+specified by the same keyword as in LLVM IR and is located between the operation
+name (<code class="docutils literal notranslate"><span class="pre">llvm.func</span></code> or <code class="docutils literal notranslate"><span class="pre">llvm.global</span></code>) and the symbol name. If no linkage keyword
+is present, <code class="docutils literal notranslate"><span class="pre">external</span></code> linkage is assumed by default. Linkage is <em>distinct</em> from
+MLIR symbol visibility.</p>
+</section>
+<section id="attribute-pass-through">
+<h3>Attribute Pass-Through<a class="headerlink" href="#attribute-pass-through" title="此标题的永久链接">¶</a></h3>
+<p>The LLVM dialect provides a mechanism to forward function-level attributes to
+LLVM IR using the <code class="docutils literal notranslate"><span class="pre">passthrough</span></code> attribute. This is an array attribute containing
+either string attributes or array attributes. In the former case, the value of
+the string is interpreted as the name of LLVM IR function attribute. In the
+latter case, the array is expected to contain exactly two string attributes, the
+first corresponding to the name of LLVM IR function attribute, and the second
+corresponding to its value. Note that even integer LLVM IR function attributes
+have their value represented in the string form.</p>
+<p>Example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>llvm.func @func() attributes {
+  passthrough = [&quot;noinline&quot;,           // value-less attribute
+                 [&quot;alignstack&quot;, &quot;4&quot;],  // integer attribute with value
+                 [&quot;other&quot;, &quot;attr&quot;]]    // attribute unknown to LLVM
+} {
+  llvm.return
+}
+</pre></div>
+</div>
+<p>If the attribute is not known to LLVM IR, it will be attached as a string
+attribute.</p>
+</section>
+</section>
+<section id="types">
+<h2>Types<a class="headerlink" href="#types" title="此标题的永久链接">¶</a></h2>
+<p>LLVM dialect uses built-in types whenever possible and defines a set of
+complementary types, which correspond to the LLVM IR types that cannot be
+directly represented with built-in types. Similarly to other MLIR context-owned
+objects, the creation and manipulation of LLVM dialect types is thread-safe.</p>
+<p>MLIR does not support module-scoped named type declarations, e.g. <code class="docutils literal notranslate"><span class="pre">%s</span> <span class="pre">=</span> <span class="pre">type</span> <span class="pre">{i32,</span> <span class="pre">i32}</span></code> in LLVM IR. Instead, types must be fully specified at each use,
+except for recursive types where only the first reference to a named type needs
+to be fully specified. MLIR <a class="reference external" href="../LangRef.md/#type-aliases">type aliases</a> can be
+used to achieve more compact syntax.</p>
+<p>The general syntax of LLVM dialect types is <code class="docutils literal notranslate"><span class="pre">!llvm.</span></code>, followed by a type kind
+identifier (e.g., <code class="docutils literal notranslate"><span class="pre">ptr</span></code> for pointer or <code class="docutils literal notranslate"><span class="pre">struct</span></code> for structure) and by an
+optional list of type parameters in angle brackets. The dialect follows MLIR
+style for types with nested angle brackets and keyword specifiers rather than
+using different bracket styles to differentiate types. Types inside the angle
+brackets may omit the <code class="docutils literal notranslate"><span class="pre">!llvm.</span></code> prefix for brevity: the parser first attempts to
+find a type (starting with <code class="docutils literal notranslate"><span class="pre">!</span></code> or a built-in type) and falls back to accepting a
+keyword. For example, <code class="docutils literal notranslate"><span class="pre">!llvm.ptr&lt;!llvm.ptr&lt;i32&gt;&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">!llvm.ptr&lt;ptr&lt;i32&gt;&gt;</span></code> are
+equivalent, with the latter being the canonical form, and denote a pointer to a
+pointer to a 32-bit integer.</p>
+<section id="built-in-type-compatibility">
+<h3>Built-in Type Compatibility<a class="headerlink" href="#built-in-type-compatibility" title="此标题的永久链接">¶</a></h3>
+<p>LLVM dialect accepts a subset of built-in types that are referred to as <em>LLVM
+dialect-compatible types</em>. The following types are compatible:</p>
+<ul class="simple">
+<li><p>Signless integers - <code class="docutils literal notranslate"><span class="pre">iN</span></code> (<code class="docutils literal notranslate"><span class="pre">IntegerType</span></code>).</p></li>
+<li><p>Floating point types - <code class="docutils literal notranslate"><span class="pre">bfloat</span></code>, <code class="docutils literal notranslate"><span class="pre">half</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">double</span></code> , <code class="docutils literal notranslate"><span class="pre">f80</span></code>, <code class="docutils literal notranslate"><span class="pre">f128</span></code>
+(<code class="docutils literal notranslate"><span class="pre">FloatType</span></code>).</p></li>
+<li><p>1D vectors of signless integers or floating point types - <code class="docutils literal notranslate"><span class="pre">vector&lt;NxT&gt;</span></code>
+(<code class="docutils literal notranslate"><span class="pre">VectorType</span></code>).</p></li>
+</ul>
+<p>Note that only a subset of types that can be represented by a given class is
+compatible. For example, signed and unsigned integers are not compatible. LLVM
+provides a function, <code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">LLVM::isCompatibleType(Type)</span></code>, that can be used as a
+compatibility check.</p>
+<p>Each LLVM IR type corresponds to <em>exactly one</em> MLIR type, either built-in or
+LLVM dialect type. For example, because <code class="docutils literal notranslate"><span class="pre">i32</span></code> is LLVM-compatible, there is no
+<code class="docutils literal notranslate"><span class="pre">!llvm.i32</span></code> type. However, <code class="docutils literal notranslate"><span class="pre">!llvm.ptr&lt;T&gt;</span></code> is defined in the LLVM dialect as
+there is no corresponding built-in type.</p>
+</section>
+<section id="additional-simple-types">
+<h3>Additional Simple Types<a class="headerlink" href="#additional-simple-types" title="此标题的永久链接">¶</a></h3>
+<p>The following non-parametric types derived from the LLVM IR are available in the
+LLVM dialect:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">!llvm.x86_mmx</span></code> (<code class="docutils literal notranslate"><span class="pre">LLVMX86MMXType</span></code>) - value held in an MMX register on x86
+machine.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!llvm.ppc_fp128</span></code> (<code class="docutils literal notranslate"><span class="pre">LLVMPPCFP128Type</span></code>) - 128-bit floating-point value (two
+64 bits).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!llvm.token</span></code> (<code class="docutils literal notranslate"><span class="pre">LLVMTokenType</span></code>) - a non-inspectable value associated with an
+operation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!llvm.metadata</span></code> (<code class="docutils literal notranslate"><span class="pre">LLVMMetadataType</span></code>) - LLVM IR metadata, to be used only if
+the metadata cannot be represented as structured MLIR attributes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">!llvm.void</span></code> (<code class="docutils literal notranslate"><span class="pre">LLVMVoidType</span></code>) - does not represent any value; can only
+appear in function results.</p></li>
+</ul>
+<p>These types represent a single value (or an absence thereof in case of <code class="docutils literal notranslate"><span class="pre">void</span></code>)
+and correspond to their LLVM IR counterparts.</p>
+</section>
+<section id="additional-parametric-types">
+<h3>Additional Parametric Types<a class="headerlink" href="#additional-parametric-types" title="此标题的永久链接">¶</a></h3>
+<p>These types are parameterized by the types they contain, e.g., the pointee or
+the element type, which can be either compatible built-in or LLVM dialect types.</p>
+<section id="pointer-types">
+<h4>Pointer Types<a class="headerlink" href="#pointer-types" title="此标题的永久链接">¶</a></h4>
+<p>Pointer types specify an address in memory.</p>
+<p>Both opaque and type-parameterized pointer types are supported.
+<a class="reference external" href="https://llvm.org/docs/OpaquePointers.html">Opaque pointers</a> do not indicate the
+type of the data pointed to, and are intended to simplify LLVM IR by encoding
+behavior relevant to the pointee type into operations rather than into types.
+Non-opaque pointer types carry the pointee type as a type parameter. Both kinds
+of pointers may be additionally parameterized by an address space. The address
+space is an integer, but this choice may be reconsidered if MLIR implements
+named address spaces. The syntax of pointer types is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  llvm-ptr-type ::= `!llvm.ptr` (`&lt;` integer-literal `&gt;`)?
+                  | `!llvm.ptr&lt;` type (`,` integer-literal)? `&gt;`
+</pre></div>
+</div>
+<p>where the former case is the opaque pointer type and the latter case is the
+non-opaque pointer type; the optional group containing the integer literal
+corresponds to the memory space. All cases are represented by <code class="docutils literal notranslate"><span class="pre">LLVMPointerType</span></code>
+internally.</p>
+</section>
+<section id="array-types">
+<h4>Array Types<a class="headerlink" href="#array-types" title="此标题的永久链接">¶</a></h4>
+<p>Array types represent sequences of elements in memory. Array elements can be
+addressed with a value unknown at compile time, and can be nested. Only 1D
+arrays are allowed though.</p>
+<p>Array types are parameterized by the fixed size and the element type.
+Syntactically, their representation is the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  llvm-array-type ::= `!llvm.array&lt;` integer-literal `x` type `&gt;`
+</pre></div>
+</div>
+<p>and they are internally represented as <code class="docutils literal notranslate"><span class="pre">LLVMArrayType</span></code>.</p>
+</section>
+<section id="function-types">
+<h4>Function Types<a class="headerlink" href="#function-types" title="此标题的永久链接">¶</a></h4>
+<p>Function types represent the type of a function, i.e. its signature.</p>
+<p>Function types are parameterized by the result type, the list of argument types
+and by an optional “variadic” flag. Unlike built-in <code class="docutils literal notranslate"><span class="pre">FunctionType</span></code>, LLVM dialect
+functions (<code class="docutils literal notranslate"><span class="pre">LLVMFunctionType</span></code>) always have single result, which may be
+<code class="docutils literal notranslate"><span class="pre">!llvm.void</span></code> if the function does not return anything. The syntax is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  llvm-func-type ::= `!llvm.func&lt;` type `(` type-list (`,` `...`)? `)` `&gt;`
+</pre></div>
+</div>
+<p>For example,</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>!llvm.func&lt;void ()&gt;           // a function with no arguments;
+!llvm.func&lt;i32 (f32, i32)&gt;    // a function with two arguments and a result;
+!llvm.func&lt;void (i32, ...)&gt;   // a variadic function with at least one argument.
+</pre></div>
+</div>
+<p>In the LLVM dialect, functions are not first-class objects and one cannot have a
+value of function type. Instead, one can take the address of a function and
+operate on pointers to functions.</p>
+</section>
+</section>
+<section id="vector-types">
+<h3>Vector Types<a class="headerlink" href="#vector-types" title="此标题的永久链接">¶</a></h3>
+<p>Vector types represent sequences of elements, typically when multiple data
+elements are processed by a single instruction (SIMD). Vectors are thought of as
+stored in registers and therefore vector elements can only be addressed through
+constant indices.</p>
+<p>Vector types are parameterized by the size, which may be either <em>fixed</em> or a
+multiple of some fixed size in case of <em>scalable</em> vectors, and the element type.
+Vectors cannot be nested and only 1D vectors are supported. Scalable vectors are
+still considered 1D.</p>
+<p>LLVM dialect uses built-in vector types for <em>fixed</em>-size vectors of built-in
+types, and provides additional types for fixed-sized vectors of LLVM dialect
+types (<code class="docutils literal notranslate"><span class="pre">LLVMFixedVectorType</span></code>) and scalable vectors of any types
+(<code class="docutils literal notranslate"><span class="pre">LLVMScalableVectorType</span></code>). These two additional types share the following
+syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  llvm-vec-type ::= `!llvm.vec&lt;` (`?` `x`)? integer-literal `x` type `&gt;`
+</pre></div>
+</div>
+<p>Note that the sets of element types supported by built-in and LLVM dialect
+vector types are mutually exclusive, e.g., the built-in vector type does not
+accept <code class="docutils literal notranslate"><span class="pre">!llvm.ptr&lt;i32&gt;</span></code> and the LLVM dialect fixed-width vector type does not
+accept <code class="docutils literal notranslate"><span class="pre">i32</span></code>.</p>
+<p>The following functions are provided to operate on any kind of the vector types
+compatible with the LLVM dialect:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">LLVM::isCompatibleVectorType(Type)</span></code> - checks whether a type is a
+vector type compatible with the LLVM dialect;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Type</span> <span class="pre">LLVM::getVectorElementType(Type)</span></code> - returns the element type of any
+vector type compatible with the LLVM dialect;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">llvm::ElementCount</span> <span class="pre">LLVM::getVectorNumElements(Type)</span></code> - returns the number
+of elements in any vector type compatible with the LLVM dialect;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Type</span> <span class="pre">LLVM::getFixedVectorType(Type,</span> <span class="pre">unsigned)</span></code> - gets a fixed vector type
+with the given element type and size; the resulting type is either a
+built-in or an LLVM dialect vector type depending on which one supports the
+given element type.</p></li>
+</ul>
+<section id="examples-of-compatible-vector-types">
+<h4>Examples of Compatible Vector Types<a class="headerlink" href="#examples-of-compatible-vector-types" title="此标题的永久链接">¶</a></h4>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>vector&lt;42 x i32&gt;                   // Vector of 42 32-bit integers.
+!llvm.vec&lt;42 x ptr&lt;i32&gt;&gt;           // Vector of 42 pointers to 32-bit integers.
+!llvm.vec&lt;? x 4 x i32&gt;             // Scalable vector of 32-bit integers with
+                                   // size divisible by 4.
+!llvm.array&lt;2 x vector&lt;2 x i32&gt;&gt;   // Array of 2 vectors of 2 32-bit integers.
+!llvm.array&lt;2 x vec&lt;2 x ptr&lt;i32&gt;&gt;&gt; // Array of 2 vectors of 2 pointers to 32-bit
+                                   // integers.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="structure-types">
+<h3>Structure Types<a class="headerlink" href="#structure-types" title="此标题的永久链接">¶</a></h3>
+<p>The structure type is used to represent a collection of data members together in
+memory. The elements of a structure may be any type that has a size.</p>
+<p>Structure types are represented in a single dedicated class
+mlir::LLVM::LLVMStructType. Internally, the struct type stores a (potentially
+empty) name, a (potentially empty) list of contained types and a bitmask
+indicating whether the struct is named, opaque, packed or uninitialized.
+Structure types that don’t have a name are referred to as <em>literal</em> structs.
+Such structures are uniquely identified by their contents. <em>Identified</em> structs
+on the other hand are uniquely identified by the name.</p>
+<section id="identified-structure-types">
+<h4>Identified Structure Types<a class="headerlink" href="#identified-structure-types" title="此标题的永久链接">¶</a></h4>
+<p>Identified structure types are uniqued using their name in a given context.
+Attempting to construct an identified structure with the same name a structure
+that already exists in the context <em>will result in the existing structure being
+returned</em>. <strong>MLIR does not auto-rename identified structs in case of name
+conflicts</strong> because there is no naming scope equivalent to a module in LLVM IR
+since MLIR modules can be arbitrarily nested.</p>
+<p>Programmatically, identified structures can be constructed in an <em>uninitialized</em>
+state. In this case, they are given a name but the body must be set up by a
+later call, using MLIR’s type mutation mechanism. Such uninitialized types can
+be used in type construction, but must be eventually initialized for IR to be
+valid. This mechanism allows for constructing <em>recursive</em> or mutually referring
+structure types: an uninitialized type can be used in its own initialization.</p>
+<p>Once the type is initialized, its body cannot be changed anymore. Any further
+attempts to modify the body will fail and return failure to the caller <em>unless
+the type is initialized with the exact same body</em>. Type initialization is
+thread-safe; however, if a concurrent thread initializes the type before the
+current thread, the initialization may return failure.</p>
+<p>The syntax for identified structure types is as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>llvm-ident-struct-type ::= `!llvm.struct&lt;` string-literal, `opaque` `&gt;`
+                         | `!llvm.struct&lt;` string-literal, `packed`?
+                           `(` type-or-ref-list  `)` `&gt;`
+type-or-ref-list ::= &lt;maybe empty comma-separated list of type-or-ref&gt;
+type-or-ref ::= &lt;any compatible type with optional !llvm.&gt;
+              | `!llvm.`? `struct&lt;` string-literal `&gt;`
+</pre></div>
+</div>
+<p>The body of the identified struct is printed in full unless the it is
+transitively contained in the same struct. In the latter case, only the
+identifier is printed. For example, the structure containing the pointer to
+itself is represented as <code class="docutils literal notranslate"><span class="pre">!llvm.struct&lt;&quot;A&quot;,</span> <span class="pre">(ptr&lt;&quot;A&quot;&gt;)&gt;</span></code>, and the structure <code class="docutils literal notranslate"><span class="pre">A</span></code>
+containing two pointers to the structure <code class="docutils literal notranslate"><span class="pre">B</span></code> containing a pointer to the
+structure <code class="docutils literal notranslate"><span class="pre">A</span></code> is represented as <code class="docutils literal notranslate"><span class="pre">!llvm.struct&lt;&quot;A&quot;,</span> <span class="pre">(ptr&lt;&quot;B&quot;,</span> <span class="pre">(ptr&lt;&quot;A&quot;&gt;)&gt;,</span> <span class="pre">ptr&lt;&quot;B&quot;,</span> <span class="pre">(ptr&lt;&quot;A&quot;&gt;))&gt;</span></code>. Note that the structure <code class="docutils literal notranslate"><span class="pre">B</span></code> is “unrolled” for both
+elements. <em>A structure with the same name but different body is a syntax error.</em>
+<strong>The user must ensure structure name uniqueness across all modules processed in
+a given MLIR context.</strong> Structure names are arbitrary string literals and may
+include, e.g., spaces and keywords.</p>
+<p>Identified structs may be <em>opaque</em>. In this case, the body is unknown but the
+structure type is considered <em>initialized</em> and is valid in the IR.</p>
+</section>
+<section id="literal-structure-types">
+<h4>Literal Structure Types<a class="headerlink" href="#literal-structure-types" title="此标题的永久链接">¶</a></h4>
+<p>Literal structures are uniqued according to the list of elements they contain,
+and can optionally be packed. The syntax for such structs is as follows.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>llvm-literal-struct-type ::= `!llvm.struct&lt;` `packed`? `(` type-list `)` `&gt;`
+type-list ::= &lt;maybe empty comma-separated list of types with optional !llvm.&gt;
+</pre></div>
+</div>
+<p>Literal structs cannot be recursive, but can contain other structs. Therefore,
+they must be constructed in a single step with the entire list of contained
+elements provided.</p>
+</section>
+<section id="examples-of-structure-types">
+<h4>Examples of Structure Types<a class="headerlink" href="#examples-of-structure-types" title="此标题的永久链接">¶</a></h4>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>!llvm.struct&lt;&gt;                  // NOT allowed
+!llvm.struct&lt;()&gt;                // empty, literal
+!llvm.struct&lt;(i32)&gt;             // literal
+!llvm.struct&lt;(struct&lt;(i32)&gt;)&gt;   // struct containing a struct
+!llvm.struct&lt;packed (i8, i32)&gt;  // packed struct
+!llvm.struct&lt;&quot;a&quot;&gt;               // recursive reference, only allowed within
+                                // another struct, NOT allowed at top level
+!llvm.struct&lt;&quot;a&quot;, ptr&lt;struct&lt;&quot;a&quot;&gt;&gt;&gt;  // supported example of recursive reference
+!llvm.struct&lt;&quot;a&quot;, ()&gt;           // empty, named (necessary to differentiate from
+                                // recursive reference)
+!llvm.struct&lt;&quot;a&quot;, opaque&gt;       // opaque, named
+!llvm.struct&lt;&quot;a&quot;, (i32)&gt;        // named
+!llvm.struct&lt;&quot;a&quot;, packed (i8, i32)&gt;  // named, packed
+</pre></div>
+</div>
+</section>
+</section>
+<section id="unsupported-types">
+<h3>Unsupported Types<a class="headerlink" href="#unsupported-types" title="此标题的永久链接">¶</a></h3>
+<p>LLVM IR <code class="docutils literal notranslate"><span class="pre">label</span></code> type does not have a counterpart in the LLVM dialect since, in
+MLIR, blocks are not values and don’t need a type.</p>
+</section>
+</section>
+<section id="operations">
+<h2>Operations<a class="headerlink" href="#operations" title="此标题的永久链接">¶</a></h2>
+<p>All operations in the LLVM IR dialect have a custom form in MLIR. The mnemonic
+of an operation is that used in LLVM IR prefixed with “<code class="docutils literal notranslate"><span class="pre">llvm.</span></code>”.</p>
+<p>[include “Dialects/LLVMOps.md”]</p>
+</section>
+<section id="operations-for-llvm-ir-intrinsics">
+<h2>Operations for LLVM IR Intrinsics<a class="headerlink" href="#operations-for-llvm-ir-intrinsics" title="此标题的永久链接">¶</a></h2>
+<p>MLIR operation system is open making it unnecessary to introduce a hard bound
+between “core” operations and “intrinsics”. General LLVM IR intrinsics are
+modeled as first-class operations in the LLVM dialect. Target-specific LLVM IR
+intrinsics, e.g., NVVM or ROCDL, are modeled as separate dialects.</p>
+<p>[include “Dialects/LLVMIntrinsicOps.md”]</p>
+<section id="debug-info">
+<h3>Debug Info<a class="headerlink" href="#debug-info" title="此标题的永久链接">¶</a></h3>
+<p>Debug information within the LLVM dialect is represented using locations in
+combination with a set of attributes that mirror the DINode structure defined by
+the debug info metadata within LLVM IR. Debug scoping information is attached
+to LLVM IR dialect operations using a fused location (<code class="docutils literal notranslate"><span class="pre">FusedLoc</span></code>) whose metadata
+holds the DIScopeAttr representing the debug scope. Similarly, the subprogram
+of LLVM IR dialect <code class="docutils literal notranslate"><span class="pre">FuncOp</span></code> operations is attached using a fused location whose
+metadata is a DISubprogramAttr.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

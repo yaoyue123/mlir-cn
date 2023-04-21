@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Chapter 7: Adding a Composite Type to Toy</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../../../genindex.html" />
+  <link rel="search" title="搜索" href="../../../search.html" />
+  <link rel="next" title="Toy Tutorial" href="_index.html" />
+  <link rel="prev" title="Chapter 6: Lowering to LLVM and CodeGeneration" href="Ch-6.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../DataFlowAnalysis.html" class="reference internal ">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-5.html" class="reference internal ">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-6.html" class="reference internal ">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#defining-a-struct-in-toy" class="reference internal">Defining a struct in Toy</a></li>
+                
+                  <li class="toctree-l2"><a href="#defining-a-struct-in-mlir" class="reference internal">Defining a struct in MLIR</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="_index.html" class="reference internal ">Toy Tutorial</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+    <li>Chapter 7: Adding a Composite Type to Toy</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="Ch-6.html"
+       title="上一章">← Chapter 6: Lowering to LLVM and CodeGeneration</a>
+  </li>
+  <li class="next">
+    <a href="_index.html"
+       title="下一章">Toy Tutorial →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="chapter-7-adding-a-composite-type-to-toy">
+<h1>Chapter 7: Adding a Composite Type to Toy<a class="headerlink" href="#chapter-7-adding-a-composite-type-to-toy" title="此标题的永久链接">¶</a></h1>
+<p>[TOC]</p>
+<p>In the <a class="reference internal" href="Ch-6.html"><span class="doc">previous chapter</span></a>, we demonstrated an end-to-end compilation
+flow from our Toy front-end to LLVM IR. In this chapter, we will extend the Toy
+language to support a new composite <code class="docutils literal notranslate"><span class="pre">struct</span></code> type.</p>
+<section id="defining-a-struct-in-toy">
+<h2>Defining a <code class="docutils literal notranslate"><span class="pre">struct</span></code> in Toy<a class="headerlink" href="#defining-a-struct-in-toy" title="此标题的永久链接">¶</a></h2>
+<p>The first thing we need to define is the interface of this type in our <code class="docutils literal notranslate"><span class="pre">toy</span></code>
+source language. The general syntax of a <code class="docutils literal notranslate"><span class="pre">struct</span></code> type in Toy is as follows:</p>
+<div class="highlight-toy notranslate"><div class="highlight"><pre><span></span># A struct is defined by using the `struct` keyword followed by a name.
+struct MyStruct {
+  # Inside of the struct is a list of variable declarations without initializers
+  # or shapes, which may also be other previously defined structs.
+  var a;
+  var b;
+}
+</pre></div>
+</div>
+<p>Structs may now be used in functions as variables or parameters by using the
+name of the struct instead of <code class="docutils literal notranslate"><span class="pre">var</span></code>. The members of the struct are accessed via
+a <code class="docutils literal notranslate"><span class="pre">.</span></code> access operator. Values of <code class="docutils literal notranslate"><span class="pre">struct</span></code> type may be initialized with a
+composite initializer, or a comma-separated list of other initializers
+surrounded by <code class="docutils literal notranslate"><span class="pre">{}</span></code>. An example is shown below:</p>
+<div class="highlight-toy notranslate"><div class="highlight"><pre><span></span>struct Struct {
+  var a;
+  var b;
+}
+
+# User defined generic function may operate on struct types as well.
+def multiply_transpose(Struct value) {
+  # We can access the elements of a struct via the &#39;.&#39; operator.
+  return transpose(value.a) * transpose(value.b);
+}
+
+def main() {
+  # We initialize struct values using a composite initializer.
+  Struct value = {[[1, 2, 3], [4, 5, 6]], [[1, 2, 3], [4, 5, 6]]};
+
+  # We pass these arguments to functions like we do with variables.
+  var c = multiply_transpose(value);
+  print(c);
+}
+</pre></div>
+</div>
+</section>
+<section id="defining-a-struct-in-mlir">
+<h2>Defining a <code class="docutils literal notranslate"><span class="pre">struct</span></code> in MLIR<a class="headerlink" href="#defining-a-struct-in-mlir" title="此标题的永久链接">¶</a></h2>
+<p>In MLIR, we will also need a representation for our struct types. MLIR does not
+provide a type that does exactly what we need, so we will need to define our
+own. We will simply define our <code class="docutils literal notranslate"><span class="pre">struct</span></code> as an unnamed container of a set of
+element types. The name of the <code class="docutils literal notranslate"><span class="pre">struct</span></code> and its elements are only useful for the
+AST of our <code class="docutils literal notranslate"><span class="pre">toy</span></code> compiler, so we don’t need to encode it in the MLIR
+representation.</p>
+<section id="defining-the-type-class">
+<h3>Defining the Type Class<a class="headerlink" href="#defining-the-type-class" title="此标题的永久链接">¶</a></h3>
+<section id="id1">
+<h4>Defining the Type Class<a class="headerlink" href="#id1" title="此标题的永久链接">¶</a></h4>
+<p>As mentioned in <a class="reference internal" href="Ch-2.html"><span class="doc">chapter 2</span></a>, <a class="reference external" href="../../LangRef.md/#type-system"><code class="docutils literal notranslate"><span class="pre">Type</span></code></a>
+objects in MLIR are value-typed and rely on having an internal storage object
+that holds the actual data for the type. The <code class="docutils literal notranslate"><span class="pre">Type</span></code> class in itself acts as a
+simple wrapper around an internal <code class="docutils literal notranslate"><span class="pre">TypeStorage</span></code> object that is uniqued within an
+instance of an <code class="docutils literal notranslate"><span class="pre">MLIRContext</span></code>. When constructing a <code class="docutils literal notranslate"><span class="pre">Type</span></code>, we are internally just
+constructing and uniquing an instance of a storage class.</p>
+<p>When defining a new <code class="docutils literal notranslate"><span class="pre">Type</span></code> that contains parametric data (e.g. the <code class="docutils literal notranslate"><span class="pre">struct</span></code>
+type, which requires additional information to hold the element types), we will
+need to provide a derived storage class. The <code class="docutils literal notranslate"><span class="pre">singleton</span></code> types that don’t have
+any additional data (e.g. the <a class="reference external" href="../../Dialects/Builtin.md/#indextype"><code class="docutils literal notranslate"><span class="pre">index</span></code> type</a>) don’t
+require a storage class and use the default <code class="docutils literal notranslate"><span class="pre">TypeStorage</span></code>.</p>
+<section id="defining-the-storage-class">
+<h5>Defining the Storage Class<a class="headerlink" href="#defining-the-storage-class" title="此标题的永久链接">¶</a></h5>
+<p>Type storage objects contain all of the data necessary to construct and unique a
+type instance. Derived storage classes must inherit from the base
+<code class="docutils literal notranslate"><span class="pre">mlir::TypeStorage</span></code> and provide a set of aliases and hooks that will be used by
+the <code class="docutils literal notranslate"><span class="pre">MLIRContext</span></code> for uniquing. Below is the definition of the storage instance
+for our <code class="docutils literal notranslate"><span class="pre">struct</span></code> type, with each of the necessary requirements detailed inline:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">/// This class represents the internal storage of the Toy `StructType`.</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">StructTypeStorage</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">TypeStorage</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">/// The `KeyTy` is a required type that provides an interface for the storage</span>
+<span class="w">  </span><span class="c1">/// instance. This type will be used when uniquing an instance of the type</span>
+<span class="w">  </span><span class="c1">/// storage. For our struct type, we will unique each instance structurally on</span>
+<span class="w">  </span><span class="c1">/// the elements that it contains.</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">KeyTy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">llvm</span><span class="o">::</span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">/// A constructor for the type storage instance.</span>
+<span class="w">  </span><span class="n">StructTypeStorage</span><span class="p">(</span><span class="n">llvm</span><span class="o">::</span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">elementTypes</span><span class="p">)</span>
+<span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">elementTypes</span><span class="p">(</span><span class="n">elementTypes</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">  </span><span class="c1">/// Define the comparison function for the key type with the current storage</span>
+<span class="w">  </span><span class="c1">/// instance. This is used when constructing a new instance to ensure that we</span>
+<span class="w">  </span><span class="c1">/// haven&#39;t already uniqued an instance of the given key.</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">KeyTy</span><span class="w"> </span><span class="o">&amp;</span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">elementTypes</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">/// Define a hash function for the key type. This is used when uniquing</span>
+<span class="w">  </span><span class="c1">/// instances of the storage.</span>
+<span class="w">  </span><span class="c1">/// Note: This method isn&#39;t necessary as both llvm::ArrayRef and mlir::Type</span>
+<span class="w">  </span><span class="c1">/// have hash functions available, so we could just omit this entirely.</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">llvm</span><span class="o">::</span><span class="n">hash_code</span><span class="w"> </span><span class="n">hashKey</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">KeyTy</span><span class="w"> </span><span class="o">&amp;</span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">llvm</span><span class="o">::</span><span class="n">hash_value</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">/// Define a construction function for the key type from a set of parameters.</span>
+<span class="w">  </span><span class="c1">/// These parameters will be provided when constructing the storage instance</span>
+<span class="w">  </span><span class="c1">/// itself, see the `StructType::get` method further below.</span>
+<span class="w">  </span><span class="c1">/// Note: This method isn&#39;t necessary because KeyTy can be directly</span>
+<span class="w">  </span><span class="c1">/// constructed with the given parameters.</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">KeyTy</span><span class="w"> </span><span class="n">getKey</span><span class="p">(</span><span class="n">llvm</span><span class="o">::</span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">elementTypes</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">KeyTy</span><span class="p">(</span><span class="n">elementTypes</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">/// Define a construction method for creating a new instance of this storage.</span>
+<span class="w">  </span><span class="c1">/// This method takes an instance of a storage allocator, and an instance of a</span>
+<span class="w">  </span><span class="c1">/// `KeyTy`. The given allocator must be used for *all* necessary dynamic</span>
+<span class="w">  </span><span class="c1">/// allocations used to create the type storage and its internal.</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">StructTypeStorage</span><span class="w"> </span><span class="o">*</span><span class="n">construct</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">TypeStorageAllocator</span><span class="w"> </span><span class="o">&amp;</span><span class="n">allocator</span><span class="p">,</span>
+<span class="w">                                      </span><span class="k">const</span><span class="w"> </span><span class="n">KeyTy</span><span class="w"> </span><span class="o">&amp;</span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Copy the elements from the provided `KeyTy` into the allocator.</span>
+<span class="w">    </span><span class="n">llvm</span><span class="o">::</span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">elementTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">allocator</span><span class="p">.</span><span class="n">copyInto</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Allocate the storage instance and construct it.</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="p">(</span><span class="n">allocator</span><span class="p">.</span><span class="n">allocate</span><span class="o">&lt;</span><span class="n">StructTypeStorage</span><span class="o">&gt;</span><span class="p">())</span>
+<span class="w">        </span><span class="n">StructTypeStorage</span><span class="p">(</span><span class="n">elementTypes</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">/// The following field contains the element types of the struct.</span>
+<span class="w">  </span><span class="n">llvm</span><span class="o">::</span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">elementTypes</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h5>Defining the Type Class<a class="headerlink" href="#id2" title="此标题的永久链接">¶</a></h5>
+<p>With the storage class defined, we can add the definition for the user-visible
+<code class="docutils literal notranslate"><span class="pre">StructType</span></code> class. This is the class that we will actually interface with.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">/// This class defines the Toy struct type. It represents a collection of</span>
+<span class="c1">/// element types. All derived types in MLIR must inherit from the CRTP class</span>
+<span class="c1">/// &#39;Type::TypeBase&#39;. It takes as template parameters the concrete type</span>
+<span class="c1">/// (StructType), the base class to use (Type), and the storage class</span>
+<span class="c1">/// (StructTypeStorage).</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">StructType</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">TypeBase</span><span class="o">&lt;</span><span class="n">StructType</span><span class="p">,</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="p">,</span>
+<span class="w">                                               </span><span class="n">StructTypeStorage</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">/// Inherit some necessary constructors from &#39;TypeBase&#39;.</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">Base</span><span class="o">::</span><span class="n">Base</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">/// Create an instance of a `StructType` with the given element types. There</span>
+<span class="w">  </span><span class="c1">/// *must* be at least one element type.</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">StructType</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">llvm</span><span class="o">::</span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">elementTypes</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">elementTypes</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;expected at least 1 element type&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Call into a helper &#39;get&#39; method in &#39;TypeBase&#39; to get a uniqued instance</span>
+<span class="w">    </span><span class="c1">// of this type. The first parameter is the context to unique in. The</span>
+<span class="w">    </span><span class="c1">// parameters after are forwarded to the storage instance.</span>
+<span class="w">    </span><span class="n">mlir</span><span class="o">::</span><span class="n">MLIRContext</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">elementTypes</span><span class="p">.</span><span class="n">front</span><span class="p">().</span><span class="n">getContext</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Base</span><span class="o">::</span><span class="n">get</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="n">elementTypes</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">/// Returns the element types of this struct type.</span>
+<span class="w">  </span><span class="n">llvm</span><span class="o">::</span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">getElementTypes</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// &#39;getImpl&#39; returns a pointer to the internal storage instance.</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">getImpl</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">elementTypes</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">/// Returns the number of element type held by this struct.</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">getNumElementTypes</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">getElementTypes</span><span class="p">().</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>We register this type in the <code class="docutils literal notranslate"><span class="pre">ToyDialect</span></code> initializer in a similar way to how we
+did with operations:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">ToyDialect::initialize</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">addTypes</span><span class="o">&lt;</span><span class="n">StructType</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>(An important note here is that when registering a type, the definition of the
+storage class must be visible.)</p>
+<p>With this we can now use our <code class="docutils literal notranslate"><span class="pre">StructType</span></code> when generating MLIR from Toy. See
+examples/toy/Ch7/mlir/MLIRGen.cpp for more details.</p>
+</section>
+</section>
+</section>
+<section id="exposing-to-ods">
+<h3>Exposing to ODS<a class="headerlink" href="#exposing-to-ods" title="此标题的永久链接">¶</a></h3>
+<p>After defining a new type, we should make the ODS framework aware of our Type so
+that we can use it in the operation definitions and auto-generate utilities
+within the Dialect. A simple example is shown below:</p>
+<div class="highlight-tablegen notranslate"><div class="highlight"><pre><span></span>// Provide a definition for the Toy StructType for use in ODS. This allows for
+// using StructType in a similar way to Tensor or MemRef. We use `DialectType`
+// to demarcate the StructType as belonging to the Toy dialect.
+def Toy_StructType :
+    DialectType&lt;Toy_Dialect, CPred&lt;&quot;$_self.isa&lt;StructType&gt;()&quot;&gt;,
+                &quot;Toy struct type&quot;&gt;;
+
+// Provide a definition of the types that are used within the Toy dialect.
+def Toy_Type : AnyTypeOf&lt;[F64Tensor, Toy_StructType]&gt;;
+</pre></div>
+</div>
+</section>
+<section id="parsing-and-printing">
+<h3>Parsing and Printing<a class="headerlink" href="#parsing-and-printing" title="此标题的永久链接">¶</a></h3>
+<p>At this point we can use our <code class="docutils literal notranslate"><span class="pre">StructType</span></code> during MLIR generation and
+transformation, but we can’t output or parse <code class="docutils literal notranslate"><span class="pre">.mlir</span></code>. For this we need to add
+support for parsing and printing instances of the <code class="docutils literal notranslate"><span class="pre">StructType</span></code>. This can be done
+by overriding the <code class="docutils literal notranslate"><span class="pre">parseType</span></code> and <code class="docutils literal notranslate"><span class="pre">printType</span></code> methods on the <code class="docutils literal notranslate"><span class="pre">ToyDialect</span></code>.
+Declarations for these methods are automatically provided when the type is
+exposed to ODS as detailed in the previous section.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ToyDialect</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">Dialect</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">/// Parse an instance of a type registered to the toy dialect.</span>
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="w"> </span><span class="n">parseType</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">DialectAsmParser</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parser</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">/// Print an instance of a type registered to the toy dialect.</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">printType</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="w"> </span><span class="n">type</span><span class="p">,</span>
+<span class="w">                 </span><span class="n">mlir</span><span class="o">::</span><span class="n">DialectAsmPrinter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">printer</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>These methods take an instance of a high-level parser or printer that allows for
+easily implementing the necessary functionality. Before going into the
+implementation, let’s think about the syntax that we want for the <code class="docutils literal notranslate"><span class="pre">struct</span></code> type
+in the printed IR. As described in the
+<a class="reference external" href="../../LangRef.md/#dialect-types">MLIR language reference</a>, dialect types are
+generally represented as: <code class="docutils literal notranslate"><span class="pre">!</span> <span class="pre">dialect-namespace</span> <span class="pre">&lt;</span> <span class="pre">type-data</span> <span class="pre">&gt;</span></code>, with a pretty
+form available under certain circumstances. The responsibility of our <code class="docutils literal notranslate"><span class="pre">Toy</span></code>
+parser and printer is to provide the <code class="docutils literal notranslate"><span class="pre">type-data</span></code> bits. We will define our
+<code class="docutils literal notranslate"><span class="pre">StructType</span></code> as having the following form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  struct-type ::= `struct` `&lt;` type (`,` type)* `&gt;`
+</pre></div>
+</div>
+<section id="parsing">
+<h4>Parsing<a class="headerlink" href="#parsing" title="此标题的永久链接">¶</a></h4>
+<p>An implementation of the parser is shown below:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">/// Parse an instance of a type registered to the toy dialect.</span>
+<span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="w"> </span><span class="nf">ToyDialect::parseType</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">DialectAsmParser</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parser</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Parse a struct type in the following form:</span>
+<span class="w">  </span><span class="c1">//   struct-type ::= `struct` `&lt;` type (`,` type)* `&gt;`</span>
+
+<span class="w">  </span><span class="c1">// NOTE: All MLIR parser function return a ParseResult. This is a</span>
+<span class="w">  </span><span class="c1">// specialization of LogicalResult that auto-converts to a `true` boolean</span>
+<span class="w">  </span><span class="c1">// value on failure to allow for chaining, but may be used with explicit</span>
+<span class="w">  </span><span class="c1">// `mlir::failed/mlir::succeeded` as desired.</span>
+
+<span class="w">  </span><span class="c1">// Parse: `struct` `&lt;`</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="n">parseKeyword</span><span class="p">(</span><span class="s">&quot;struct&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">parser</span><span class="p">.</span><span class="n">parseLess</span><span class="p">())</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Type</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// Parse the element types of the struct.</span>
+<span class="w">  </span><span class="n">SmallVector</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">elementTypes</span><span class="p">;</span>
+<span class="w">  </span><span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Parse the current element type.</span>
+<span class="w">    </span><span class="n">SMLoc</span><span class="w"> </span><span class="n">typeLoc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parser</span><span class="p">.</span><span class="n">getCurrentLocation</span><span class="p">();</span>
+<span class="w">    </span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="w"> </span><span class="n">elementType</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="n">parseType</span><span class="p">(</span><span class="n">elementType</span><span class="p">))</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Check that the type is either a TensorType or another StructType.</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">elementType</span><span class="p">.</span><span class="n">isa</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">TensorType</span><span class="p">,</span><span class="w"> </span><span class="n">StructType</span><span class="o">&gt;</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">parser</span><span class="p">.</span><span class="n">emitError</span><span class="p">(</span><span class="n">typeLoc</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;element type for a struct must either &quot;</span>
+<span class="w">                                </span><span class="s">&quot;be a TensorType or a StructType, got: &quot;</span><span class="p">)</span>
+<span class="w">          </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">elementType</span><span class="p">;</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">Type</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">elementTypes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">elementType</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Parse the optional: `,`</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">succeeded</span><span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="n">parseOptionalComma</span><span class="p">()));</span>
+
+<span class="w">  </span><span class="c1">// Parse: `&gt;`</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="n">parseGreater</span><span class="p">())</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Type</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">StructType</span><span class="o">::</span><span class="n">get</span><span class="p">(</span><span class="n">elementTypes</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="printing">
+<h4>Printing<a class="headerlink" href="#printing" title="此标题的永久链接">¶</a></h4>
+<p>An implementation of the printer is shown below:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">/// Print an instance of a type registered to the toy dialect.</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">ToyDialect::printType</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="w"> </span><span class="n">type</span><span class="p">,</span>
+<span class="w">                           </span><span class="n">mlir</span><span class="o">::</span><span class="n">DialectAsmPrinter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">printer</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Currently the only toy type is a struct type.</span>
+<span class="w">  </span><span class="n">StructType</span><span class="w"> </span><span class="n">structType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type</span><span class="p">.</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">StructType</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// Print the struct type according to the parser format.</span>
+<span class="w">  </span><span class="n">printer</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;struct&lt;&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="n">llvm</span><span class="o">::</span><span class="n">interleaveComma</span><span class="p">(</span><span class="n">structType</span><span class="p">.</span><span class="n">getElementTypes</span><span class="p">(),</span><span class="w"> </span><span class="n">printer</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printer</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;&gt;&#39;</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Before moving on, let’s look at a quick of example showcasing the functionality
+we have now:</p>
+<div class="highlight-toy notranslate"><div class="highlight"><pre><span></span>struct Struct {
+  var a;
+  var b;
+}
+
+def multiply_transpose(Struct value) {
+}
+</pre></div>
+</div>
+<p>Which generates the following:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>module {
+  toy.func @multiply_transpose(%arg0: !toy.struct&lt;tensor&lt;*xf64&gt;, tensor&lt;*xf64&gt;&gt;) {
+    toy.return
+  }
+}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="operating-on-structtype">
+<h3>Operating on <code class="docutils literal notranslate"><span class="pre">StructType</span></code><a class="headerlink" href="#operating-on-structtype" title="此标题的永久链接">¶</a></h3>
+<p>Now that the <code class="docutils literal notranslate"><span class="pre">struct</span></code> type has been defined, and we can round-trip it through
+the IR. The next step is to add support for using it within our operations.</p>
+<section id="updating-existing-operations">
+<h4>Updating Existing Operations<a class="headerlink" href="#updating-existing-operations" title="此标题的永久链接">¶</a></h4>
+<p>A few of our existing operations, e.g. <code class="docutils literal notranslate"><span class="pre">ReturnOp</span></code>, will need to be updated to
+handle <code class="docutils literal notranslate"><span class="pre">Toy_StructType</span></code>.</p>
+<div class="highlight-tablegen notranslate"><div class="highlight"><pre><span></span>def ReturnOp : Toy_Op&lt;&quot;return&quot;, [Terminator, HasParent&lt;&quot;FuncOp&quot;&gt;]&gt; {
+  ...
+  let arguments = (ins Variadic&lt;Toy_Type&gt;:$input);
+  ...
+}
+</pre></div>
+</div>
+</section>
+<section id="adding-new-toy-operations">
+<h4>Adding New <code class="docutils literal notranslate"><span class="pre">Toy</span></code> Operations<a class="headerlink" href="#adding-new-toy-operations" title="此标题的永久链接">¶</a></h4>
+<p>In addition to the existing operations, we will be adding a few new operations
+that will provide more specific handling of <code class="docutils literal notranslate"><span class="pre">structs</span></code>.</p>
+<section id="toy-struct-constant">
+<h5><code class="docutils literal notranslate"><span class="pre">toy.struct_constant</span></code><a class="headerlink" href="#toy-struct-constant" title="此标题的永久链接">¶</a></h5>
+<p>This new operation materializes a constant value for a struct. In our current
+modeling, we just use an <a class="reference external" href="../../Dialects/Builtin.md/#arrayattr">array attribute</a>
+that contains a set of constant values for each of the <code class="docutils literal notranslate"><span class="pre">struct</span></code> elements.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>  %0 = toy.struct_constant [
+    dense&lt;[[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]&gt; : tensor&lt;2x3xf64&gt;
+  ] : !toy.struct&lt;tensor&lt;*xf64&gt;&gt;
+</pre></div>
+</div>
+</section>
+<section id="toy-struct-access">
+<h5><code class="docutils literal notranslate"><span class="pre">toy.struct_access</span></code><a class="headerlink" href="#toy-struct-access" title="此标题的永久链接">¶</a></h5>
+<p>This new operation materializes the Nth element of a <code class="docutils literal notranslate"><span class="pre">struct</span></code> value.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>  // Using %0 from above
+  %1 = toy.struct_access %0[0] : !toy.struct&lt;tensor&lt;*xf64&gt;&gt; -&gt; tensor&lt;*xf64&gt;
+</pre></div>
+</div>
+<p>With these operations, we can revisit our original example:</p>
+<div class="highlight-toy notranslate"><div class="highlight"><pre><span></span>struct Struct {
+  var a;
+  var b;
+}
+
+# User defined generic function may operate on struct types as well.
+def multiply_transpose(Struct value) {
+  # We can access the elements of a struct via the &#39;.&#39; operator.
+  return transpose(value.a) * transpose(value.b);
+}
+
+def main() {
+  # We initialize struct values using a composite initializer.
+  Struct value = {[[1, 2, 3], [4, 5, 6]], [[1, 2, 3], [4, 5, 6]]};
+
+  # We pass these arguments to functions like we do with variables.
+  var c = multiply_transpose(value);
+  print(c);
+}
+</pre></div>
+</div>
+<p>and finally get a full MLIR module:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>module {
+  toy.func @multiply_transpose(%arg0: !toy.struct&lt;tensor&lt;*xf64&gt;, tensor&lt;*xf64&gt;&gt;) -&gt; tensor&lt;*xf64&gt; {
+    %0 = toy.struct_access %arg0[0] : !toy.struct&lt;tensor&lt;*xf64&gt;, tensor&lt;*xf64&gt;&gt; -&gt; tensor&lt;*xf64&gt;
+    %1 = toy.transpose(%0 : tensor&lt;*xf64&gt;) to tensor&lt;*xf64&gt;
+    %2 = toy.struct_access %arg0[1] : !toy.struct&lt;tensor&lt;*xf64&gt;, tensor&lt;*xf64&gt;&gt; -&gt; tensor&lt;*xf64&gt;
+    %3 = toy.transpose(%2 : tensor&lt;*xf64&gt;) to tensor&lt;*xf64&gt;
+    %4 = toy.mul %1, %3 : tensor&lt;*xf64&gt;
+    toy.return %4 : tensor&lt;*xf64&gt;
+  }
+  toy.func @main() {
+    %0 = toy.struct_constant [
+      dense&lt;[[1.000000e+00, 2.000000e+00, 3.000000e+00], [4.000000e+00, 5.000000e+00, 6.000000e+00]]&gt; : tensor&lt;2x3xf64&gt;,
+      dense&lt;[[1.000000e+00, 2.000000e+00, 3.000000e+00], [4.000000e+00, 5.000000e+00, 6.000000e+00]]&gt; : tensor&lt;2x3xf64&gt;
+    ] : !toy.struct&lt;tensor&lt;*xf64&gt;, tensor&lt;*xf64&gt;&gt;
+    %1 = toy.generic_call @multiply_transpose(%0) : (!toy.struct&lt;tensor&lt;*xf64&gt;, tensor&lt;*xf64&gt;&gt;) -&gt; tensor&lt;*xf64&gt;
+    toy.print %1 : tensor&lt;*xf64&gt;
+    toy.return
+  }
+}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="optimizing-operations-on-structtype">
+<h4>Optimizing Operations on <code class="docutils literal notranslate"><span class="pre">StructType</span></code><a class="headerlink" href="#optimizing-operations-on-structtype" title="此标题的永久链接">¶</a></h4>
+<p>Now that we have a few operations operating on <code class="docutils literal notranslate"><span class="pre">StructType</span></code>, we also have many
+new constant folding opportunities.</p>
+<p>After inlining, the MLIR module in the previous section looks something like:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>module {
+  toy.func @main() {
+    %0 = toy.struct_constant [
+      dense&lt;[[1.000000e+00, 2.000000e+00, 3.000000e+00], [4.000000e+00, 5.000000e+00, 6.000000e+00]]&gt; : tensor&lt;2x3xf64&gt;,
+      dense&lt;[[1.000000e+00, 2.000000e+00, 3.000000e+00], [4.000000e+00, 5.000000e+00, 6.000000e+00]]&gt; : tensor&lt;2x3xf64&gt;
+    ] : !toy.struct&lt;tensor&lt;*xf64&gt;, tensor&lt;*xf64&gt;&gt;
+    %1 = toy.struct_access %0[0] : !toy.struct&lt;tensor&lt;*xf64&gt;, tensor&lt;*xf64&gt;&gt; -&gt; tensor&lt;*xf64&gt;
+    %2 = toy.transpose(%1 : tensor&lt;*xf64&gt;) to tensor&lt;*xf64&gt;
+    %3 = toy.struct_access %0[1] : !toy.struct&lt;tensor&lt;*xf64&gt;, tensor&lt;*xf64&gt;&gt; -&gt; tensor&lt;*xf64&gt;
+    %4 = toy.transpose(%3 : tensor&lt;*xf64&gt;) to tensor&lt;*xf64&gt;
+    %5 = toy.mul %2, %4 : tensor&lt;*xf64&gt;
+    toy.print %5 : tensor&lt;*xf64&gt;
+    toy.return
+  }
+}
+</pre></div>
+</div>
+<p>We have several <code class="docutils literal notranslate"><span class="pre">toy.struct_access</span></code> operations that access into a
+<code class="docutils literal notranslate"><span class="pre">toy.struct_constant</span></code>. As detailed in <a class="reference internal" href="Ch-3.html"><span class="doc">chapter 3</span></a> (FoldConstantReshape),
+we can add folders for these <code class="docutils literal notranslate"><span class="pre">toy</span></code> operations by setting the <code class="docutils literal notranslate"><span class="pre">hasFolder</span></code> bit
+on the operation definition and providing a definition of the <code class="docutils literal notranslate"><span class="pre">*Op::fold</span></code>
+method.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">/// Fold constants.</span>
+<span class="n">OpFoldResult</span><span class="w"> </span><span class="nf">ConstantOp::fold</span><span class="p">(</span><span class="n">FoldAdaptor</span><span class="w"> </span><span class="n">adaptor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">value</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c1">/// Fold struct constants.</span>
+<span class="n">OpFoldResult</span><span class="w"> </span><span class="nf">StructConstantOp::fold</span><span class="p">(</span><span class="n">FoldAdaptor</span><span class="w"> </span><span class="n">adaptor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">value</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">/// Fold simple struct access operations that access into a constant.</span>
+<span class="n">OpFoldResult</span><span class="w"> </span><span class="nf">StructAccessOp::fold</span><span class="p">(</span><span class="n">FoldAdaptor</span><span class="w"> </span><span class="n">adaptor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">structAttr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">adaptor</span><span class="p">.</span><span class="n">getInput</span><span class="p">().</span><span class="n">dyn_cast_or_null</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">ArrayAttr</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">structAttr</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">elementIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">index</span><span class="p">().</span><span class="n">getZExtValue</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">structAttr</span><span class="p">[</span><span class="n">elementIndex</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To ensure that MLIR generates the proper constant operations when folding our
+<code class="docutils literal notranslate"><span class="pre">Toy</span></code> operations, i.e. <code class="docutils literal notranslate"><span class="pre">ConstantOp</span></code> for <code class="docutils literal notranslate"><span class="pre">TensorType</span></code> and <code class="docutils literal notranslate"><span class="pre">StructConstant</span></code> for
+<code class="docutils literal notranslate"><span class="pre">StructType</span></code>, we will need to provide an override for the dialect hook
+<code class="docutils literal notranslate"><span class="pre">materializeConstant</span></code>. This allows for generic MLIR operations to create
+constants for the <code class="docutils literal notranslate"><span class="pre">Toy</span></code> dialect when necessary.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">mlir</span><span class="o">::</span><span class="n">Operation</span><span class="w"> </span><span class="o">*</span><span class="nf">ToyDialect::materializeConstant</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">OpBuilder</span><span class="w"> </span><span class="o">&amp;</span><span class="n">builder</span><span class="p">,</span>
+<span class="w">                                                 </span><span class="n">mlir</span><span class="o">::</span><span class="n">Attribute</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">                                                 </span><span class="n">mlir</span><span class="o">::</span><span class="n">Type</span><span class="w"> </span><span class="n">type</span><span class="p">,</span>
+<span class="w">                                                 </span><span class="n">mlir</span><span class="o">::</span><span class="n">Location</span><span class="w"> </span><span class="n">loc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">type</span><span class="p">.</span><span class="n">isa</span><span class="o">&lt;</span><span class="n">StructType</span><span class="o">&gt;</span><span class="p">())</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">create</span><span class="o">&lt;</span><span class="n">StructConstantOp</span><span class="o">&gt;</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">,</span>
+<span class="w">                                            </span><span class="n">value</span><span class="p">.</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">ArrayAttr</span><span class="o">&gt;</span><span class="p">());</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">create</span><span class="o">&lt;</span><span class="n">ConstantOp</span><span class="o">&gt;</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">,</span>
+<span class="w">                                    </span><span class="n">value</span><span class="p">.</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">DenseElementsAttr</span><span class="o">&gt;</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>With this, we can now generate code that can be generated to LLVM without any
+changes to our pipeline.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>module {
+  toy.func @main() {
+    %0 = toy.constant dense&lt;[[1.000000e+00, 2.000000e+00, 3.000000e+00], [4.000000e+00, 5.000000e+00, 6.000000e+00]]&gt; : tensor&lt;2x3xf64&gt;
+    %1 = toy.transpose(%0 : tensor&lt;2x3xf64&gt;) to tensor&lt;3x2xf64&gt;
+    %2 = toy.mul %1, %1 : tensor&lt;3x2xf64&gt;
+    toy.print %2 : tensor&lt;3x2xf64&gt;
+    toy.return
+  }
+}
+</pre></div>
+</div>
+<p>You can build <code class="docutils literal notranslate"><span class="pre">toyc-ch7</span></code> and try yourself: <code class="docutils literal notranslate"><span class="pre">toyc-ch7</span> <span class="pre">test/Examples/Toy/Ch7/struct-codegen.toy</span> <span class="pre">-emit=mlir</span></code>. More details on defining
+custom types can be found in
+<a class="reference internal" href="../../DefiningDialects/AttributesAndTypes.html"><span class="doc">DefiningAttributesAndTypes</span></a>.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="Ch-6.html"
+       title="上一章">← Chapter 6: Lowering to LLVM and CodeGeneration</a>
+  </li>
+  <li class="next">
+    <a href="_index.html"
+       title="下一章">Toy Tutorial →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

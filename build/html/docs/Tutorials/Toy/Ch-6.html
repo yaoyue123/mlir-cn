@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Chapter 6: Lowering to LLVM and CodeGeneration</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../../../genindex.html" />
+  <link rel="search" title="搜索" href="../../../search.html" />
+  <link rel="next" title="Chapter 7: Adding a Composite Type to Toy" href="Ch-7.html" />
+  <link rel="prev" title="Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization" href="Ch-5.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../DataFlowAnalysis.html" class="reference internal ">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-5.html" class="reference internal ">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#lowering-to-llvm" class="reference internal">Lowering to LLVM</a></li>
+                
+                  <li class="toctree-l2"><a href="#codegen-getting-out-of-mlir" class="reference internal">CodeGen: Getting Out of MLIR</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-7.html" class="reference internal ">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="_index.html" class="reference internal ">Toy Tutorial</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+    <li>Chapter 6: Lowering to LLVM and CodeGeneration</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="Ch-5.html"
+       title="上一章">← Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+  </li>
+  <li class="next">
+    <a href="Ch-7.html"
+       title="下一章">Chapter 7: Adding a Composite Type to Toy →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="chapter-6-lowering-to-llvm-and-codegeneration">
+<h1>Chapter 6: Lowering to LLVM and CodeGeneration<a class="headerlink" href="#chapter-6-lowering-to-llvm-and-codegeneration" title="此标题的永久链接">¶</a></h1>
+<p>[TOC]</p>
+<p>In the <a class="reference internal" href="Ch-5.html"><span class="doc">previous chapter</span></a>, we introduced the
+<a class="reference internal" href="../../DialectConversion.html"><span class="doc">dialect conversion</span></a> framework and partially lowered
+many of the <code class="docutils literal notranslate"><span class="pre">Toy</span></code> operations to affine loop nests for optimization. In this
+chapter, we will finally lower to LLVM for code generation.</p>
+<section id="lowering-to-llvm">
+<h2>Lowering to LLVM<a class="headerlink" href="#lowering-to-llvm" title="此标题的永久链接">¶</a></h2>
+<p>For this lowering, we will again use the dialect conversion framework to perform
+the heavy lifting. However, this time, we will be performing a full conversion
+to the <a class="reference internal" href="../../Dialects/LLVM.html"><span class="doc">LLVM dialect</span></a>. Thankfully, we have already
+lowered all but one of the <code class="docutils literal notranslate"><span class="pre">toy</span></code> operations, with the last being <code class="docutils literal notranslate"><span class="pre">toy.print</span></code>.
+Before going over the conversion to LLVM, let’s lower the <code class="docutils literal notranslate"><span class="pre">toy.print</span></code> operation.
+We will lower this operation to a non-affine loop nest that invokes <code class="docutils literal notranslate"><span class="pre">printf</span></code> for
+each element. Note that, because the dialect conversion framework supports
+<a class="reference external" href="../../../getting_started/Glossary.md/#transitive-lowering">transitive lowering</a>,
+we don’t need to directly emit operations in the LLVM dialect. By transitive
+lowering, we mean that the conversion framework may apply multiple patterns to
+fully legalize an operation. In this example, we are generating a structured
+loop nest instead of the branch-form in the LLVM dialect. As long as we then
+have a lowering from the loop operations to LLVM, the lowering will still
+succeed.</p>
+<p>During lowering we can get, or build, the declaration for printf as so:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">/// Return a symbol reference to the printf function, inserting it into the</span>
+<span class="c1">/// module if necessary.</span>
+<span class="k">static</span><span class="w"> </span><span class="n">FlatSymbolRefAttr</span><span class="w"> </span><span class="nf">getOrInsertPrintf</span><span class="p">(</span><span class="n">PatternRewriter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rewriter</span><span class="p">,</span>
+<span class="w">                                           </span><span class="n">ModuleOp</span><span class="w"> </span><span class="k">module</span><span class="p">,</span>
+<span class="w">                                           </span><span class="n">LLVM</span><span class="o">::</span><span class="n">LLVMDialect</span><span class="w"> </span><span class="o">*</span><span class="n">llvmDialect</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="o">*</span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">module</span><span class="p">.</span><span class="n">getContext</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">module</span><span class="p">.</span><span class="n">lookupSymbol</span><span class="o">&lt;</span><span class="n">LLVM</span><span class="o">::</span><span class="n">LLVMFuncOp</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;printf&quot;</span><span class="p">))</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">SymbolRefAttr</span><span class="o">::</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;printf&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Create a function declaration for printf, the signature is:</span>
+<span class="w">  </span><span class="c1">//   * `i32 (i8*, ...)`</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">llvmI32Ty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IntegerType</span><span class="o">::</span><span class="n">get</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">llvmI8PtrTy</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">LLVM</span><span class="o">::</span><span class="n">LLVMPointerType</span><span class="o">::</span><span class="n">get</span><span class="p">(</span><span class="n">IntegerType</span><span class="o">::</span><span class="n">get</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">));</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">llvmFnType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LLVM</span><span class="o">::</span><span class="n">LLVMFunctionType</span><span class="o">::</span><span class="n">get</span><span class="p">(</span><span class="n">llvmI32Ty</span><span class="p">,</span><span class="w"> </span><span class="n">llvmI8PtrTy</span><span class="p">,</span>
+<span class="w">                                                </span><span class="cm">/*isVarArg=*/</span><span class="nb">true</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Insert the printf function into the body of the parent module.</span>
+<span class="w">  </span><span class="n">PatternRewriter</span><span class="o">::</span><span class="n">InsertionGuard</span><span class="w"> </span><span class="n">insertGuard</span><span class="p">(</span><span class="n">rewriter</span><span class="p">);</span>
+<span class="w">  </span><span class="n">rewriter</span><span class="p">.</span><span class="n">setInsertionPointToStart</span><span class="p">(</span><span class="k">module</span><span class="p">.</span><span class="n">getBody</span><span class="p">());</span>
+<span class="w">  </span><span class="n">rewriter</span><span class="p">.</span><span class="n">create</span><span class="o">&lt;</span><span class="n">LLVM</span><span class="o">::</span><span class="n">LLVMFuncOp</span><span class="o">&gt;</span><span class="p">(</span><span class="k">module</span><span class="p">.</span><span class="n">getLoc</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;printf&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">llvmFnType</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">SymbolRefAttr</span><span class="o">::</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;printf&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now that the lowering for the printf operation has been defined, we can specify
+the components necessary for the lowering. These are largely the same as the
+components defined in the <a class="reference internal" href="Ch-5.html"><span class="doc">previous chapter</span></a>.</p>
+<section id="conversion-target">
+<h3>Conversion Target<a class="headerlink" href="#conversion-target" title="此标题的永久链接">¶</a></h3>
+<p>For this conversion, aside from the top-level module, we will be lowering
+everything to the LLVM dialect.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">ConversionTarget</span><span class="w"> </span><span class="nf">target</span><span class="p">(</span><span class="n">getContext</span><span class="p">());</span>
+<span class="w">  </span><span class="n">target</span><span class="p">.</span><span class="n">addLegalDialect</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">LLVMDialect</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">  </span><span class="n">target</span><span class="p">.</span><span class="n">addLegalOp</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">ModuleOp</span><span class="o">&gt;</span><span class="p">();</span>
+</pre></div>
+</div>
+</section>
+<section id="type-converter">
+<h3>Type Converter<a class="headerlink" href="#type-converter" title="此标题的永久链接">¶</a></h3>
+<p>This lowering will also transform the MemRef types which are currently being
+operated on into a representation in LLVM. To perform this conversion, we use a
+TypeConverter as part of the lowering. This converter specifies how one type
+maps to another. This is necessary now that we are performing more complicated
+lowerings involving block arguments. Given that we don’t have any
+Toy-dialect-specific types that need to be lowered, the default converter is
+enough for our use case.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">LLVMTypeConverter</span><span class="w"> </span><span class="nf">typeConverter</span><span class="p">(</span><span class="o">&amp;</span><span class="n">getContext</span><span class="p">());</span>
+</pre></div>
+</div>
+</section>
+<section id="conversion-patterns">
+<h3>Conversion Patterns<a class="headerlink" href="#conversion-patterns" title="此标题的永久链接">¶</a></h3>
+<p>Now that the conversion target has been defined, we need to provide the patterns
+used for lowering. At this point in the compilation process, we have a
+combination of <code class="docutils literal notranslate"><span class="pre">toy</span></code>, <code class="docutils literal notranslate"><span class="pre">affine</span></code>, <code class="docutils literal notranslate"><span class="pre">arith</span></code>, and <code class="docutils literal notranslate"><span class="pre">std</span></code> operations. Luckily, the
+<code class="docutils literal notranslate"><span class="pre">affine</span></code>, <code class="docutils literal notranslate"><span class="pre">arith</span></code>, and <code class="docutils literal notranslate"><span class="pre">std</span></code> dialects already provide the set of patterns needed
+to transform them into LLVM dialect. These patterns allow for lowering the IR in
+multiple stages by relying on
+<a class="reference external" href="../../../getting_started/Glossary.md/#transitive-lowering">transitive lowering</a>.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">RewritePatternSet</span><span class="w"> </span><span class="nf">patterns</span><span class="p">(</span><span class="o">&amp;</span><span class="n">getContext</span><span class="p">());</span>
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">populateAffineToStdConversionPatterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">getContext</span><span class="p">());</span>
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">cf</span><span class="o">::</span><span class="n">populateSCFToControlFlowConversionPatterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">getContext</span><span class="p">());</span>
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">arith</span><span class="o">::</span><span class="n">populateArithToLLVMConversionPatterns</span><span class="p">(</span><span class="n">typeConverter</span><span class="p">,</span>
+<span class="w">                                                          </span><span class="n">patterns</span><span class="p">);</span>
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">populateFuncToLLVMConversionPatterns</span><span class="p">(</span><span class="n">typeConverter</span><span class="p">,</span><span class="w"> </span><span class="n">patterns</span><span class="p">);</span>
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">cf</span><span class="o">::</span><span class="n">populateControlFlowToLLVMConversionPatterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">getContext</span><span class="p">());</span>
+
+<span class="w">  </span><span class="c1">// The only remaining operation, to lower from the `toy` dialect, is the</span>
+<span class="w">  </span><span class="c1">// PrintOp.</span>
+<span class="w">  </span><span class="n">patterns</span><span class="p">.</span><span class="n">add</span><span class="o">&lt;</span><span class="n">PrintOpLowering</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">getContext</span><span class="p">());</span>
+</pre></div>
+</div>
+</section>
+<section id="full-lowering">
+<h3>Full Lowering<a class="headerlink" href="#full-lowering" title="此标题的永久链接">¶</a></h3>
+<p>We want to completely lower to LLVM, so we use a <code class="docutils literal notranslate"><span class="pre">FullConversion</span></code>. This ensures
+that only legal operations will remain after the conversion.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">ModuleOp</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getOperation</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">failed</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">applyFullConversion</span><span class="p">(</span><span class="k">module</span><span class="p">,</span><span class="w"> </span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">patterns</span><span class="p">)))</span>
+<span class="w">    </span><span class="n">signalPassFailure</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Looking back at our current working example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>toy.func @main() {
+  %0 = toy.constant dense&lt;[[1.000000e+00, 2.000000e+00, 3.000000e+00], [4.000000e+00, 5.000000e+00, 6.000000e+00]]&gt; : tensor&lt;2x3xf64&gt;
+  %2 = toy.transpose(%0 : tensor&lt;2x3xf64&gt;) to tensor&lt;3x2xf64&gt;
+  %3 = toy.mul %2, %2 : tensor&lt;3x2xf64&gt;
+  toy.print %3 : tensor&lt;3x2xf64&gt;
+  toy.return
+}
+</pre></div>
+</div>
+<p>We can now lower down to the LLVM dialect, which produces the following code:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>llvm.func @free(!llvm&lt;&quot;i8*&quot;&gt;)
+llvm.func @printf(!llvm&lt;&quot;i8*&quot;&gt;, ...) -&gt; i32
+llvm.func @malloc(i64) -&gt; !llvm&lt;&quot;i8*&quot;&gt;
+llvm.func @main() {
+  %0 = llvm.mlir.constant(1.000000e+00 : f64) : f64
+  %1 = llvm.mlir.constant(2.000000e+00 : f64) : f64
+
+  ...
+
+^bb16:
+  %221 = llvm.extractvalue %25[0] : !llvm&lt;&quot;{ double*, i64, [2 x i64], [2 x i64] }&quot;&gt;
+  %222 = llvm.mlir.constant(0 : index) : i64
+  %223 = llvm.mlir.constant(2 : index) : i64
+  %224 = llvm.mul %214, %223 : i64
+  %225 = llvm.add %222, %224 : i64
+  %226 = llvm.mlir.constant(1 : index) : i64
+  %227 = llvm.mul %219, %226 : i64
+  %228 = llvm.add %225, %227 : i64
+  %229 = llvm.getelementptr %221[%228] : (!llvm.&quot;double*&quot;&gt;, i64) -&gt; !llvm&lt;&quot;f64*&quot;&gt;
+  %230 = llvm.load %229 : !llvm&lt;&quot;double*&quot;&gt;
+  %231 = llvm.call @printf(%207, %230) : (!llvm&lt;&quot;i8*&quot;&gt;, f64) -&gt; i32
+  %232 = llvm.add %219, %218 : i64
+  llvm.br ^bb15(%232 : i64)
+
+  ...
+
+^bb18:
+  %235 = llvm.extractvalue %65[0] : !llvm&lt;&quot;{ double*, i64, [2 x i64], [2 x i64] }&quot;&gt;
+  %236 = llvm.bitcast %235 : !llvm&lt;&quot;double*&quot;&gt; to !llvm&lt;&quot;i8*&quot;&gt;
+  llvm.call @free(%236) : (!llvm&lt;&quot;i8*&quot;&gt;) -&gt; ()
+  %237 = llvm.extractvalue %45[0] : !llvm&lt;&quot;{ double*, i64, [2 x i64], [2 x i64] }&quot;&gt;
+  %238 = llvm.bitcast %237 : !llvm&lt;&quot;double*&quot;&gt; to !llvm&lt;&quot;i8*&quot;&gt;
+  llvm.call @free(%238) : (!llvm&lt;&quot;i8*&quot;&gt;) -&gt; ()
+  %239 = llvm.extractvalue %25[0] : !llvm&lt;&quot;{ double*, i64, [2 x i64], [2 x i64] }&quot;&gt;
+  %240 = llvm.bitcast %239 : !llvm&lt;&quot;double*&quot;&gt; to !llvm&lt;&quot;i8*&quot;&gt;
+  llvm.call @free(%240) : (!llvm&lt;&quot;i8*&quot;&gt;) -&gt; ()
+  llvm.return
+}
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../../TargetLLVMIR.html"><span class="doc">LLVM IR Target</span></a> for
+more in-depth details on lowering to the LLVM dialect.</p>
+</section>
+</section>
+<section id="codegen-getting-out-of-mlir">
+<h2>CodeGen: Getting Out of MLIR<a class="headerlink" href="#codegen-getting-out-of-mlir" title="此标题的永久链接">¶</a></h2>
+<p>At this point we are right at the cusp of code generation. We can generate code
+in the LLVM dialect, so now we just need to export to LLVM IR and setup a JIT to
+run it.</p>
+<section id="emitting-llvm-ir">
+<h3>Emitting LLVM IR<a class="headerlink" href="#emitting-llvm-ir" title="此标题的永久链接">¶</a></h3>
+<p>Now that our module is comprised only of operations in the LLVM dialect, we can
+export to LLVM IR. To do this programmatically, we can invoke the following
+utility:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">llvm</span><span class="o">::</span><span class="n">Module</span><span class="o">&gt;</span><span class="w"> </span><span class="n">llvmModule</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">translateModuleToLLVMIR</span><span class="p">(</span><span class="k">module</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">llvmModule</span><span class="p">)</span>
+<span class="w">    </span><span class="cm">/* ... an error was encountered ... */</span>
+</pre></div>
+</div>
+<p>Exporting our module to LLVM IR generates:</p>
+<div class="highlight-llvm notranslate"><div class="highlight"><pre><span></span>define void @main() {
+  ...
+
+102:
+  %103 = extractvalue { double*, i64, [2 x i64], [2 x i64] } %8, 0
+  %104 = mul i64 %96, 2
+  %105 = add i64 0, %104
+  %106 = mul i64 %100, 1
+  %107 = add i64 %105, %106
+  %108 = getelementptr double, double* %103, i64 %107
+  %109 = memref.load double, double* %108
+  %110 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @frmt_spec, i64 0, i64 0), double %109)
+  %111 = add i64 %100, 1
+  cf.br label %99
+
+  ...
+
+115:
+  %116 = extractvalue { double*, i64, [2 x i64], [2 x i64] } %24, 0
+  %117 = bitcast double* %116 to i8*
+  call void @free(i8* %117)
+  %118 = extractvalue { double*, i64, [2 x i64], [2 x i64] } %16, 0
+  %119 = bitcast double* %118 to i8*
+  call void @free(i8* %119)
+  %120 = extractvalue { double*, i64, [2 x i64], [2 x i64] } %8, 0
+  %121 = bitcast double* %120 to i8*
+  call void @free(i8* %121)
+  ret void
+}
+</pre></div>
+</div>
+<p>If we enable optimization on the generated LLVM IR, we can trim this down quite
+a bit:</p>
+<div class="highlight-llvm notranslate"><div class="highlight"><pre><span></span><span class="k">define</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="vg">@main</span><span class="p">()</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%0</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">tail</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="p">(</span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="vg">@printf</span><span class="p">(</span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="k">nonnull</span><span class="w"> </span><span class="k">dereferenceable</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="k">getelementptr</span><span class="w"> </span><span class="k">inbounds</span><span class="w"> </span><span class="p">([</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">]*</span><span class="w"> </span><span class="vg">@frmt_spec</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="m">1.000000e+00</span><span class="p">)</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">tail</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="p">(</span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="vg">@printf</span><span class="p">(</span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="k">nonnull</span><span class="w"> </span><span class="k">dereferenceable</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="k">getelementptr</span><span class="w"> </span><span class="k">inbounds</span><span class="w"> </span><span class="p">([</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">]*</span><span class="w"> </span><span class="vg">@frmt_spec</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="m">1.600000e+01</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">%putchar</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">tail</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="vg">@putchar</span><span class="p">(</span><span class="kt">i32</span><span class="w"> </span><span class="m">10</span><span class="p">)</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%2</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">tail</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="p">(</span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="vg">@printf</span><span class="p">(</span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="k">nonnull</span><span class="w"> </span><span class="k">dereferenceable</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="k">getelementptr</span><span class="w"> </span><span class="k">inbounds</span><span class="w"> </span><span class="p">([</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">]*</span><span class="w"> </span><span class="vg">@frmt_spec</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="m">4.000000e+00</span><span class="p">)</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%3</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">tail</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="p">(</span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="vg">@printf</span><span class="p">(</span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="k">nonnull</span><span class="w"> </span><span class="k">dereferenceable</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="k">getelementptr</span><span class="w"> </span><span class="k">inbounds</span><span class="w"> </span><span class="p">([</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">]*</span><span class="w"> </span><span class="vg">@frmt_spec</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="m">2.500000e+01</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">%putchar.1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">tail</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="vg">@putchar</span><span class="p">(</span><span class="kt">i32</span><span class="w"> </span><span class="m">10</span><span class="p">)</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%4</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">tail</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="p">(</span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="vg">@printf</span><span class="p">(</span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="k">nonnull</span><span class="w"> </span><span class="k">dereferenceable</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="k">getelementptr</span><span class="w"> </span><span class="k">inbounds</span><span class="w"> </span><span class="p">([</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">]*</span><span class="w"> </span><span class="vg">@frmt_spec</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="m">9.000000e+00</span><span class="p">)</span>
+<span class="w">  </span><span class="nv nv-Anonymous">%5</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">tail</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="p">(</span><span class="kt">i8</span><span class="p">*,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="vg">@printf</span><span class="p">(</span><span class="kt">i8</span><span class="p">*</span><span class="w"> </span><span class="k">nonnull</span><span class="w"> </span><span class="k">dereferenceable</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="k">getelementptr</span><span class="w"> </span><span class="k">inbounds</span><span class="w"> </span><span class="p">([</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="m">4</span><span class="w"> </span><span class="k">x</span><span class="w"> </span><span class="kt">i8</span><span class="p">]*</span><span class="w"> </span><span class="vg">@frmt_spec</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="kt">i64</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="m">3.600000e+01</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">%putchar.2</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">tail</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="vg">@putchar</span><span class="p">(</span><span class="kt">i32</span><span class="w"> </span><span class="m">10</span><span class="p">)</span>
+<span class="w">  </span><span class="k">ret</span><span class="w"> </span><span class="k">void</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The full code listing for dumping LLVM IR can be found in
+<code class="docutils literal notranslate"><span class="pre">examples/toy/Ch6/toy.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">dumpLLVMIR()</span></code> function:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">dumpLLVMIR</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">ModuleOp</span><span class="w"> </span><span class="k">module</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Translate the module, that contains the LLVM dialect, to LLVM IR. Use a</span>
+<span class="w">  </span><span class="c1">// fresh LLVM IR context. (Note that LLVM is not thread-safe and any</span>
+<span class="w">  </span><span class="c1">// concurrent use of a context requires external locking.)</span>
+<span class="w">  </span><span class="n">llvm</span><span class="o">::</span><span class="n">LLVMContext</span><span class="w"> </span><span class="n">llvmContext</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">llvmModule</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">translateModuleToLLVMIR</span><span class="p">(</span><span class="k">module</span><span class="p">,</span><span class="w"> </span><span class="n">llvmContext</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">llvmModule</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">llvm</span><span class="o">::</span><span class="n">errs</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to emit LLVM IR</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Initialize LLVM targets.</span>
+<span class="w">  </span><span class="n">llvm</span><span class="o">::</span><span class="n">InitializeNativeTarget</span><span class="p">();</span>
+<span class="w">  </span><span class="n">llvm</span><span class="o">::</span><span class="n">InitializeNativeTargetAsmPrinter</span><span class="p">();</span>
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">ExecutionEngine</span><span class="o">::</span><span class="n">setupTargetTriple</span><span class="p">(</span><span class="n">llvmModule</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+
+<span class="w">  </span><span class="c1">/// Optionally run an optimization pipeline over the llvm module.</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">optPipeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">makeOptimizingTransformer</span><span class="p">(</span>
+<span class="w">      </span><span class="cm">/*optLevel=*/</span><span class="n">EnableOpt</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="cm">/*sizeLevel=*/</span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="cm">/*targetMachine=*/</span><span class="k">nullptr</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optPipeline</span><span class="p">(</span><span class="n">llvmModule</span><span class="p">.</span><span class="n">get</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">llvm</span><span class="o">::</span><span class="n">errs</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to optimize LLVM IR &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">err</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">llvm</span><span class="o">::</span><span class="n">errs</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="o">*</span><span class="n">llvmModule</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="setting-up-a-jit">
+<h3>Setting up a JIT<a class="headerlink" href="#setting-up-a-jit" title="此标题的永久链接">¶</a></h3>
+<p>Setting up a JIT to run the module containing the LLVM dialect can be done using
+the <code class="docutils literal notranslate"><span class="pre">mlir::ExecutionEngine</span></code> infrastructure. This is a utility wrapper around
+LLVM’s JIT that accepts <code class="docutils literal notranslate"><span class="pre">.mlir</span></code> as input. The full code listing for setting up
+the JIT can be found in <code class="docutils literal notranslate"><span class="pre">Ch6/toyc.cpp</span></code> in the <code class="docutils literal notranslate"><span class="pre">runJit()</span></code> function:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">runJit</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">ModuleOp</span><span class="w"> </span><span class="k">module</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Initialize LLVM targets.</span>
+<span class="w">  </span><span class="n">llvm</span><span class="o">::</span><span class="n">InitializeNativeTarget</span><span class="p">();</span>
+<span class="w">  </span><span class="n">llvm</span><span class="o">::</span><span class="n">InitializeNativeTargetAsmPrinter</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// An optimization pipeline to use within the execution engine.</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">optPipeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">makeOptimizingTransformer</span><span class="p">(</span>
+<span class="w">      </span><span class="cm">/*optLevel=*/</span><span class="n">EnableOpt</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="cm">/*sizeLevel=*/</span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="cm">/*targetMachine=*/</span><span class="k">nullptr</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Create an MLIR execution engine. The execution engine eagerly JIT-compiles</span>
+<span class="w">  </span><span class="c1">// the module.</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">maybeEngine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">ExecutionEngine</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="k">module</span><span class="p">,</span>
+<span class="w">      </span><span class="cm">/*llvmModuleBuilder=*/</span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">optPipeline</span><span class="p">);</span>
+<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">maybeEngine</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;failed to construct an execution engine&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">engine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">maybeEngine</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// Invoke the JIT-compiled function.</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">invocationResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engine</span><span class="o">-&gt;</span><span class="n">invoke</span><span class="p">(</span><span class="s">&quot;main&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">invocationResult</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">llvm</span><span class="o">::</span><span class="n">errs</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;JIT invocation failed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can play around with it from the build directory:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;def main() { print([[1, 2], [3, 4]]); }&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./bin/toyc-ch6<span class="w"> </span>-emit<span class="o">=</span>jit
+<span class="m">1</span>.000000<span class="w"> </span><span class="m">2</span>.000000
+<span class="m">3</span>.000000<span class="w"> </span><span class="m">4</span>.000000
+</pre></div>
+</div>
+<p>You can also play with <code class="docutils literal notranslate"><span class="pre">-emit=mlir</span></code>, <code class="docutils literal notranslate"><span class="pre">-emit=mlir-affine</span></code>, <code class="docutils literal notranslate"><span class="pre">-emit=mlir-llvm</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">-emit=llvm</span></code> to compare the various levels of IR involved. Also try options like
+<a class="reference external" href="../../PassManagement.md/#ir-printing"><code class="docutils literal notranslate"><span class="pre">--mlir-print-ir-after-all</span></code></a> to track the
+evolution of the IR throughout the pipeline.</p>
+<p>The example code used throughout this section can be found in
+test/Examples/Toy/Ch6/llvm-lowering.mlir.</p>
+<p>So far, we have worked with primitive data types. In the
+<a class="reference internal" href="Ch-7.html"><span class="doc">next chapter</span></a>, we will add a composite <code class="docutils literal notranslate"><span class="pre">struct</span></code> type.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="Ch-5.html"
+       title="上一章">← Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+  </li>
+  <li class="next">
+    <a href="Ch-7.html"
+       title="下一章">Chapter 7: Adding a Composite Type to Toy →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

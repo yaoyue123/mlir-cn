@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>MLIR : Language Server Protocol</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../../genindex.html" />
+  <link rel="search" title="搜索" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/DataFlowAnalysis.html" class="reference internal ">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-5.html" class="reference internal ">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-6.html" class="reference internal ">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-7.html" class="reference internal ">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/_index.html" class="reference internal ">Toy Tutorial</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+    <li>MLIR : Language Server Protocol</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="mlir-language-server-protocol">
+<h1>MLIR : Language Server Protocol<a class="headerlink" href="#mlir-language-server-protocol" title="此标题的永久链接">¶</a></h1>
+<p>[TOC]</p>
+<p>This document describes the tools and utilities related to supporting
+<a class="reference external" href="https://microsoft.github.io/language-server-protocol/">LSP</a> IDE language
+extensions for various MLIR-related languages. An LSP language extension is
+generally comprised of two components; a language client and a language server.
+A language client is a piece of code that interacts with the IDE that you are
+using, such as VSCode. A language server acts as the backend for queries that
+the client may want to perform, such as “Find Definition”, “Find References”,
+etc.</p>
+<section id="mlir-lsp-language-server-mlir-lsp-server">
+<h2>MLIR LSP Language Server : <code class="docutils literal notranslate"><span class="pre">mlir-lsp-server</span></code><a class="headerlink" href="#mlir-lsp-language-server-mlir-lsp-server" title="此标题的永久链接">¶</a></h2>
+<p>MLIR provides an implementation of an LSP language server for <code class="docutils literal notranslate"><span class="pre">.mlir</span></code> text files
+in the form of the <code class="docutils literal notranslate"><span class="pre">mlir-lsp-server</span></code> tool. This tool interacts with the MLIR C++
+API to support rich language queries, such as “Find Definition”.</p>
+<section id="supporting-custom-dialects-and-passes">
+<h3>Supporting custom dialects and passes<a class="headerlink" href="#supporting-custom-dialects-and-passes" title="此标题的永久链接">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">mlir-lsp-server</span></code>, like many other MLIR based tools, relies on having the
+appropriate dialects registered to be able to parse in the custom assembly
+formats used in the textual .mlir files. The <code class="docutils literal notranslate"><span class="pre">mlir-lsp-server</span></code> found within the
+main MLIR repository provides support for all of the upstream MLIR dialects and
+passes. Downstream and out-of-tree users will need to provide a custom
+<code class="docutils literal notranslate"><span class="pre">mlir-lsp-server</span></code> executable that registers the entities that they are
+interested in. The implementation of <code class="docutils literal notranslate"><span class="pre">mlir-lsp-server</span></code> is provided as a library,
+making it easy for downstream users to register their dialect/passes and simply
+call into the main implementation. A simple example is shown below:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;mlir/Tools/mlir-lsp-server/MlirLspServerMain.h&quot;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">DialectRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">;</span>
+<span class="w">  </span><span class="n">registerMyDialects</span><span class="p">(</span><span class="n">registry</span><span class="p">);</span>
+<span class="w">  </span><span class="n">registerMyPasses</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">failed</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">MlirLspServerMain</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">,</span><span class="w"> </span><span class="n">registry</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>See the <a class="reference external" href="#editor-plugins">Editor Plugins</a> section below for details on how to
+setup support in a few known LSP clients, such as vscode.</p>
+</section>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="此标题的永久链接">¶</a></h3>
+<p>This section details a few of the features that the MLIR language server
+provides. The screenshots are shown in <a class="reference external" href="https://code.visualstudio.com/">VSCode</a>,
+but the exact feature set available will depend on your editor client.</p>
+<section id="diagnostics">
+<h4>Diagnostics<a class="headerlink" href="#diagnostics" title="此标题的永久链接">¶</a></h4>
+<p>The language server actively runs verification on the IR as you type, showing
+any generated diagnostics in-place.</p>
+<p><img alt="IMG" src="mlir-lsp-server/diagnostics.png" /></p>
+<section id="automatically-insert-expected-diagnostic-checks">
+<h5>Automatically insert <code class="docutils literal notranslate"><span class="pre">expected-</span></code> diagnostic checks<a class="headerlink" href="#automatically-insert-expected-diagnostic-checks" title="此标题的永久链接">¶</a></h5>
+<p>MLIR provides
+<a class="reference external" href="https://mlir.llvm.org/docs/Diagnostics/#sourcemgr-diagnostic-verifier-handler">infrastructure</a>
+for checking expected diagnostics, which is heavily utilized when defining IR
+parsing and verification. The language server provides code actions for
+automatically inserting the checks for diagnostics it knows about.</p>
+<p><img alt="IMG" src="mlir-lsp-server/diagnostics_action.gif" /></p>
+</section>
+</section>
+<section id="code-completion">
+<h4>Code completion<a class="headerlink" href="#code-completion" title="此标题的永久链接">¶</a></h4>
+<p>The language server provides suggestions as you type, offering completions for
+dialect constructs (such as attributes, operations, and types), block names, SSA
+value names, keywords, and more.</p>
+<p><img alt="IMG" src="mlir-lsp-server/code_complete.gif" /></p>
+</section>
+<section id="cross-references">
+<h4>Cross-references<a class="headerlink" href="#cross-references" title="此标题的永久链接">¶</a></h4>
+<p>Cross references allow for navigating the use/def chains of SSA values (i.e.
+operation results and block arguments), <a class="reference internal" href="../SymbolsAndSymbolTables.html"><span class="doc">Symbols</span></a>,
+and Blocks.</p>
+<section id="find-definition">
+<h5>Find definition<a class="headerlink" href="#find-definition" title="此标题的永久链接">¶</a></h5>
+<p>Jump to the definition of the IR entity under the cursor. A few examples are
+shown below:</p>
+<ul class="simple">
+<li><p>SSA Values</p></li>
+</ul>
+<p><img alt="SSA" src="mlir-lsp-server/goto_def_ssa.gif" /></p>
+<ul class="simple">
+<li><p>Symbol References</p></li>
+</ul>
+<p><img alt="Symbols" src="mlir-lsp-server/goto_def_symbol.gif" /></p>
+<p>The definition of an operation will also take into account the source location
+attached, allowing for navigating into the source file that generated the
+operation.</p>
+<p><img alt="External Locations" src="mlir-lsp-server/goto_def_external.gif" /></p>
+</section>
+<section id="find-references">
+<h5>Find references<a class="headerlink" href="#find-references" title="此标题的永久链接">¶</a></h5>
+<p>Show all references of the IR entity under the cursor.</p>
+<p><img alt="IMG" src="mlir-lsp-server/find_references.gif" /></p>
+</section>
+</section>
+<section id="hover">
+<h4>Hover<a class="headerlink" href="#hover" title="此标题的永久链接">¶</a></h4>
+<p>Hover over an IR entity to see more information about it. The exact information
+displayed is dependent on the type of IR entity under the cursor. For example,
+hovering over an <code class="docutils literal notranslate"><span class="pre">Operation</span></code> may show its generic format.</p>
+<p><img alt="IMG" src="mlir-lsp-server/hover.png" /></p>
+</section>
+<section id="navigation">
+<h4>Navigation<a class="headerlink" href="#navigation" title="此标题的永久链接">¶</a></h4>
+<p>The language server will also inform the editor about the structure of symbol
+tables within the IR. This allows for jumping directly to the definition of a
+symbol, such as a <code class="docutils literal notranslate"><span class="pre">func.func</span></code>, within the file.</p>
+<p><img alt="IMG" src="mlir-lsp-server/navigation.gif" /></p>
+</section>
+<section id="bytecode-editing-and-inspection">
+<h4>Bytecode Editing and Inspection<a class="headerlink" href="#bytecode-editing-and-inspection" title="此标题的永久链接">¶</a></h4>
+<p>The language server provides support for interacting with MLIR bytecode files,
+enabling IDEs to transparently view and edit bytecode files in the same way
+as textual <code class="docutils literal notranslate"><span class="pre">.mlir</span></code> files.</p>
+<p><img alt="IMG" src="mlir-lsp-server/bytecode_edit.gif" /></p>
+</section>
+</section>
+</section>
+<section id="pdll-lsp-language-server-mlir-pdll-lsp-server">
+<h2>PDLL LSP Language Server : <code class="docutils literal notranslate"><span class="pre">mlir-pdll-lsp-server</span></code><a class="headerlink" href="#pdll-lsp-language-server-mlir-pdll-lsp-server" title="此标题的永久链接">¶</a></h2>
+<p>MLIR provides an implementation of an LSP language server for <code class="docutils literal notranslate"><span class="pre">.pdll</span></code> text files
+in the form of the <code class="docutils literal notranslate"><span class="pre">mlir-pdll-lsp-server</span></code> tool. This tool interacts with the
+PDLL C++ API to support rich language queries, such as code completion and “Find
+Definition”.</p>
+<section id="compilation-database">
+<h3>Compilation Database<a class="headerlink" href="#compilation-database" title="此标题的永久链接">¶</a></h3>
+<p>Similarly to
+<a class="reference external" href="https://clang.llvm.org/docs/JSONCompilationDatabase.html"><code class="docutils literal notranslate"><span class="pre">clangd</span></code></a>, and
+language servers for various other programming languages, the PDLL language
+server relies on a compilation database to provide build-system information for
+<code class="docutils literal notranslate"><span class="pre">.pdll</span></code> files. This information includes, for example, the include directories
+available for that file. This database allows for the server to interact with
+<code class="docutils literal notranslate"><span class="pre">.pdll</span></code> files using the same configuration as when building.</p>
+<section id="format">
+<h4>Format<a class="headerlink" href="#format" title="此标题的永久链接">¶</a></h4>
+<p>A PDLL compilation database is a YAML file, conventionally named
+<code class="docutils literal notranslate"><span class="pre">pdll_compile_commands.yml</span></code>, that contains a set of <code class="docutils literal notranslate"><span class="pre">FileInfo</span></code> documents
+providing information for individiual <code class="docutils literal notranslate"><span class="pre">.pdll</span></code> files.</p>
+<p>Example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"> </span><span class="nt">!FileInfo</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">filepath</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/home/user/llvm/mlir/lib/Dialect/Arith/IR/ArithCanonicalization.pdll&quot;</span>
+<span class="w">  </span><span class="nt">includes</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/home/user/llvm/mlir/lib/Dialect/Arith/IR;/home/user/llvm/mlir/include&quot;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>filepath: <string> - Absolute file path of the file.</p></li>
+<li><p>includes: <string> - Semi-colon delimited list of absolute include
+directories.</p></li>
+</ul>
+</section>
+<section id="build-system-integration">
+<h4>Build System Integration<a class="headerlink" href="#build-system-integration" title="此标题的永久链接">¶</a></h4>
+<p>Per convention, PDLL compilation databases should be named
+<code class="docutils literal notranslate"><span class="pre">pdll_compile_commands.yml</span></code> and placed at the top of the build directory. When
+using CMake and <code class="docutils literal notranslate"><span class="pre">mlir_pdll</span></code>, a compilation database is generally automatically
+built and placed in the appropriate location.</p>
+</section>
+</section>
+<section id="id1">
+<h3>Features<a class="headerlink" href="#id1" title="此标题的永久链接">¶</a></h3>
+<p>This section details a few of the features that the PDLL language server
+provides. The screenshots are shown in <a class="reference external" href="https://code.visualstudio.com/">VSCode</a>,
+but the exact feature set available will depend on your editor client.</p>
+<section id="id2">
+<h4>Diagnostics<a class="headerlink" href="#id2" title="此标题的永久链接">¶</a></h4>
+<p>The language server actively runs verification as you type, showing any
+generated diagnostics in-place.</p>
+<p><img alt="IMG" src="mlir-pdll-lsp-server/diagnostics.png" /></p>
+</section>
+<section id="code-completion-and-signature-help">
+<h4>Code completion and signature help<a class="headerlink" href="#code-completion-and-signature-help" title="此标题的永久链接">¶</a></h4>
+<p>The language server provides suggestions as you type based on what constraints,
+rewrites, dialects, operations, etc are available in this context. The server
+also provides information about the structure of constraint and rewrite calls,
+operations, and more as you fill them in.</p>
+<p><img alt="IMG" src="mlir-pdll-lsp-server/code_complete.gif" /></p>
+</section>
+<section id="id3">
+<h4>Cross-references<a class="headerlink" href="#id3" title="此标题的永久链接">¶</a></h4>
+<p>Cross references allow for navigating the code base.</p>
+<section id="id4">
+<h5>Find definition<a class="headerlink" href="#id4" title="此标题的永久链接">¶</a></h5>
+<p>Jump to the definition of a symbol under the cursor:</p>
+<p><img alt="IMG" src="mlir-pdll-lsp-server/goto_def.gif" /></p>
+<p>If ODS information is available, we can also jump to the definition of operation
+names and more:</p>
+<p><img alt="IMG" src="mlir-pdll-lsp-server/goto_def_ods.gif" /></p>
+</section>
+<section id="id5">
+<h5>Find references<a class="headerlink" href="#id5" title="此标题的永久链接">¶</a></h5>
+<p>Show all references of the symbol under the cursor.</p>
+<p><img alt="IMG" src="mlir-pdll-lsp-server/find_references.gif" /></p>
+</section>
+</section>
+<section id="id6">
+<h4>Hover<a class="headerlink" href="#id6" title="此标题的永久链接">¶</a></h4>
+<p>Hover over a symbol to see more information about it, such as its type,
+documentation, and more.</p>
+<p><img alt="IMG" src="mlir-pdll-lsp-server/hover.png" /></p>
+<p>If ODS information is available, we can also show information directly from the
+operation definitions:</p>
+<p><img alt="IMG" src="mlir-pdll-lsp-server/hover_ods.png" /></p>
+</section>
+<section id="id7">
+<h4>Navigation<a class="headerlink" href="#id7" title="此标题的永久链接">¶</a></h4>
+<p>The language server will also inform the editor about the structure of symbols
+within the IR.</p>
+<p><img alt="IMG" src="mlir-pdll-lsp-server/navigation.gif" /></p>
+</section>
+<section id="view-intermediate-output">
+<h4>View intermediate output<a class="headerlink" href="#view-intermediate-output" title="此标题的永久链接">¶</a></h4>
+<p>The language server provides support for introspecting various intermediate
+stages of compilation, such as the AST, the <code class="docutils literal notranslate"><span class="pre">.mlir</span></code> containing the generated
+PDL, and the generated C++ glue. This is a custom LSP extension, and is not
+necessarily provided by all IDE clients.</p>
+<p><img alt="IMG" src="mlir-pdll-lsp-server/view_output.gif" /></p>
+</section>
+<section id="inlay-hints">
+<h4>Inlay hints<a class="headerlink" href="#inlay-hints" title="此标题的永久链接">¶</a></h4>
+<p>The language server provides additional information inline with the source code.
+Editors usually render this using read-only virtual text snippets interspersed
+with code. Hints may be shown for:</p>
+<ul class="simple">
+<li><p>types of local variables</p></li>
+<li><p>names of operand and result groups</p></li>
+<li><p>constraint and rewrite arguments</p></li>
+</ul>
+<p><img alt="IMG" src="mlir-pdll-lsp-server/inlay_hints.png" /></p>
+</section>
+</section>
+</section>
+<section id="tablegen-lsp-language-server-tblgen-lsp-server">
+<h2>TableGen LSP Language Server : <code class="docutils literal notranslate"><span class="pre">tblgen-lsp-server</span></code><a class="headerlink" href="#tablegen-lsp-language-server-tblgen-lsp-server" title="此标题的永久链接">¶</a></h2>
+<p>MLIR provides an implementation of an LSP language server for <code class="docutils literal notranslate"><span class="pre">.td</span></code> text files
+in the form of the <code class="docutils literal notranslate"><span class="pre">tblgen-lsp-server</span></code> tool. This tool interacts with the
+TableGen C++ API to support rich language queries, such as “Find Definition”.</p>
+<section id="id8">
+<h3>Compilation Database<a class="headerlink" href="#id8" title="此标题的永久链接">¶</a></h3>
+<p>Similarly to
+<a class="reference external" href="https://clang.llvm.org/docs/JSONCompilationDatabase.html"><code class="docutils literal notranslate"><span class="pre">clangd</span></code></a>, and
+language servers for various other programming languages, the TableGen language
+server relies on a compilation database to provide build-system information for
+<code class="docutils literal notranslate"><span class="pre">.td</span></code> files. This information includes, for example, the include directories
+available for that file. This database allows for the server to interact with
+<code class="docutils literal notranslate"><span class="pre">.td</span></code> files using the same configuration as when building.</p>
+<section id="id9">
+<h4>Format<a class="headerlink" href="#id9" title="此标题的永久链接">¶</a></h4>
+<p>A TableGen compilation database is a YAML file, conventionally named
+<code class="docutils literal notranslate"><span class="pre">tablegen_compile_commands.yml</span></code>, that contains a set of <code class="docutils literal notranslate"><span class="pre">FileInfo</span></code> documents
+providing information for individiual <code class="docutils literal notranslate"><span class="pre">.td</span></code> files.</p>
+<p>Example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"> </span><span class="nt">!FileInfo</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">filepath</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/home/user/llvm/mlir/lib/Dialect/Arith/IR/ArithCanonicalization.td&quot;</span>
+<span class="w">  </span><span class="nt">includes</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/home/user/llvm/mlir/lib/Dialect/Arith/IR;/home/user/llvm/mlir/include&quot;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>filepath: <string> - Absolute file path of the file.</p></li>
+<li><p>includes: <string> - Semi-colon delimited list of absolute include
+directories.</p></li>
+</ul>
+</section>
+<section id="id10">
+<h4>Build System Integration<a class="headerlink" href="#id10" title="此标题的永久链接">¶</a></h4>
+<p>Per convention, TableGen compilation databases should be named
+<code class="docutils literal notranslate"><span class="pre">tablegen_compile_commands.yml</span></code> and placed at the top of the build directory.
+When using CMake and <code class="docutils literal notranslate"><span class="pre">mlir_tablegen</span></code>, a compilation database is generally
+automatically built and placed in the appropriate location.</p>
+</section>
+</section>
+<section id="id11">
+<h3>Features<a class="headerlink" href="#id11" title="此标题的永久链接">¶</a></h3>
+<p>This section details a few of the features that the TableGen language server
+provides. The screenshots are shown in <a class="reference external" href="https://code.visualstudio.com/">VSCode</a>,
+but the exact feature set available will depend on your editor client.</p>
+<section id="id12">
+<h4>Diagnostics<a class="headerlink" href="#id12" title="此标题的永久链接">¶</a></h4>
+<p>The language server actively runs verification as you type, showing any
+generated diagnostics in-place.</p>
+<p><img alt="IMG" src="tblgen-lsp-server/diagnostics.png" /></p>
+</section>
+<section id="id13">
+<h4>Cross-references<a class="headerlink" href="#id13" title="此标题的永久链接">¶</a></h4>
+<p>Cross references allow for navigating the code base.</p>
+<section id="id14">
+<h5>Find definition<a class="headerlink" href="#id14" title="此标题的永久链接">¶</a></h5>
+<p>Jump to the definition of a symbol under the cursor:</p>
+<p><img alt="IMG" src="tblgen-lsp-server/goto_def.gif" /></p>
+</section>
+<section id="id15">
+<h5>Find references<a class="headerlink" href="#id15" title="此标题的永久链接">¶</a></h5>
+<p>Show all references of the symbol under the cursor.</p>
+<p><img alt="IMG" src="tblgen-lsp-server/find_references.gif" /></p>
+</section>
+</section>
+<section id="id16">
+<h4>Hover<a class="headerlink" href="#id16" title="此标题的永久链接">¶</a></h4>
+<p>Hover over a symbol to see more information about it, such as its type,
+documentation, and more.</p>
+<p><img alt="IMG" src="tblgen-lsp-server/hover_def.png" /></p>
+<p>Hovering over an overridden field will also show you information such as
+documentation from the base value:</p>
+<p><img alt="IMG" src="tblgen-lsp-server/hover_field.png" /></p>
+</section>
+</section>
+</section>
+<section id="language-server-design">
+<h2>Language Server Design<a class="headerlink" href="#language-server-design" title="此标题的永久链接">¶</a></h2>
+<p>The design of the various language servers provided by MLIR are effectively the
+same, and are largely comprised of three different components:</p>
+<ul class="simple">
+<li><p>Communication and Transport (via JSON-RPC)</p></li>
+<li><p>Language Server Protocol</p></li>
+<li><p>Language-Specific Server</p></li>
+</ul>
+<p><img alt="Index Map Example" src="includes/img/mlir-lsp-server-server_diagram.svg" /></p>
+<section id="communication-and-transport">
+<h3>Communication and Transport<a class="headerlink" href="#communication-and-transport" title="此标题的永久链接">¶</a></h3>
+<p>The language server, such as <code class="docutils literal notranslate"><span class="pre">mlir-lsp-server</span></code>, communicates with the language
+client via JSON-RPC over stdin/stdout. In the code, this is the <code class="docutils literal notranslate"><span class="pre">JSONTransport</span></code>
+class. This class knows nothing about the Language Server Protocol, it only
+knows that JSON-RPC messages are coming in and JSON-RPC messages are going out.
+The handling of incoming and outgoing LSP messages is left to the
+<code class="docutils literal notranslate"><span class="pre">MessageHandler</span></code> class. This class routes incoming messages to handlers in the
+<code class="docutils literal notranslate"><span class="pre">Language</span> <span class="pre">Server</span> <span class="pre">Protocol</span></code> layer for interpretation, and packages outgoing
+messages for transport. This class also has limited knowledge of the LSP, and
+only has information about the three main classes of messages: notifications,
+calls, and replies.</p>
+</section>
+<section id="language-server-protocol">
+<h3>Language Server Protocol<a class="headerlink" href="#language-server-protocol" title="此标题的永久链接">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">LSPServer</span></code> handles the interpretation of the finer LSP details. This class
+registers handlers for LSP messages and then forwards to the
+<a class="reference external" href="#language-specific-server"><code class="docutils literal notranslate"><span class="pre">Language-Specific</span> <span class="pre">Server</span></code></a> for processing. The
+intent of this component is to hold all of the necessary glue when communicating
+from the LSP world to the language-specific world (e.g. MLIR, PDLL, etc.). In
+most cases, the LSP message handlers simply forward directly to the
+<code class="docutils literal notranslate"><span class="pre">Language-Specific</span> <span class="pre">Server</span></code>. In some cases, however, the impedance mismatch
+between the two requires more complicated glue code.</p>
+</section>
+<section id="language-specific-server">
+<h3>Language-Specific Server<a class="headerlink" href="#language-specific-server" title="此标题的永久链接">¶</a></h3>
+<p>The language specific server, such as <code class="docutils literal notranslate"><span class="pre">MLIRServer</span></code> or <code class="docutils literal notranslate"><span class="pre">PDLLServer</span></code>, provides the
+internal implementation of all of LSP queries for a specific language. These are
+the classes that directly interacts with the C++ API for the language, including
+parsing text files, interpreting definition/reference information, etc.</p>
+</section>
+</section>
+<section id="editor-plugins">
+<h2>Editor Plugins<a class="headerlink" href="#editor-plugins" title="此标题的永久链接">¶</a></h2>
+<p>LSP Language plugins are available for many popular editors, and in principle
+the language servers provided by MLIR should work with any of them, though
+feature sets and interfaces may vary. Below are a set of plugins that are known
+to work:</p>
+<section id="visual-studio-code">
+<h3>Visual Studio Code<a class="headerlink" href="#visual-studio-code" title="此标题的永久链接">¶</a></h3>
+<p>Provides language IDE features for <a class="reference external" href="https://mlir.llvm.org/">MLIR</a> related
+languages: <a class="reference external" href="#mlir---mlir-textual-assembly-format">MLIR</a>,
+<a class="reference external" href="#pdll---mlir-pdll-pattern-files">PDLL</a>, and <a class="reference external" href="#td---tablegen-files">TableGen</a></p>
+<section id="mlir-mlir-textual-assembly-format">
+<h4><code class="docutils literal notranslate"><span class="pre">.mlir</span></code> - MLIR textual assembly format:<a class="headerlink" href="#mlir-mlir-textual-assembly-format" title="此标题的永久链接">¶</a></h4>
+<p>The MLIR extension adds language support for the
+<a class="reference external" href="https://mlir.llvm.org/docs/LangRef/">MLIR textual assembly format</a>:</p>
+<section id="id17">
+<h5>Features<a class="headerlink" href="#id17" title="此标题的永久链接">¶</a></h5>
+<ul class="simple">
+<li><p>Syntax highlighting for <code class="docutils literal notranslate"><span class="pre">.mlir</span></code> files and <code class="docutils literal notranslate"><span class="pre">mlir</span></code> markdown blocks</p></li>
+<li><p>go-to-definition and cross references</p></li>
+<li><p>Detailed information when hovering over IR entities</p></li>
+<li><p>Outline and navigation of symbols and symbol tables</p></li>
+<li><p>Code completion</p></li>
+<li><p>Live parser and verifier diagnostics</p></li>
+</ul>
+</section>
+<section id="setup">
+<h5>Setup<a class="headerlink" href="#setup" title="此标题的永久链接">¶</a></h5>
+<section id="mlir-lsp-server">
+<h6><code class="docutils literal notranslate"><span class="pre">mlir-lsp-server</span></code><a class="headerlink" href="#mlir-lsp-server" title="此标题的永久链接">¶</a></h6>
+<p>The various <code class="docutils literal notranslate"><span class="pre">.mlir</span></code> language features require the
+<a class="reference external" href="https://mlir.llvm.org/docs/Tools/MLIRLSP/#mlir-lsp-language-server--mlir-lsp-server"><code class="docutils literal notranslate"><span class="pre">mlir-lsp-server</span></code> language server</a>.
+If <code class="docutils literal notranslate"><span class="pre">mlir-lsp-server</span></code> is not found within your workspace path, you must specify
+the path of the server via the <code class="docutils literal notranslate"><span class="pre">mlir.server_path</span></code> setting. The path of the
+server may be absolute or relative within your workspace.</p>
+</section>
+</section>
+</section>
+<section id="pdll-mlir-pdll-pattern-files">
+<h4><code class="docutils literal notranslate"><span class="pre">.pdll</span></code> - MLIR PDLL pattern files:<a class="headerlink" href="#pdll-mlir-pdll-pattern-files" title="此标题的永久链接">¶</a></h4>
+<p>The MLIR extension adds language support for the
+<a class="reference external" href="https://mlir.llvm.org/docs/PDLL/">PDLL pattern language</a>.</p>
+<section id="id18">
+<h5>Features<a class="headerlink" href="#id18" title="此标题的永久链接">¶</a></h5>
+<ul class="simple">
+<li><p>Syntax highlighting for <code class="docutils literal notranslate"><span class="pre">.pdll</span></code> files and <code class="docutils literal notranslate"><span class="pre">pdll</span></code> markdown blocks</p></li>
+<li><p>go-to-definition and cross references</p></li>
+<li><p>Types and documentation on hover</p></li>
+<li><p>Code completion and signature help</p></li>
+<li><p>View intermediate AST, MLIR, or C++ output</p></li>
+</ul>
+</section>
+<section id="id19">
+<h5>Setup<a class="headerlink" href="#id19" title="此标题的永久链接">¶</a></h5>
+<section id="mlir-pdll-lsp-server">
+<h6><code class="docutils literal notranslate"><span class="pre">mlir-pdll-lsp-server</span></code><a class="headerlink" href="#mlir-pdll-lsp-server" title="此标题的永久链接">¶</a></h6>
+<p>The various <code class="docutils literal notranslate"><span class="pre">.pdll</span></code> language features require the
+<a class="reference external" href="https://mlir.llvm.org/docs/Tools/MLIRLSP/#pdll-lsp-language-server--mlir-pdll-lsp-server"><code class="docutils literal notranslate"><span class="pre">mlir-pdll-lsp-server</span></code> language server</a>.
+If <code class="docutils literal notranslate"><span class="pre">mlir-pdll-lsp-server</span></code> is not found within your workspace path, you must
+specify the path of the server via the <code class="docutils literal notranslate"><span class="pre">mlir.pdll_server_path</span></code> setting. The path
+of the server may be absolute or relative within your workspace.</p>
+</section>
+<section id="project-setup">
+<h6>Project setup<a class="headerlink" href="#project-setup" title="此标题的永久链接">¶</a></h6>
+<p>To properly understand and interact with <code class="docutils literal notranslate"><span class="pre">.pdll</span></code> files, the language server must
+understand how the project is built (compile flags).
+<a class="reference external" href="https://mlir.llvm.org/docs/Tools/MLIRLSP/#compilation-database"><code class="docutils literal notranslate"><span class="pre">pdll_compile_commands.yml</span></code> files</a>
+related to your project should be provided to ensure files are properly
+processed. These files can usually be generated by the build system, and the
+server will attempt to find them within your <code class="docutils literal notranslate"><span class="pre">build/</span></code> directory. If not
+available in or a unique location, additional <code class="docutils literal notranslate"><span class="pre">pdll_compile_commands.yml</span></code> files
+may be specified via the <code class="docutils literal notranslate"><span class="pre">mlir.pdll_compilation_databases</span></code> setting. The paths of
+these databases may be absolute or relative within your workspace.</p>
+</section>
+</section>
+</section>
+<section id="td-tablegen-files">
+<h4><code class="docutils literal notranslate"><span class="pre">.td</span></code> - TableGen files:<a class="headerlink" href="#td-tablegen-files" title="此标题的永久链接">¶</a></h4>
+<p>The MLIR extension adds language support for the
+<a class="reference external" href="https://llvm.org/docs/TableGen/ProgRef.html">TableGen language</a>.</p>
+<section id="id20">
+<h5>Features<a class="headerlink" href="#id20" title="此标题的永久链接">¶</a></h5>
+<ul class="simple">
+<li><p>Syntax highlighting for <code class="docutils literal notranslate"><span class="pre">.td</span></code> files and <code class="docutils literal notranslate"><span class="pre">tablegen</span></code> markdown blocks</p></li>
+<li><p>go-to-definition and cross references</p></li>
+<li><p>Types and documentation on hover</p></li>
+</ul>
+</section>
+<section id="id21">
+<h5>Setup<a class="headerlink" href="#id21" title="此标题的永久链接">¶</a></h5>
+<section id="tblgen-lsp-server">
+<h6><code class="docutils literal notranslate"><span class="pre">tblgen-lsp-server</span></code><a class="headerlink" href="#tblgen-lsp-server" title="此标题的永久链接">¶</a></h6>
+<p>The various <code class="docutils literal notranslate"><span class="pre">.td</span></code> language features require the
+<a class="reference external" href="https://mlir.llvm.org/docs/Tools/MLIRLSP/#tablegen-lsp-language-server--tblgen-lsp-server"><code class="docutils literal notranslate"><span class="pre">tblgen-lsp-server</span></code> language server</a>.
+If <code class="docutils literal notranslate"><span class="pre">tblgen-lsp-server</span></code> is not found within your workspace path, you must specify
+the path of the server via the <code class="docutils literal notranslate"><span class="pre">mlir.tablegen_server_path</span></code> setting. The path of
+the server may be absolute or relative within your workspace.</p>
+</section>
+<section id="id22">
+<h6>Project setup<a class="headerlink" href="#id22" title="此标题的永久链接">¶</a></h6>
+<p>To properly understand and interact with <code class="docutils literal notranslate"><span class="pre">.td</span></code> files, the language server must
+understand how the project is built (compile flags).
+<a class="reference external" href="https://mlir.llvm.org/docs/Tools/MLIRLSP/#compilation-database-1"><code class="docutils literal notranslate"><span class="pre">tablegen_compile_commands.yml</span></code> files</a>
+related to your project should be provided to ensure files are properly
+processed. These files can usually be generated by the build system, and the
+server will attempt to find them within your <code class="docutils literal notranslate"><span class="pre">build/</span></code> directory. If not
+available in or a unique location, additional <code class="docutils literal notranslate"><span class="pre">tablegen_compile_commands.yml</span></code>
+files may be specified via the <code class="docutils literal notranslate"><span class="pre">mlir.tablegen_compilation_databases</span></code> setting.
+The paths of these databases may be absolute or relative within your workspace.</p>
+</section>
+</section>
+</section>
+<section id="contributing">
+<h4>Contributing<a class="headerlink" href="#contributing" title="此标题的永久链接">¶</a></h4>
+<p>This extension is actively developed within the
+<a class="reference external" href="https://github.com/llvm/llvm-project">LLVM monorepo</a>, at
+<a class="reference external" href="https://github.com/llvm/llvm-project/tree/main/mlir/utils/vscode"><code class="docutils literal notranslate"><span class="pre">mlir/utils/vscode</span></code></a>.
+As such, contributions should follow the
+<a class="reference external" href="https://llvm.org/docs/Contributing.html">normal LLVM guidelines</a>, with code
+reviews sent to
+<a class="reference external" href="https://llvm.org/docs/Contributing.html#how-to-submit-a-patch">phabricator</a>.</p>
+<p>When developing or deploying this extension within the LLVM monorepo, a few
+extra setup steps are required:</p>
+<ul class="simple">
+<li><p>Copy <code class="docutils literal notranslate"><span class="pre">mlir/utils/textmate/mlir.json</span></code> to the extension directory and rename to
+<code class="docutils literal notranslate"><span class="pre">grammar.json</span></code>.</p></li>
+<li><p>Copy <code class="docutils literal notranslate"><span class="pre">llvm/utils/textmate/tablegen.json</span></code> to the extension directory and rename
+to <code class="docutils literal notranslate"><span class="pre">tablegen-grammar.json</span></code>.</p></li>
+<li><p>Copy
+<code class="docutils literal notranslate"><span class="pre">https://mlir.llvm.org//LogoAssets/logo/PNG/full_color/mlir-identity-03.png</span></code>
+to the extension directory and rename to <code class="docutils literal notranslate"><span class="pre">icon.png</span></code>.</p></li>
+</ul>
+<p>Please follow the existing code style when contributing to the extension, we
+recommend to run <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">run</span> <span class="pre">format</span></code> before sending a patch.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

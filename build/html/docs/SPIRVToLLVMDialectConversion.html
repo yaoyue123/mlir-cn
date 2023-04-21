@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>SPIR-V Dialect to LLVM Dialect conversion manual</title>
+    
+          <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../_static/theme-vendors.js"></script> -->
+      <script src="../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../genindex.html" />
+  <link rel="search" title="搜索" href="../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/DataFlowAnalysis.html" class="reference internal ">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-5.html" class="reference internal ">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-6.html" class="reference internal ">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/Ch-7.html" class="reference internal ">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/Toy/_index.html" class="reference internal ">Toy Tutorial</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Tutorials/_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+    
+    <li>SPIR-V Dialect to LLVM Dialect conversion manual</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="spir-v-dialect-to-llvm-dialect-conversion-manual">
+<h1>SPIR-V Dialect to LLVM Dialect conversion manual<a class="headerlink" href="#spir-v-dialect-to-llvm-dialect-conversion-manual" title="此标题的永久链接">¶</a></h1>
+<p>This manual describes the conversion from <a class="reference internal" href="Dialects/SPIR-V.html"><span class="doc">SPIR-V Dialect</span></a>
+to <a class="reference internal" href="Dialects/LLVM.html"><span class="doc">LLVM Dialect</span></a>. It assumes familiarity with both, and
+describes the design choices behind the modelling of SPIR-V concepts in LLVM
+Dialect. The conversion is an ongoing work, and is expected to grow as more
+features are implemented.</p>
+<p>Conversion can be performed by invoking an appropriate conversion pass:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mlir-opt<span class="w"> </span>-convert-spirv-to-llvm<span class="w"> </span>&lt;filename.mlir&gt;
+</pre></div>
+</div>
+<p>This pass performs type and operation conversions for SPIR-V operations as
+described in this document.</p>
+<p>[TOC]</p>
+<section id="type-conversion">
+<h2>Type Conversion<a class="headerlink" href="#type-conversion" title="此标题的永久链接">¶</a></h2>
+<p>This section describes how SPIR-V Dialect types are mapped to LLVM Dialect.</p>
+<section id="scalar-types">
+<h3>Scalar types<a class="headerlink" href="#scalar-types" title="此标题的永久链接">¶</a></h3>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect</th>
+<th style="text-align: center;">LLVM Dialect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>i&lt;bitwidth&gt;</code></td>
+<td style="text-align: center;"><code>!llvm.i&lt;bitwidth&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>si&lt;bitwidth&gt;</code></td>
+<td style="text-align: center;"><code>!llvm.i&lt;bitwidth&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>ui&lt;bitwidth&gt;</code></td>
+<td style="text-align: center;"><code>!llvm.i&lt;bitwidth&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>f16</code></td>
+<td style="text-align: center;"><code>f16</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>f32</code></td>
+<td style="text-align: center;"><code>f32</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>f64</code></td>
+<td style="text-align: center;"><code>f64</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="vector-types">
+<h3>Vector types<a class="headerlink" href="#vector-types" title="此标题的永久链接">¶</a></h3>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect</th>
+<th style="text-align: center;">LLVM Dialect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>vector&lt;&lt;count&gt; x &lt;scalar-type&gt;&gt;</code></td>
+<td style="text-align: center;"><code>vector&lt;&lt;count&gt; x &lt;scalar-type&gt;&gt;</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="pointer-types">
+<h3>Pointer types<a class="headerlink" href="#pointer-types" title="此标题的永久链接">¶</a></h3>
+<p>A SPIR-V pointer also takes a Storage Class. At the moment, conversion does
+<strong>not</strong> take it into account.</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect</th>
+<th style="text-align: center;">LLVM Dialect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>!spirv.ptr&lt; &lt;element-type&gt;, &lt;storage-class&gt; &gt;</code></td>
+<td style="text-align: center;"><code>!llvm.ptr&lt;&lt;element-type&gt;&gt;</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="array-types">
+<h3>Array types<a class="headerlink" href="#array-types" title="此标题的永久链接">¶</a></h3>
+<p>SPIR-V distinguishes between array type and run-time array type, the length of
+which is not known at compile time. In LLVM, it is possible to index beyond the
+end of the array. Therefore, runtime array can be implemented as a zero length
+array type.</p>
+<p>Moreover, SPIR-V supports the notion of array stride. Currently only natural
+strides (based on <a class="reference external" href="https://github.com/llvm/llvm-project/blob/main/mlir/include/mlir/Dialect/SPIRV/LayoutUtils.h"><code class="docutils literal notranslate"><span class="pre">VulkanLayoutUtils</span></code></a>) are supported. They
+are also mapped to LLVM array.</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect</th>
+<th style="text-align: center;">LLVM Dialect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>!spirv.array&lt;&lt;count&gt; x &lt;element-type&gt;&gt;</code></td>
+<td style="text-align: center;"><code>!llvm.array&lt;&lt;count&gt; x &lt;element-type&gt;&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>!spirv.rtarray&lt; &lt;element-type&gt; &gt;</code></td>
+<td style="text-align: center;"><code>!llvm.array&lt;0 x &lt;element-type&gt;&gt;</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="struct-types">
+<h3>Struct types<a class="headerlink" href="#struct-types" title="此标题的永久链接">¶</a></h3>
+<p>Members of SPIR-V struct types may have decorations and offset information.
+Currently, there is <strong>no</strong> support of member decorations conversion for structs.
+For more information see section on <a class="reference external" href="#Decorations-conversion">Decorations</a>.</p>
+<p>Usually we expect that each struct member has a natural size and alignment.
+However, there are cases (<em>e.g.</em> in graphics) where one would place struct
+members explicitly at particular offsets. This case is <strong>not</strong> supported at the
+moment. Hence, we adhere to the following mapping:</p>
+<ul class="simple">
+<li><p>Structs with no offset are modelled as LLVM packed structures.</p></li>
+<li><p>Structs with natural offset (<em>i.e.</em> offset that equals to cumulative size of
+the previous struct elements or is a natural alignment) are mapped to
+naturally padded structs.</p></li>
+<li><p>Structs with unnatural offset (<em>i.e.</em> offset that is not equal to cumulative
+size of the previous struct elements) are <strong>not</strong> supported. In this case,
+offsets can be emulated with padding fields (<em>e.g.</em> integers). However, such
+a design would require index recalculation in the conversion of ops that
+involve memory addressing.</p></li>
+</ul>
+<p>Examples of SPIR-V struct conversion are: ```mlir !spirv.struct&lt;i8, i32&gt; =&gt;
+!llvm.struct&lt;packed (i8, i32)&gt; !spirv.struct&lt;i8 [0], i32 [4]&gt; =&gt; !llvm.struct&lt;(i8,
+i32)&gt;</p>
+<p>// error !spirv.struct&lt;i8 [0], i32 [8]&gt; ```</p>
+</section>
+<section id="not-implemented-types">
+<h3>Not implemented types<a class="headerlink" href="#not-implemented-types" title="此标题的永久链接">¶</a></h3>
+<p>The rest of the types not mentioned explicitly above are not supported by the
+conversion. This includes <code class="docutils literal notranslate"><span class="pre">ImageType</span></code> and <code class="docutils literal notranslate"><span class="pre">MatrixType</span></code>.</p>
+</section>
+</section>
+<section id="operation-conversion">
+<h2>Operation Conversion<a class="headerlink" href="#operation-conversion" title="此标题的永久链接">¶</a></h2>
+<p>This section describes how SPIR-V Dialect operations are converted to LLVM
+Dialect. It lists already working conversion patterns, as well as those that are
+an ongoing work.</p>
+<p>There are also multiple ops for which there is no clear mapping in LLVM.
+Conversion for those have to be discussed within the community on the
+case-by-case basis.</p>
+<section id="arithmetic-ops">
+<h3>Arithmetic ops<a class="headerlink" href="#arithmetic-ops" title="此标题的永久链接">¶</a></h3>
+<p>SPIR-V arithmetic ops mostly have a direct equivalent in LLVM Dialect. Such
+exceptions as <code class="docutils literal notranslate"><span class="pre">spirv.SMod</span></code> and <code class="docutils literal notranslate"><span class="pre">spirv.FMod</span></code> are rare.</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect op</th>
+<th style="text-align: center;">LLVM Dialect op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>spirv.FAdd</code></td>
+<td style="text-align: center;"><code>llvm.fadd</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FDiv</code></td>
+<td style="text-align: center;"><code>llvm.fdiv</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FNegate</code></td>
+<td style="text-align: center;"><code>llvm.fneg</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FMul</code></td>
+<td style="text-align: center;"><code>llvm.fmul</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FRem</code></td>
+<td style="text-align: center;"><code>llvm.frem</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FSub</code></td>
+<td style="text-align: center;"><code>llvm.fsub</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.IAdd</code></td>
+<td style="text-align: center;"><code>llvm.add</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.IMul</code></td>
+<td style="text-align: center;"><code>llvm.mul</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.ISub</code></td>
+<td style="text-align: center;"><code>llvm.sub</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.SDiv</code></td>
+<td style="text-align: center;"><code>llvm.sdiv</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.SRem</code></td>
+<td style="text-align: center;"><code>llvm.srem</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.UDiv</code></td>
+<td style="text-align: center;"><code>llvm.udiv</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.UMod</code></td>
+<td style="text-align: center;"><code>llvm.urem</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="bitwise-ops">
+<h3>Bitwise ops<a class="headerlink" href="#bitwise-ops" title="此标题的永久链接">¶</a></h3>
+<p>SPIR-V has a range of bit ops that are mapped to LLVM dialect ops, intrinsics or
+may have a specific conversion pattern.</p>
+<section id="direct-conversion">
+<h4>Direct conversion<a class="headerlink" href="#direct-conversion" title="此标题的永久链接">¶</a></h4>
+<p>As with arithmetic ops, most of bitwise ops have a semantically equivalent op in
+LLVM:</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect op</th>
+<th style="text-align: center;">LLVM Dialect op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>spirv.BitwiseAnd</code></td>
+<td style="text-align: center;"><code>llvm.and</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.BitwiseOr</code></td>
+<td style="text-align: center;"><code>llvm.or</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.BitwiseXor</code></td>
+<td style="text-align: center;"><code>llvm.xor</code></td>
+</tr>
+</tbody>
+</table><p>Also, some of bitwise ops can be modelled with LLVM intrinsics:</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect op</th>
+<th style="text-align: center;">LLVM Dialect intrinsic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>spirv.BitCount</code></td>
+<td style="text-align: center;"><code>llvm.intr.ctpop</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.BitReverse</code></td>
+<td style="text-align: center;"><code>llvm.intr.bitreverse</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="spirv-not">
+<h4><code class="docutils literal notranslate"><span class="pre">spirv.Not</span></code><a class="headerlink" href="#spirv-not" title="此标题的永久链接">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">spirv.Not</span></code> is modelled with a <code class="docutils literal notranslate"><span class="pre">xor</span></code> operation with a mask with all bits set.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>                            %mask = llvm.mlir.constant(-1 : i32) : i32
+%0 = spirv.Not %op : i32  =&gt;  %0  = llvm.xor %op, %mask : i32
+</pre></div>
+</div>
+</section>
+<section id="bitfield-ops">
+<h4>Bitfield ops<a class="headerlink" href="#bitfield-ops" title="此标题的永久链接">¶</a></h4>
+<p>SPIR-V dialect has three bitfield ops: <code class="docutils literal notranslate"><span class="pre">spirv.BitFieldInsert</span></code>,
+<code class="docutils literal notranslate"><span class="pre">spirv.BitFieldSExtract</span></code> and <code class="docutils literal notranslate"><span class="pre">spirv.BitFieldUExtract</span></code>. This section will first
+outline the general design of conversion patterns for this ops, and then
+describe each of them.</p>
+<p>All of these ops take <code class="docutils literal notranslate"><span class="pre">base</span></code>, <code class="docutils literal notranslate"><span class="pre">offset</span></code> and <code class="docutils literal notranslate"><span class="pre">count</span></code> (<code class="docutils literal notranslate"><span class="pre">insert</span></code> for
+<code class="docutils literal notranslate"><span class="pre">spirv.BitFieldInsert</span></code>) as arguments. There are two important things to note:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">offset</span></code> and <code class="docutils literal notranslate"><span class="pre">count</span></code> are always scalar. This means that we can have the
+following case:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>%0 = spirv.BitFieldSExtract %base, %offset, %count : vector&lt;2xi32&gt;, i8, i8
+</pre></div>
+</div>
+<p>To be able to proceed with conversion algorithms described below, all
+operands have to be of the same type and bitwidth. This requires
+broadcasting of <code class="docutils literal notranslate"><span class="pre">offset</span></code> and <code class="docutils literal notranslate"><span class="pre">count</span></code> to vectors, for example for the case
+above it gives:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Broadcasting offset
+%offset0 = llvm.mlir.undef : vector&lt;2xi8&gt;
+%zero = llvm.mlir.constant(0 : i32) : i32
+%offset1 = llvm.insertelement %offset, %offset0[%zero : i32] : vector&lt;2xi8&gt;
+%one = llvm.mlir.constant(1 : i32) : i32
+%vec_offset = llvm.insertelement  %offset, %offset1[%one : i32] : vector&lt;2xi8&gt;
+
+// Broadcasting count
+// ...
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">offset</span></code> and <code class="docutils literal notranslate"><span class="pre">count</span></code> may have different bitwidths from <code class="docutils literal notranslate"><span class="pre">base</span></code>. In this case,
+both of these operands have to be zero extended (since they are treated as
+unsigned by the specification) or truncated. For the above example it would
+be:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Zero extending offset after broadcasting
+%res_offset = llvm.zext %vec_offset: vector&lt;2xi8&gt; to vector&lt;2xi32&gt;
+</pre></div>
+</div>
+<p>Also, note that if the bitwidth of <code class="docutils literal notranslate"><span class="pre">offset</span></code> or <code class="docutils literal notranslate"><span class="pre">count</span></code> is greater than the
+bitwidth of <code class="docutils literal notranslate"><span class="pre">base</span></code>, truncation is still permitted. This is because the ops
+have a defined behaviour with <code class="docutils literal notranslate"><span class="pre">offset</span></code> and <code class="docutils literal notranslate"><span class="pre">count</span></code> being less than the size
+of <code class="docutils literal notranslate"><span class="pre">base</span></code>. It creates a natural upper bound on what values <code class="docutils literal notranslate"><span class="pre">offset</span></code> and
+<code class="docutils literal notranslate"><span class="pre">count</span></code> can take, which is 64. This can be expressed in less than 8 bits.</p>
+</li>
+</ul>
+<p>Now, having these two cases in mind, we can proceed with conversion for the ops
+and their operands.</p>
+<section id="spirv-bitfieldinsert">
+<h5><code class="docutils literal notranslate"><span class="pre">spirv.BitFieldInsert</span></code><a class="headerlink" href="#spirv-bitfieldinsert" title="此标题的永久链接">¶</a></h5>
+<p>This operation is implemented as a series of LLVM Dialect operations. First step
+would be to create a mask with bits set outside [<code class="docutils literal notranslate"><span class="pre">offset</span></code>, <code class="docutils literal notranslate"><span class="pre">offset</span></code> + <code class="docutils literal notranslate"><span class="pre">count</span></code> -
+1]. Then, unchanged bits are extracted from <code class="docutils literal notranslate"><span class="pre">base</span></code> that are outside of
+[<code class="docutils literal notranslate"><span class="pre">offset</span></code>, <code class="docutils literal notranslate"><span class="pre">offset</span></code> + <code class="docutils literal notranslate"><span class="pre">count</span></code> - 1]. The result is <code class="docutils literal notranslate"><span class="pre">or</span></code>ed with shifted <code class="docutils literal notranslate"><span class="pre">insert</span></code>.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Create mask
+// %minus_one = llvm.mlir.constant(-1 : i32) : i32
+// %t0        = llvm.shl %minus_one, %count : i32
+// %t1        = llvm.xor %t0, %minus_one : i32
+// %t2        = llvm.shl %t1, %offset : i32
+// %mask      = llvm.xor %t2, %minus_one : i32
+
+// Extract unchanged bits from the Base
+// %new_base  = llvm.and %base, %mask : i32
+
+// Insert new bits
+// %sh_insert = llvm.shl %insert, %offset : i32
+// %res       = llvm.or %new_base, %sh_insert : i32
+%res = spirv.BitFieldInsert %base, %insert, %offset, %count : i32, i32, i32
+</pre></div>
+</div>
+</section>
+<section id="spirv-bitfieldsextract">
+<h5><code class="docutils literal notranslate"><span class="pre">spirv.BitFieldSExtract</span></code><a class="headerlink" href="#spirv-bitfieldsextract" title="此标题的永久链接">¶</a></h5>
+<p>To implement <code class="docutils literal notranslate"><span class="pre">spirv.BitFieldSExtract</span></code>, <code class="docutils literal notranslate"><span class="pre">base</span></code> is shifted left by [sizeof(<code class="docutils literal notranslate"><span class="pre">base</span></code>) -
+(<code class="docutils literal notranslate"><span class="pre">count</span></code> + <code class="docutils literal notranslate"><span class="pre">offset</span></code>)], so that the bit at <code class="docutils literal notranslate"><span class="pre">offset</span></code> + <code class="docutils literal notranslate"><span class="pre">count</span></code> - 1 is the most
+significant bit. After, the result is shifted right, filling the bits with the
+sign bit.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Calculate the amount to shift left.
+// %size    = llvm.mlir.constant(32 : i32) : i32
+// %t0      = llvm.add %count, %offset : i32
+// %t1      = llvm.sub %size, %t0 : i32
+
+// Shift left and then right to extract the bits
+// %sh_left = llvm.shl %base, %t1 : i32
+// %t2      = llvm.add %offset, %t1 : i32
+// %res     = llvm.ashr %sh_left, %t2 : i32
+%res = spirv.BitFieldSExtract %base, %offset, %count : i32, i32, i32
+</pre></div>
+</div>
+</section>
+<section id="spirv-bitfielduextract">
+<h5><code class="docutils literal notranslate"><span class="pre">spirv.BitFieldUExtract</span></code><a class="headerlink" href="#spirv-bitfielduextract" title="此标题的永久链接">¶</a></h5>
+<p>For this op a similar pattern as for <code class="docutils literal notranslate"><span class="pre">spirv.BitFieldInsert</span></code> is used. First, a mask
+with bits set at [0, <code class="docutils literal notranslate"><span class="pre">count</span></code> - 1] is created. Then <code class="docutils literal notranslate"><span class="pre">base</span></code> is shifted by <code class="docutils literal notranslate"><span class="pre">offset</span></code>
+and the mask is applied.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Create a mask
+// %minus_one = llvm.mlir.constant(-1 : i32) : i32
+// %t0        = llvm.shl %minus_one, %count : i32
+// mask       = llvm.xor  %t0, %minus_one : i32
+
+// Shift Base and apply mask
+// %sh_base   = llvm.lshr %base, %offset : i32
+// %res       = llvm.and %sh_base, %mask : i32
+%res = spirv.BitFieldUExtract %base, %offset, %count : i32, i32, i32
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="cast-ops">
+<h3>Cast ops<a class="headerlink" href="#cast-ops" title="此标题的永久链接">¶</a></h3>
+<section id="direct-conversions">
+<h4>Direct conversions<a class="headerlink" href="#direct-conversions" title="此标题的永久链接">¶</a></h4>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect op</th>
+<th style="text-align: center;">LLVM Dialect op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>spirv.ConvertFToS</code></td>
+<td style="text-align: center;"><code>llvm.fptosi</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.ConvertFToU</code></td>
+<td style="text-align: center;"><code>llvm.fptoui</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.ConvertSToF</code></td>
+<td style="text-align: center;"><code>llvm.sitofp</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.ConvertUToF</code></td>
+<td style="text-align: center;"><code>llvm.uitofp</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="spirv-bitcast">
+<h4>spirv.Bitcast<a class="headerlink" href="#spirv-bitcast" title="此标题的永久链接">¶</a></h4>
+<p>This operation has a direct counterpart in LLVM: <code class="docutils literal notranslate"><span class="pre">llvm.bitcast</span></code>. It is treated
+separately since it also supports pointer to pointer bit pattern-preserving type
+conversion, apart from regular scalar or vector of numerical type.</p>
+</section>
+<section id="special-cases">
+<h4>Special cases<a class="headerlink" href="#special-cases" title="此标题的永久链接">¶</a></h4>
+<p>Special cases include <code class="docutils literal notranslate"><span class="pre">spirv.FConvert</span></code>, <code class="docutils literal notranslate"><span class="pre">spirv.SConvert</span></code> and <code class="docutils literal notranslate"><span class="pre">spirv.UConvert</span></code>. These
+operations are either a truncate or extend. Let’s denote the operand component
+width as A, and result component width as R. Then, the following mappings are
+used:</p>
+<section id="spirv-fconvert">
+<h5><code class="docutils literal notranslate"><span class="pre">spirv.FConvert</span></code><a class="headerlink" href="#spirv-fconvert" title="此标题的永久链接">¶</a></h5>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">Case</th>
+<th style="text-align: center;">LLVM Dialect op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">A &lt; R</td>
+<td style="text-align: center;"><code>llvm.fpext</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">A &gt; R</td>
+<td style="text-align: center;"><code>llvm.fptrunc</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="spirv-sconvert">
+<h5><code class="docutils literal notranslate"><span class="pre">spirv.SConvert</span></code><a class="headerlink" href="#spirv-sconvert" title="此标题的永久链接">¶</a></h5>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">Case</th>
+<th style="text-align: center;">LLVM Dialect op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">A &lt; R</td>
+<td style="text-align: center;"><code>llvm.sext</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">A &gt; R</td>
+<td style="text-align: center;"><code>llvm.trunc</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="spirv-uconvert">
+<h5><code class="docutils literal notranslate"><span class="pre">spirv.UConvert</span></code><a class="headerlink" href="#spirv-uconvert" title="此标题的永久链接">¶</a></h5>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">Case</th>
+<th style="text-align: center;">LLVM Dialect op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">A &lt; R</td>
+<td style="text-align: center;"><code>llvm.zext</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">A &gt; R</td>
+<td style="text-align: center;"><code>llvm.trunc</code></td>
+</tr>
+</tbody>
+</table><p>The case when A = R is not possible, based on SPIR-V Dialect specification:</p>
+<blockquote>
+<div><p>The component width cannot equal the component width in Result Type.</p>
+</div></blockquote>
+</section>
+</section>
+</section>
+<section id="comparison-ops">
+<h3>Comparison ops<a class="headerlink" href="#comparison-ops" title="此标题的永久链接">¶</a></h3>
+<p>SPIR-V comparison ops are mapped to LLVM <code class="docutils literal notranslate"><span class="pre">icmp</span></code> and <code class="docutils literal notranslate"><span class="pre">fcmp</span></code> operations.</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect op</th>
+<th style="text-align: center;">LLVM Dialect op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>spirv.IEqual</code></td>
+<td style="text-align: center;"><code>llvm.icmp "eq"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.INotEqual</code></td>
+<td style="text-align: center;"><code>llvm.icmp "ne"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FOrdEqual</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "oeq"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FOrdGreaterThan</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "ogt"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FOrdGreaterThanEqual</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "oge"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FOrdLessThan</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "olt"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FOrdLessThanEqual</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "ole"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FOrdNotEqual</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "one"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FUnordEqual</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "ueq"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FUnordGreaterThan</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "ugt"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FUnordGreaterThanEqual</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "uge"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FUnordLessThan</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "ult"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FUnordLessThanEqual</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "ule"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.FUnordNotEqual</code></td>
+<td style="text-align: center;"><code>llvm.fcmp "une"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.SGreaterThan</code></td>
+<td style="text-align: center;"><code>llvm.icmp "sgt"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.SGreaterThanEqual</code></td>
+<td style="text-align: center;"><code>llvm.icmp "sge"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.SLessThan</code></td>
+<td style="text-align: center;"><code>llvm.icmp "slt"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.SLessThanEqual</code></td>
+<td style="text-align: center;"><code>llvm.icmp "sle"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.UGreaterThan</code></td>
+<td style="text-align: center;"><code>llvm.icmp "ugt"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.UGreaterThanEqual</code></td>
+<td style="text-align: center;"><code>llvm.icmp "uge"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.ULessThan</code></td>
+<td style="text-align: center;"><code>llvm.icmp "ult"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.ULessThanEqual</code></td>
+<td style="text-align: center;"><code>llvm.icmp "ule"</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="composite-ops">
+<h3>Composite ops<a class="headerlink" href="#composite-ops" title="此标题的永久链接">¶</a></h3>
+<p>Currently, conversion supports rewrite patterns for <code class="docutils literal notranslate"><span class="pre">spirv.CompositeExtract</span></code> and
+<code class="docutils literal notranslate"><span class="pre">spirv.CompositeInsert</span></code>. We distinguish two cases for these operations: when the
+composite object is a vector, and when the composite object is of a non-vector
+type (<em>i.e.</em> struct, array or runtime array).</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">Composite type</th>
+<th style="text-align: center;">SPIR-V Dialect op</th>
+<th style="text-align: center;">LLVM Dialect op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">vector</td>
+<td style="text-align: center;"><code>spirv.CompositeExtract</code></td>
+<td style="text-align: center;"><code>llvm.extractelement</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">vector</td>
+<td style="text-align: center;"><code>spirv.CompositeInsert</code></td>
+<td style="text-align: center;"><code>llvm.insertelement</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">non-vector</td>
+<td style="text-align: center;"><code>spirv.CompositeExtract</code></td>
+<td style="text-align: center;"><code>llvm.extractvalue</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">non-vector</td>
+<td style="text-align: center;"><code>spirv.CompositeInsert</code></td>
+<td style="text-align: center;"><code>llvm.insertvalue</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="spirv-entrypoint-and-spirv-executionmode">
+<h3><code class="docutils literal notranslate"><span class="pre">spirv.EntryPoint</span></code> and <code class="docutils literal notranslate"><span class="pre">spirv.ExecutionMode</span></code><a class="headerlink" href="#spirv-entrypoint-and-spirv-executionmode" title="此标题的永久链接">¶</a></h3>
+<p>First of all, it is important to note that there is no direct representation of
+entry points in LLVM. At the moment, we use the following approach:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">spirv.EntryPoint</span></code> is simply removed.</p></li>
+<li><p>In contrast, <code class="docutils literal notranslate"><span class="pre">spirv.ExecutionMode</span></code> may contain important information about the
+entry point. For example, <code class="docutils literal notranslate"><span class="pre">LocalSize</span></code> provides information about the
+work-group size that can be reused.</p>
+<p>In order to preserve this information, <code class="docutils literal notranslate"><span class="pre">spirv.ExecutionMode</span></code> is converted to a
+struct global variable that stores the execution mode id and any variables
+associated with it. In C, the struct has the structure shown below.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// No values are associated      // There are values that are associated</span>
+<span class="c1">// with this entry point.        // with this entry point.</span>
+<span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w">                         </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">executionMode</span><span class="p">;</span><span class="w">             </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">executionMode</span><span class="p">;</span>
+<span class="p">};</span><span class="w">                                   </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">values</span><span class="p">[];</span>
+<span class="w">                                 </span><span class="p">};</span>
+</pre></div>
+</div>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// spirv.ExecutionMode @empty &quot;ContractionOff&quot;
+llvm.mlir.global external constant @{{.*}}() : !llvm.struct&lt;(i32)&gt; {
+  %0   = llvm.mlir.undef : !llvm.struct&lt;(i32)&gt;
+  %1   = llvm.mlir.constant(31 : i32) : i32
+  %ret = llvm.insertvalue %1, %0[0] : !llvm.struct&lt;(i32)&gt;
+  llvm.return %ret : !llvm.struct&lt;(i32)&gt;
+}
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="logical-ops">
+<h3>Logical ops<a class="headerlink" href="#logical-ops" title="此标题的永久链接">¶</a></h3>
+<p>Logical ops follow a similar pattern as bitwise ops, with the difference that
+they operate on <code class="docutils literal notranslate"><span class="pre">i1</span></code> or vector of <code class="docutils literal notranslate"><span class="pre">i1</span></code> values. The following mapping is used to
+emulate SPIR-V ops behaviour:</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect op</th>
+<th style="text-align: center;">LLVM Dialect op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>spirv.LogicalAnd</code></td>
+<td style="text-align: center;"><code>llvm.and</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.LogicalOr</code></td>
+<td style="text-align: center;"><code>llvm.or</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.LogicalEqual</code></td>
+<td style="text-align: center;"><code>llvm.icmp "eq"</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.LogicalNotEqual</code></td>
+<td style="text-align: center;"><code>llvm.icmp "ne"</code></td>
+</tr>
+</tbody>
+</table><p><code class="docutils literal notranslate"><span class="pre">spirv.LogicalNot</span></code> has the same conversion pattern as bitwise <code class="docutils literal notranslate"><span class="pre">spirv.Not</span></code>. It is
+modelled with <code class="docutils literal notranslate"><span class="pre">xor</span></code> operation with a mask with all bits set.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>                                  %mask = llvm.mlir.constant(-1 : i1) : i1
+%0 = spirv.LogicalNot %op : i1  =&gt;  %0    = llvm.xor %op, %mask : i1
+</pre></div>
+</div>
+</section>
+<section id="memory-ops">
+<h3>Memory ops<a class="headerlink" href="#memory-ops" title="此标题的永久链接">¶</a></h3>
+<p>This section describes the conversion patterns for SPIR-V dialect operations
+that concern memory.</p>
+<section id="spirv-accesschain">
+<h4><code class="docutils literal notranslate"><span class="pre">spirv.AccessChain</span></code><a class="headerlink" href="#spirv-accesschain" title="此标题的永久链接">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">spirv.AccessChain</span></code> is mapped to <code class="docutils literal notranslate"><span class="pre">llvm.getelementptr</span></code> op. In order to create a
+valid LLVM op, we also add a 0 index to the <code class="docutils literal notranslate"><span class="pre">spirv.AccessChain</span></code>’s indices list in
+order to go through the pointer.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Access the 1st element of the array
+%i   = spirv.Constant 1: i32
+%var = spirv.Variable : !spirv.ptr&lt;!spirv.struct&lt;f32, !spirv.array&lt;4xf32&gt;&gt;, Function&gt;
+%el  = spirv.AccessChain %var[%i, %i] : !spirv.ptr&lt;!spirv.struct&lt;f32, !spirv.array&lt;4xf32&gt;&gt;, Function&gt;, i32, i32
+
+// Corresponding LLVM dialect code
+%i   = ...
+%var = ...
+%0   = llvm.mlir.constant(0 : i32) : i32
+%el  = llvm.getelementptr %var[%0, %i, %i] : (!llvm.ptr&lt;struct&lt;packed (f32, array&lt;4 x f32&gt;)&gt;&gt;, i32, i32, i32)
+</pre></div>
+</div>
+</section>
+<section id="spirv-load-and-spirv-store">
+<h4><code class="docutils literal notranslate"><span class="pre">spirv.Load</span></code> and <code class="docutils literal notranslate"><span class="pre">spirv.Store</span></code><a class="headerlink" href="#spirv-load-and-spirv-store" title="此标题的永久链接">¶</a></h4>
+<p>These ops are converted to their LLVM counterparts: <code class="docutils literal notranslate"><span class="pre">llvm.load</span></code> and
+<code class="docutils literal notranslate"><span class="pre">llvm.store</span></code>. If the op has a memory access attribute, then there are the
+following cases, based on the value of the attribute:</p>
+<ul class="simple">
+<li><p><strong>Aligned</strong>: alignment is passed on to LLVM op builder, for example: <code class="docutils literal notranslate"><span class="pre">mlir</span> <span class="pre">//</span> <span class="pre">llvm.store</span> <span class="pre">%ptr,</span> <span class="pre">%val</span> <span class="pre">{alignment</span> <span class="pre">=</span> <span class="pre">4</span> <span class="pre">:</span> <span class="pre">i64}</span> <span class="pre">:</span> <span class="pre">!llvm.ptr&lt;f32&gt;</span> <span class="pre">spirv.Store</span> <span class="pre">&quot;Function&quot;</span> <span class="pre">%ptr,</span> <span class="pre">%val</span> <span class="pre">[&quot;Aligned&quot;,</span> <span class="pre">4]</span> <span class="pre">:</span> <span class="pre">f32</span></code></p></li>
+<li><p><strong>None</strong>: same case as if there is no memory access attribute.</p></li>
+<li><p><strong>Nontemporal</strong>: set <code class="docutils literal notranslate"><span class="pre">nontemporal</span></code> flag, for example: <code class="docutils literal notranslate"><span class="pre">mlir</span> <span class="pre">//</span> <span class="pre">%res</span> <span class="pre">=</span> <span class="pre">llvm.load</span> <span class="pre">%ptr</span> <span class="pre">{nontemporal}</span> <span class="pre">:</span> <span class="pre">!llvm.ptr&lt;f32&gt;</span> <span class="pre">%res</span> <span class="pre">=</span> <span class="pre">spirv.Load</span> <span class="pre">&quot;Function&quot;</span> <span class="pre">%ptr</span> <span class="pre">[&quot;Nontemporal&quot;]</span> <span class="pre">:</span> <span class="pre">f32</span></code></p></li>
+<li><p><strong>Volatile</strong>: mark the op as <code class="docutils literal notranslate"><span class="pre">volatile</span></code>, for example: <code class="docutils literal notranslate"><span class="pre">mlir</span> <span class="pre">//</span> <span class="pre">%res</span> <span class="pre">=</span> <span class="pre">llvm.load</span> <span class="pre">volatile</span> <span class="pre">%ptr</span> <span class="pre">:</span> <span class="pre">!llvm.ptr&lt;f32&gt;</span> <span class="pre">%res</span> <span class="pre">=</span> <span class="pre">spirv.Load</span> <span class="pre">&quot;Function&quot;</span> <span class="pre">%ptr</span> <span class="pre">[&quot;Volatile&quot;]</span> <span class="pre">:</span> <span class="pre">f32</span></code> Otherwise the conversion fails as other cases
+(<code class="docutils literal notranslate"><span class="pre">MakePointerAvailable</span></code>, <code class="docutils literal notranslate"><span class="pre">MakePointerVisible</span></code>, <code class="docutils literal notranslate"><span class="pre">NonPrivatePointer</span></code>) are not
+supported yet.</p></li>
+</ul>
+</section>
+<section id="spirv-globalvariable-and-spirv-mlir-addressof">
+<h4><code class="docutils literal notranslate"><span class="pre">spirv.GlobalVariable</span></code> and <code class="docutils literal notranslate"><span class="pre">spirv.mlir.addressof</span></code><a class="headerlink" href="#spirv-globalvariable-and-spirv-mlir-addressof" title="此标题的永久链接">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">spirv.GlobalVariable</span></code> is modelled with <code class="docutils literal notranslate"><span class="pre">llvm.mlir.global</span></code> op. However, there is a
+difference that has to be pointed out.</p>
+<p>In SPIR-V dialect, the global variable returns a pointer, whereas in LLVM
+dialect the global holds an actual value. This difference is handled by
+<code class="docutils literal notranslate"><span class="pre">spirv.mlir.addressof</span></code> and <code class="docutils literal notranslate"><span class="pre">llvm.mlir.addressof</span></code> ops that both return a pointer
+and are used to reference the global.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Original SPIR-V module
+spirv.module Logical GLSL450 {
+  spirv.GlobalVariable @struct : !spirv.ptr&lt;!spirv.struct&lt;f32, !spirv.array&lt;10xf32&gt;&gt;, Private&gt;
+  spirv.func @func() -&gt; () &quot;None&quot; {
+    %0 = spirv.mlir.addressof @struct : !spirv.ptr&lt;!spirv.struct&lt;f32, !spirv.array&lt;10xf32&gt;&gt;, Private&gt;
+    spirv.Return
+  }
+}
+
+// Converted result
+module {
+  llvm.mlir.global private @struct() : !llvm.struct&lt;packed (f32, [10 x f32])&gt;
+  llvm.func @func() {
+    %0 = llvm.mlir.addressof @struct : !llvm.ptr&lt;struct&lt;packed (f32, [10 x f32])&gt;&gt;
+    llvm.return
+  }
+}
+</pre></div>
+</div>
+<p>The SPIR-V to LLVM conversion does not involve modelling of workgroups. Hence,
+we say that only current invocation is in conversion’s scope. This means that
+global variables with pointers of <code class="docutils literal notranslate"><span class="pre">Input</span></code>, <code class="docutils literal notranslate"><span class="pre">Output</span></code>, and <code class="docutils literal notranslate"><span class="pre">Private</span></code> storage
+classes are supported. Also, <code class="docutils literal notranslate"><span class="pre">StorageBuffer</span></code> storage class is allowed for
+executing <a class="reference external" href="#mlir-spirv-cpu-runner"><code class="docutils literal notranslate"><span class="pre">mlir-spirv-cpu-runner</span></code></a>.</p>
+<p>Moreover, <code class="docutils literal notranslate"><span class="pre">bind</span></code> that specifies the descriptor set and the binding number and
+<code class="docutils literal notranslate"><span class="pre">built_in</span></code> that specifies SPIR-V <code class="docutils literal notranslate"><span class="pre">BuiltIn</span></code> decoration have no conversion into
+LLVM dialect.</p>
+<p>Currently <code class="docutils literal notranslate"><span class="pre">llvm.mlir.global</span></code>s are created with <code class="docutils literal notranslate"><span class="pre">private</span></code> linkage for <code class="docutils literal notranslate"><span class="pre">Private</span></code>
+storage class and <code class="docutils literal notranslate"><span class="pre">External</span></code> for other storage classes, based on SPIR-V spec:</p>
+<blockquote>
+<div><p>By default, functions and global variables are private to a module and cannot
+be accessed by other modules. However, a module may be written to export or
+import functions and global (module scope) variables.</p>
+</div></blockquote>
+<p>If the global variable’s pointer has <code class="docutils literal notranslate"><span class="pre">Input</span></code> storage class, then a <code class="docutils literal notranslate"><span class="pre">constant</span></code>
+flag is added to LLVM op:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>spirv.GlobalVariable @var : !spirv.ptr&lt;f32, Input&gt;    =&gt;    llvm.mlir.global external constant @var() : f32
+</pre></div>
+</div>
+</section>
+<section id="spirv-variable">
+<h4><code class="docutils literal notranslate"><span class="pre">spirv.Variable</span></code><a class="headerlink" href="#spirv-variable" title="此标题的永久链接">¶</a></h4>
+<p>Per SPIR-V dialect spec, <code class="docutils literal notranslate"><span class="pre">spirv.Variable</span></code> allocates an object in memory, resulting
+in a pointer to it, which can be used with <code class="docutils literal notranslate"><span class="pre">spirv.Load</span></code> and <code class="docutils literal notranslate"><span class="pre">spirv.Store</span></code>. It is
+also a function-level variable.</p>
+<p><code class="docutils literal notranslate"><span class="pre">spirv.Variable</span></code> is modelled as <code class="docutils literal notranslate"><span class="pre">llvm.alloca</span></code> op. If initialized, an additional
+store instruction is used. Note that there is no initialization for arrays and
+structs since constants of these types are not supported in LLVM dialect (TODO).
+Also, at the moment initialization is only possible via <code class="docutils literal notranslate"><span class="pre">spirv.Constant</span></code>.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Conversion of VariableOp without initialization
+                                                               %size = llvm.mlir.constant(1 : i32) : i32
+%res = spirv.Variable : !spirv.ptr&lt;vector&lt;3xf32&gt;, Function&gt;   =&gt;   %res  = llvm.alloca  %size x vector&lt;3xf32&gt; : (i32) -&gt; !llvm.ptr&lt;vec&lt;3 x f32&gt;&gt;
+
+// Conversion of VariableOp with initialization
+                                                               %c    = llvm.mlir.constant(0 : i64) : i64
+%c   = spirv.Constant 0 : i64                                    %size = llvm.mlir.constant(1 : i32) : i32
+%res = spirv.Variable init(%c) : !spirv.ptr&lt;i64, Function&gt;    =&gt;   %res  = llvm.alloca %[[SIZE]] x i64 : (i32) -&gt; !llvm.ptr&lt;i64&gt;
+                                                               llvm.store %c, %res : !llvm.ptr&lt;i64&gt;
+</pre></div>
+</div>
+<p>Note that simple conversion to <code class="docutils literal notranslate"><span class="pre">alloca</span></code> may not be sufficient if the code has
+some scoping. For example, if converting ops executed in a loop into <code class="docutils literal notranslate"><span class="pre">alloca</span></code>s,
+a stack overflow may occur. For this case, <code class="docutils literal notranslate"><span class="pre">stacksave</span></code>/<code class="docutils literal notranslate"><span class="pre">stackrestore</span></code> pair can
+be used (TODO).</p>
+</section>
+</section>
+<section id="miscellaneous-ops-with-direct-conversions">
+<h3>Miscellaneous ops with direct conversions<a class="headerlink" href="#miscellaneous-ops-with-direct-conversions" title="此标题的永久链接">¶</a></h3>
+<p>There are multiple SPIR-V ops that do not fit in a particular group but can be
+converted directly to LLVM dialect. Their conversion is addressed in this
+section.</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect op</th>
+<th style="text-align: center;">LLVM Dialect op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>spirv.Select</code></td>
+<td style="text-align: center;"><code>llvm.select</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.Undef</code></td>
+<td style="text-align: center;"><code>llvm.mlir.undef</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="shift-ops">
+<h3>Shift ops<a class="headerlink" href="#shift-ops" title="此标题的永久链接">¶</a></h3>
+<p>Shift operates on two operands: <code class="docutils literal notranslate"><span class="pre">shift</span></code> and <code class="docutils literal notranslate"><span class="pre">base</span></code>.</p>
+<p>In SPIR-V dialect, <code class="docutils literal notranslate"><span class="pre">shift</span></code> and <code class="docutils literal notranslate"><span class="pre">base</span></code> may have different bit width. On the
+contrary, in LLVM Dialect both <code class="docutils literal notranslate"><span class="pre">base</span></code> and <code class="docutils literal notranslate"><span class="pre">shift</span></code> have to be of the same
+bitwidth. This leads to the following conversions:</p>
+<ul class="simple">
+<li><p>if <code class="docutils literal notranslate"><span class="pre">base</span></code> has the same bitwidth as <code class="docutils literal notranslate"><span class="pre">shift</span></code>, the conversion is
+straightforward.</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">base</span></code> has a greater bit width than <code class="docutils literal notranslate"><span class="pre">shift</span></code>, shift is sign or zero
+extended first. Then the extended value is passed to the shift.</p></li>
+<li><p>otherwise, the conversion is considered to be illegal.</p></li>
+</ul>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Shift without extension
+%res0 = spirv.ShiftRightArithmetic %0, %2 : i32, i32  =&gt;  %res0 = llvm.ashr %0, %2 : i32
+
+// Shift with extension
+                                                        %ext  = llvm.sext %1 : i16 to i32
+%res1 = spirv.ShiftRightArithmetic %0, %1 : i32, i16  =&gt;  %res1 = llvm.ashr %0, %ext: i32
+</pre></div>
+</div>
+</section>
+<section id="spirv-constant">
+<h3><code class="docutils literal notranslate"><span class="pre">spirv.Constant</span></code><a class="headerlink" href="#spirv-constant" title="此标题的永久链接">¶</a></h3>
+<p>At the moment <code class="docutils literal notranslate"><span class="pre">spirv.Constant</span></code> conversion supports scalar and vector constants
+<strong>only</strong>.</p>
+<section id="mapping">
+<h4>Mapping<a class="headerlink" href="#mapping" title="此标题的永久链接">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">spirv.Constant</span></code> is mapped to <code class="docutils literal notranslate"><span class="pre">llvm.mlir.constant</span></code>. This is a straightforward
+conversion pattern with a special case when the argument is signed or unsigned.</p>
+</section>
+<section id="special-case">
+<h4>Special case<a class="headerlink" href="#special-case" title="此标题的永久链接">¶</a></h4>
+<p>SPIR-V constant can be a signed or unsigned integer. Since LLVM Dialect does not
+have signedness semantics, this case should be handled separately.</p>
+<p>The conversion casts constant value attribute to a signless integer or a vector
+of signless integers. This is correct because in SPIR-V, like in LLVM, how to
+interpret an integer number is also dictated by the opcode. However, in reality
+hardware implementation might show unexpected behavior. Therefore, it is better
+to handle it case-by-case, given that the purpose of the conversion is not to
+cover all possible corner cases.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// %0 = llvm.mlir.constant(0 : i8) : i8
+%0 = spirv.Constant  0 : i8
+
+// %1 = llvm.mlir.constant(dense&lt;[2, 3, 4]&gt; : vector&lt;3xi32&gt;) : vector&lt;3xi32&gt;
+%1 = spirv.Constant dense&lt;[2, 3, 4]&gt; : vector&lt;3xui32&gt;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="not-implemented-ops">
+<h3>Not implemented ops<a class="headerlink" href="#not-implemented-ops" title="此标题的永久链接">¶</a></h3>
+<p>There is no support of the following ops:</p>
+<ul class="simple">
+<li><p>All atomic ops</p></li>
+<li><p>All group ops</p></li>
+<li><p>All matrix ops</p></li>
+<li><p>All CL ops</p></li>
+</ul>
+<p>As well as:</p>
+<ul class="simple">
+<li><p>spirv.CompositeConstruct</p></li>
+<li><p>spirv.ControlBarrier</p></li>
+<li><p>spirv.CopyMemory</p></li>
+<li><p>spirv.FMod</p></li>
+<li><p>spirv.GL.Acos</p></li>
+<li><p>spirv.GL.Asin</p></li>
+<li><p>spirv.GL.Atan</p></li>
+<li><p>spirv.GL.Cosh</p></li>
+<li><p>spirv.GL.FSign</p></li>
+<li><p>spirv.GL.SAbs</p></li>
+<li><p>spirv.GL.Sinh</p></li>
+<li><p>spirv.GL.SSign</p></li>
+<li><p>spirv.MemoryBarrier</p></li>
+<li><p>spirv.mlir.referenceof</p></li>
+<li><p>spirv.SMod</p></li>
+<li><p>spirv.SpecConstant</p></li>
+<li><p>spirv.Unreachable</p></li>
+<li><p>spirv.VectorExtractDynamic</p></li>
+</ul>
+</section>
+</section>
+<section id="control-flow-conversion">
+<h2>Control flow conversion<a class="headerlink" href="#control-flow-conversion" title="此标题的永久链接">¶</a></h2>
+<section id="branch-ops">
+<h3>Branch ops<a class="headerlink" href="#branch-ops" title="此标题的永久链接">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">spirv.Branch</span></code> and <code class="docutils literal notranslate"><span class="pre">spirv.BranchConditional</span></code> are mapped to <code class="docutils literal notranslate"><span class="pre">llvm.br</span></code> and
+<code class="docutils literal notranslate"><span class="pre">llvm.cond_br</span></code>. Branch weights for <code class="docutils literal notranslate"><span class="pre">spirv.BranchConditional</span></code> are mapped to
+corresponding <code class="docutils literal notranslate"><span class="pre">branch_weights</span></code> attribute of <code class="docutils literal notranslate"><span class="pre">llvm.cond_br</span></code>. When translated to
+proper LLVM, <code class="docutils literal notranslate"><span class="pre">branch_weights</span></code> are converted into LLVM metadata associated with
+the conditional branch.</p>
+</section>
+<section id="spirv-functioncall">
+<h3><code class="docutils literal notranslate"><span class="pre">spirv.FunctionCall</span></code><a class="headerlink" href="#spirv-functioncall" title="此标题的永久链接">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">spirv.FunctionCall</span></code> maps to <code class="docutils literal notranslate"><span class="pre">llvm.call</span></code>. For example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>%0 = spirv.FunctionCall @foo() : () -&gt; i32    =&gt;    %0 = llvm.call @foo() : () -&gt; f32
+spirv.FunctionCall @bar(%0) : (i32) -&gt; ()     =&gt;    llvm.call @bar(%0) : (f32) -&gt; ()
+</pre></div>
+</div>
+</section>
+<section id="spirv-mlir-selection-and-spirv-mlir-loop">
+<h3><code class="docutils literal notranslate"><span class="pre">spirv.mlir.selection</span></code> and <code class="docutils literal notranslate"><span class="pre">spirv.mlir.loop</span></code><a class="headerlink" href="#spirv-mlir-selection-and-spirv-mlir-loop" title="此标题的永久链接">¶</a></h3>
+<p>Control flow within <code class="docutils literal notranslate"><span class="pre">spirv.mlir.selection</span></code> and <code class="docutils literal notranslate"><span class="pre">spirv.mlir.loop</span></code> is lowered directly
+to LLVM via branch ops. The conversion can only be applied to selection or loop
+with all blocks being reachable. Moreover, selection and loop control attributes
+(such as <code class="docutils literal notranslate"><span class="pre">Flatten</span></code> or <code class="docutils literal notranslate"><span class="pre">Unroll</span></code>) are not supported at the moment.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Conversion of selection
+%cond = spirv.Constant true                               %cond = llvm.mlir.constant(true) : i1
+spirv.mlir.selection {
+  spirv.BranchConditional %cond, ^true, ^false            llvm.cond_br %cond, ^true, ^false
+
+^true:                                                                                              ^true:
+  // True block code                                    // True block code
+  spirv.Branch ^merge                             =&gt;      llvm.br ^merge
+
+^false:                                               ^false:
+  // False block code                                   // False block code
+  spirv.Branch ^merge                                     llvm.br ^merge
+
+^merge:                                               ^merge:
+  spirv.mlir.merge                                            llvm.br ^continue
+}
+// Remaining code                                                                           ^continue:
+                                                        // Remaining code
+</pre></div>
+</div>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Conversion of loop
+%cond = spirv.Constant true                               %cond = llvm.mlir.constant(true) : i1
+spirv.mlir.loop {
+  spirv.Branch ^header                                    llvm.br ^header
+
+^header:                                              ^header:
+  // Header code                                        // Header code
+  spirv.BranchConditional %cond, ^body, ^merge    =&gt;      llvm.cond_br %cond, ^body, ^merge
+
+^body:                                                ^body:
+  // Body code                                          // Body code
+  spirv.Branch ^continue                                  llvm.br ^continue
+
+^continue:                                            ^continue:
+  // Continue code                                      // Continue code
+  spirv.Branch ^header                                    llvm.br ^header
+
+^merge:                                               ^merge:
+  spirv.mlir.merge                                            llvm.br ^remaining
+}
+// Remaining code                                     ^remaining:
+                                                        // Remaining code
+</pre></div>
+</div>
+</section>
+</section>
+<section id="decorations-conversion">
+<h2>Decorations conversion<a class="headerlink" href="#decorations-conversion" title="此标题的永久链接">¶</a></h2>
+<p><strong>Note: these conversions have not been implemented yet</strong></p>
+</section>
+<section id="glsl-extended-instruction-set">
+<h2>GLSL extended instruction set<a class="headerlink" href="#glsl-extended-instruction-set" title="此标题的永久链接">¶</a></h2>
+<p>This section describes how SPIR-V ops from GLSL extended instructions set are
+mapped to LLVM Dialect.</p>
+<section id="id1">
+<h3>Direct conversions<a class="headerlink" href="#id1" title="此标题的永久链接">¶</a></h3>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Dialect op</th>
+<th style="text-align: center;">LLVM Dialect op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.Ceil</code></td>
+<td style="text-align: center;"><code>llvm.intr.ceil</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.Cos</code></td>
+<td style="text-align: center;"><code>llvm.intr.cos</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.Exp</code></td>
+<td style="text-align: center;"><code>llvm.intr.exp</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.FAbs</code></td>
+<td style="text-align: center;"><code>llvm.intr.fabs</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.Floor</code></td>
+<td style="text-align: center;"><code>llvm.intr.floor</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.FMax</code></td>
+<td style="text-align: center;"><code>llvm.intr.maxnum</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.FMin</code></td>
+<td style="text-align: center;"><code>llvm.intr.minnum</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.Log</code></td>
+<td style="text-align: center;"><code>llvm.intr.log</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.Sin</code></td>
+<td style="text-align: center;"><code>llvm.intr.sin</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.Sqrt</code></td>
+<td style="text-align: center;"><code>llvm.intr.sqrt</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.SMax</code></td>
+<td style="text-align: center;"><code>llvm.intr.smax</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>spirv.GL.SMin</code></td>
+<td style="text-align: center;"><code>llvm.intr.smin</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="id2">
+<h3>Special cases<a class="headerlink" href="#id2" title="此标题的永久链接">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">spirv.InverseSqrt</span></code> is mapped to:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>                                           %one  = llvm.mlir.constant(1.0 : f32) : f32
+%res = spirv.InverseSqrt %arg : f32    =&gt;    %sqrt = &quot;llvm.intr.sqrt&quot;(%arg) : (f32) -&gt; f32
+                                           %res  = fdiv %one, %sqrt : f32
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">spirv.Tan</span></code> is mapped to:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>                                   %sin = &quot;llvm.intr.sin&quot;(%arg) : (f32) -&gt; f32
+%res = spirv.Tan %arg : f32    =&gt;    %cos = &quot;llvm.intr.cos&quot;(%arg) : (f32) -&gt; f32
+                                   %res = fdiv %sin, %cos : f32
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">spirv.Tanh</span></code> is modelled using the equality <code class="docutils literal notranslate"><span class="pre">tanh(x)</span> <span class="pre">=</span> <span class="pre">{exp(2x)</span> <span class="pre">-</span> <span class="pre">1}/{exp(2x)</span> <span class="pre">+</span> <span class="pre">1}</span></code>:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>                                     %two   = llvm.mlir.constant(2.0: f32) : f32
+                                     %2xArg = llvm.fmul %two, %arg : f32
+                                     %exp   = &quot;llvm.intr.exp&quot;(%2xArg) : (f32) -&gt; f32
+%res = spirv.Tanh %arg : f32     =&gt;    %one   = llvm.mlir.constant(1.0 : f32) : f32
+                                     %num   = llvm.fsub %exp, %one : f32
+                                     %den   = llvm.fadd %exp, %one : f32
+                                     %res   = llvm.fdiv %num, %den : f32
+</pre></div>
+</div>
+</section>
+</section>
+<section id="function-conversion-and-related-ops">
+<h2>Function conversion and related ops<a class="headerlink" href="#function-conversion-and-related-ops" title="此标题的永久链接">¶</a></h2>
+<p>This section describes the conversion of function-related operations from SPIR-V
+to LLVM dialect.</p>
+<section id="spirv-func">
+<h3><code class="docutils literal notranslate"><span class="pre">spirv.func</span></code><a class="headerlink" href="#spirv-func" title="此标题的永久链接">¶</a></h3>
+<p>This op declares or defines a SPIR-V function and it is converted to
+<code class="docutils literal notranslate"><span class="pre">llvm.func</span></code>. This conversion handles signature conversion, and function control
+attributes remapping to LLVM dialect function
+<a class="reference external" href="Dialects/LLVM.md/#attribute-pass-through"><code class="docutils literal notranslate"><span class="pre">passthrough</span></code> attribute</a>.</p>
+<p>The following mapping is used to map
+<a class="reference external" href="https://www.khronos.org/registry/spir-v/specs/unified1/SPIRV.html#_a_id_function_control_a_function_control">SPIR-V function control</a> to
+<a class="reference external" href="https://llvm.org/docs/LangRef.html#function-attributes">LLVM function attributes</a>:</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th style="text-align: center;">SPIR-V Function Control Attributes</th>
+<th style="text-align: center;">LLVM Function Attributes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">None</td>
+<td style="text-align: center;">No function attributes passed</td>
+</tr>
+<tr>
+<td style="text-align: center;">Inline</td>
+<td style="text-align: center;"><code>alwaysinline</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">DontInline</td>
+<td style="text-align: center;"><code>noinline</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">Pure</td>
+<td style="text-align: center;"><code>readonly</code></td>
+</tr>
+<tr>
+<td style="text-align: center;">Const</td>
+<td style="text-align: center;"><code>readnone</code></td>
+</tr>
+</tbody>
+</table></section>
+<section id="spirv-return-and-spirv-returnvalue">
+<h3><code class="docutils literal notranslate"><span class="pre">spirv.Return</span></code> and <code class="docutils literal notranslate"><span class="pre">spirv.ReturnValue</span></code><a class="headerlink" href="#spirv-return-and-spirv-returnvalue" title="此标题的永久链接">¶</a></h3>
+<p>In LLVM IR, functions may return either 1 or 0 value. Hence, we map both ops to
+<code class="docutils literal notranslate"><span class="pre">llvm.return</span></code> with or without a return value.</p>
+</section>
+</section>
+<section id="module-ops">
+<h2>Module ops<a class="headerlink" href="#module-ops" title="此标题的永久链接">¶</a></h2>
+<p>Module in SPIR-V has one region that contains one block. It is defined via
+<code class="docutils literal notranslate"><span class="pre">spirv.module</span></code> op that also takes a range of attributes:</p>
+<ul class="simple">
+<li><p>Addressing model</p></li>
+<li><p>Memory model</p></li>
+<li><p>Version-Capability-Extension attribute</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">spirv.module</span></code> is converted into <code class="docutils literal notranslate"><span class="pre">ModuleOp</span></code>. This plays a role of enclosing scope
+to LLVM ops. At the moment, SPIR-V module attributes are ignored.</p>
+</section>
+<section id="mlir-spirv-cpu-runner">
+<h2><code class="docutils literal notranslate"><span class="pre">mlir-spirv-cpu-runner</span></code><a class="headerlink" href="#mlir-spirv-cpu-runner" title="此标题的永久链接">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">mlir-spirv-cpu-runner</span></code> allows to execute <code class="docutils literal notranslate"><span class="pre">gpu</span></code> dialect kernel on the CPU via
+SPIR-V to LLVM dialect conversion. Currently, only single-threaded kernel is
+supported.</p>
+<p>To build the runner, add the following option to <code class="docutils literal notranslate"><span class="pre">cmake</span></code>: <code class="docutils literal notranslate"><span class="pre">bash</span> <span class="pre">-DMLIR_ENABLE_SPIRV_CPU_RUNNER=1</span></code></p>
+<section id="pipeline">
+<h3>Pipeline<a class="headerlink" href="#pipeline" title="此标题的永久链接">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">gpu</span></code> module with the kernel and the host code undergo the following
+transformations:</p>
+<ul class="simple">
+<li><p>Convert the <code class="docutils literal notranslate"><span class="pre">gpu</span></code> module into SPIR-V dialect, lower ABI attributes and
+update version, capability and extension.</p></li>
+<li><p>Emulate the kernel call by converting the launching operation into a normal
+function call. The data from the host side to the device is passed via
+copying to global variables. These are created in both the host and the
+kernel code and later linked when nested modules are folded.</p></li>
+<li><p>Convert SPIR-V dialect kernel to LLVM dialect via the new conversion path.</p></li>
+</ul>
+<p>After these passes, the IR transforms into a nested LLVM module - a main module
+representing the host code and a kernel module. These modules are linked and
+executed using <code class="docutils literal notranslate"><span class="pre">ExecutionEngine</span></code>.</p>
+</section>
+<section id="walk-through">
+<h3>Walk-through<a class="headerlink" href="#walk-through" title="此标题的永久链接">¶</a></h3>
+<p>This section gives a detailed overview of the IR changes while running
+<code class="docutils literal notranslate"><span class="pre">mlir-spirv-cpu-runner</span></code>. First, consider that we have the following IR. (For
+simplicity some type annotations and function implementations have been
+omitted).</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>gpu.module @foo {
+  gpu.func @bar(%arg: memref&lt;8xi32&gt;) {
+    // Kernel code.
+    gpu.return
+  }
+}
+
+func.func @main() {
+  // Fill the buffer with some data
+  %buffer = memref.alloc : memref&lt;8xi32&gt;
+  %data = ...
+  call fillBuffer(%buffer, %data)
+
+  &quot;gpu.launch_func&quot;(/*grid dimensions*/, %buffer) {
+    kernel = @foo::bar
+  }
+}
+</pre></div>
+</div>
+<p>Lowering <code class="docutils literal notranslate"><span class="pre">gpu</span></code> dialect to SPIR-V dialect results in</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>spirv.module @__spv__foo /*VCE triple and other metadata here*/ {
+  spirv.GlobalVariable @__spv__foo_arg bind(0,0) : ...
+  spirv.func @bar() {
+    // Kernel code.
+  }
+  spirv.EntryPoint @bar, ...
+}
+
+func.func @main() {
+  // Fill the buffer with some data.
+  %buffer = memref.alloc : memref&lt;8xi32&gt;
+  %data = ...
+  call fillBuffer(%buffer, %data)
+
+  &quot;gpu.launch_func&quot;(/*grid dimensions*/, %buffer) {
+    kernel = @foo::bar
+  }
+}
+</pre></div>
+</div>
+<p>Then, the lowering from standard dialect to LLVM dialect is applied to the host
+code.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>spirv.module @__spv__foo /*VCE triple and other metadata here*/ {
+  spirv.GlobalVariable @__spv__foo_arg bind(0,0) : ...
+  spirv.func @bar() {
+    // Kernel code.
+  }
+  spirv.EntryPoint @bar, ...
+}
+
+// Kernel function declaration.
+llvm.func @__spv__foo_bar() : ...
+
+llvm.func @main() {
+  // Fill the buffer with some data.
+  llvm.call fillBuffer(%buffer, %data)
+
+  // Copy data to the global variable, call kernel, and copy the data back.
+  %addr = llvm.mlir.addressof @__spv__foo_arg_descriptor_set0_binding0 : ...
+  &quot;llvm.intr.memcpy&quot;(%addr, %buffer) : ...
+  llvm.call @__spv__foo_bar()
+  &quot;llvm.intr.memcpy&quot;(%buffer, %addr) : ...
+
+  llvm.return
+}
+</pre></div>
+</div>
+<p>Finally, SPIR-V module is converted to LLVM and the symbol names are resolved
+for the linkage.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>module @__spv__foo {
+  llvm.mlir.global @__spv__foo_arg_descriptor_set0_binding0 : ...
+  llvm.func @__spv__foo_bar() {
+    // Kernel code.
+  }
+}
+
+// Kernel function declaration.
+llvm.func @__spv__foo_bar() : ...
+
+llvm.func @main() {
+  // Fill the buffer with some data.
+  llvm.call fillBuffer(%buffer, %data)
+
+  // Copy data to the global variable, call kernel, and copy the data back.
+  %addr = llvm.mlir.addressof @__spv__foo_arg_descriptor_set0_binding0 : ...
+  &quot;llvm.intr.memcpy&quot;(%addr, %buffer) : ...
+  llvm.call @__spv__foo_bar()
+  &quot;llvm.intr.memcpy&quot;(%buffer, %addr) : ...
+
+  llvm.return
+}
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

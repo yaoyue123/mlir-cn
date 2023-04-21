@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>MLIR Rationale</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../../genindex.html" />
+  <link rel="search" title="搜索" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/DataFlowAnalysis.html" class="reference internal ">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-5.html" class="reference internal ">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-6.html" class="reference internal ">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/Ch-7.html" class="reference internal ">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/Toy/_index.html" class="reference internal ">Toy Tutorial</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../Tutorials/_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+    <li>MLIR Rationale</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="mlir-rationale">
+<h1>MLIR Rationale<a class="headerlink" href="#mlir-rationale" title="此标题的永久链接">¶</a></h1>
+<p>This document is intended to capture some of the alternatives considered and
+open debates in the design of MLIR, along with the rationale for certain
+decisions we made. This is not intended to be a “finely groomed” document - we
+prefer the ability to dump in interesting tidbits without worrying too much
+about their consistency or readability.</p>
+<p>[TOC]</p>
+<section id="abstract">
+<h2>Abstract<a class="headerlink" href="#abstract" title="此标题的永久链接">¶</a></h2>
+<p>MLIR is a compiler intermediate representation with similarities to traditional
+three-address SSA representations (like
+<a class="reference external" href="http://llvm.org/docs/LangRef.html">LLVM IR</a> or
+<a class="reference external" href="https://github.com/apple/swift/blob/main/docs/SIL.rst">SIL</a>), but which
+introduces notions from the polyhedral loop optimization works as first class
+concepts. This hybrid design is optimized to represent, analyze, and transform
+high level dataflow graphs as well as target-specific code generated for high
+performance data parallel systems. Beyond its representational capabilities, its
+single continuous design provides a framework to lower from dataflow graphs to
+high performance target specific code.</p>
+<p>MLIR stands for one of “Multi-Level IR” or “Multi-dimensional Loop IR” or
+“Machine Learning IR” or “Mid Level IR”, we prefer the first. This document only
+provides the rationale behind MLIR – its actual
+<a class="reference internal" href="../LangRef.html"><span class="doc">specification document</span></a> and other content is hosted elsewhere.</p>
+</section>
+<section id="introduction-and-motivation">
+<h2>Introduction and Motivation<a class="headerlink" href="#introduction-and-motivation" title="此标题的永久链接">¶</a></h2>
+<p>The Multi-Level Intermediate Representation (MLIR) is intended for easy
+expression and optimization of computations involving deep loop nests and dense
+matrices of high dimensionality. It is thus well-suited to deep learning
+computations in particular. Yet it is general enough to also represent arbitrary
+sequential computation. The representation allows high-level optimization and
+parallelization for a wide range of parallel architectures including those with
+deep memory hierarchies — general-purpose multicores, GPUs, and specialized
+neural network accelerators.</p>
+<p>MLIR uses ideas drawn from IRs of LLVM and Swift for lower level constructs
+while combining them with ideas from the polyhedral abstraction to represent
+loop nests, multidimensional data (tensors), and transformations on these
+entities as first class concepts in the IR.</p>
+<p>MLIR is a multi-level IR, i.e., it represents code at a domain-specific
+representation such as HLO or TensorFlow graphs, all the way down to the machine
+level. MLIR is able to represent arbitrary control flow and arbitrary data
+accesses, and is general enough to represent nearly all sequential computation.
+This is a key distinction from existing polyhedral representation
+implementations (such as LLVM <a class="reference external" href="https://polly.llvm.org/">Polly</a>) that are able to
+use the polyhedral abstraction in a way isolated from the LLVM IR and only for
+affine loop nests, i.e., portions of the code where array accesses, loop bounds,
+and conditionals are regular (involve linear functions of loop iterators and
+constant symbols). The presence of statically unpredictable data accesses or
+control flow does not preclude representation in MLIR, but only limits to a
+certain extent the ability to reason about and apply transformations using the
+polyhedral abstraction.</p>
+<p>Maps, sets, and relations with affine constraints are the core structures
+underlying a polyhedral representation of high-dimensional loop nests and
+multidimensional arrays. These structures are represented as textual expressions
+in a form close to their mathematical form. These structures are used to capture
+loop nests, tensor data structures, and how they are reordered and mapped for a
+target architecture. All structured or “conforming” loops are captured as part
+of the polyhedral information, and so are tensor variables, their layouts, and
+subscripted accesses to these tensors in memory.</p>
+<p>The information captured in the IR allows a compact expression of all loop
+transformations, data remappings, explicit copying necessary for explicitly
+addressed memory in accelerators, mapping to pre-tuned expert-written
+primitives, and mapping to specialized vector instructions. Loop transformations
+that can be easily implemented include the body of affine transformations: these
+subsume all traditional loop transformations (unimodular and non-unimodular)
+such as loop tiling, interchange, permutation, skewing, scaling, relative
+shifting, reversal, fusion, and distribution/fission. Transformations on data
+layout such as padding and transforming to blocked layouts are also represented
+well via affine layout maps.</p>
+<p>MLIR’s design allows a progressive lowering to target-specific forms. Besides
+high-level transformations for loop nests and data layouts that a typical
+mid-level optimizer is expected to deal with, MLIR is also designed to perform
+certain low-level scheduling and mapping decisions that a typical backend IR is
+entrusted with: these include mapping to specialized vector instructions,
+auto-vectorization, and software pipelining. The need to support these
+transformations stems from the fact that neural network accelerators have
+specialized units that deal with large chunks of data whose computation maps
+back to chunks of more than one loop of the loop nests as viewed by a program at
+a level closer to the original specification. Such specialized units or
+instructions operate on multidimensional data chunks from a programmer’s
+viewpoint. It thus makes it hard or infeasible for a backend operating on a very
+low-level IR close to assembly to lift and reconstruct loops and perform such a
+mapping. This is in contrast to classic instruction selection and scheduling in
+today’s compilers that primarily only deals with the body of the innermost loop.
+MLIR also facilitates automatic mapping to expert pre-tuned primitives or vendor
+libraries operating on data at higher levels (or at the highest level) of the
+memory hierarchy.</p>
+<p>In summary, MLIR is convenient for and closed under the kind of transformations
+needed to lower to general-purpose as well as specialized accelerators. It also
+allows one to build modular and reusable target independent and target dependent
+passes.</p>
+</section>
+<section id="design-decisions">
+<h2>Design Decisions<a class="headerlink" href="#design-decisions" title="此标题的永久链接">¶</a></h2>
+<p>This section sheds light on some of the design decisions – some of these are
+indirectly implied by the specification document.</p>
+<section id="loads-and-stores">
+<h3>Loads and stores<a class="headerlink" href="#loads-and-stores" title="此标题的永久链接">¶</a></h3>
+<p>The ‘load’ and ‘store’ instructions are specifically crafted to fully resolve to
+an element of a memref. These instructions take as arguments n+1 indices for an
+n-ranked tensor. This disallows the equivalent of pointer arithmetic or the
+ability to index into the same memref in other ways (something which C arrays
+allow for example). Furthermore, for the affine constructs, the compiler can
+follow use-def chains (e.g. through
+<a class="reference external" href="../Dialects/Affine.md/#affineapply-affineapplyop">affine.apply operations</a> or
+through the map attributes of
+<a class="reference external" href="../Dialects/Affine.md/#operations">affine operations</a>) to precisely analyze
+references at compile-time using polyhedral techniques. This is possible because
+of the
+<a class="reference external" href="../Dialects/Affine.md/#restrictions-on-dimensions-and-symbols">restrictions on dimensions and symbols</a>.</p>
+<p>A scalar of element-type (a primitive type or a vector type) that is stored in
+memory is modeled as a 0-d memref. This is also necessary for scalars that are
+live out of for loops and if conditionals in a function, for which we don’t yet
+have an SSA representation –
+<a class="reference external" href="#affineif-and-affinefor-extensions-for-escaping-scalars">an extension</a> to allow
+that is described later in this doc.</p>
+</section>
+<section id="symbols-and-types">
+<h3>Symbols and types<a class="headerlink" href="#symbols-and-types" title="此标题的永久链接">¶</a></h3>
+<p>The current MLIR disallows use of symbols in types. For example, when a tensor
+or memref dimension is statically unknown, it is denoted in the type as ‘?’. An
+SSA symbol is then bound to it when a memref is created. The actual value of the
+unknown dimension can be queried using the “dim” builtin as shown below.</p>
+<p>Example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>func.func foo(...) {
+  %A = memref.alloc &lt;8x?xf32, #lmap&gt; (%N)
+  ...
+  call bar(%A) : (memref&lt;8x?xf32, #lmap&gt;)
+}
+
+func.func bar(%A : memref&lt;8x?xf32, #lmap&gt;) {
+  // Type of %A indicates that %A has dynamic shape with 8 rows
+  // and unknown number of columns. The number of columns is queried
+  // dynamically using dim instruction.
+  %N = memref.dim %A, 1 : memref&lt;8x?xf32, #lmap&gt;
+
+  affine.for %i = 0 to 8 {
+    affine.for %j = 0 to %N {
+      // A[i,j] += 1
+      %s1 = affine.load %A[%i, %j] : memref&lt;8x?xf32, #lmap&gt;
+      %s2 = add %s1, 1
+      affine.store %s2, %A[%i, %j] : memref&lt;8x?xf32, #lmap&gt;
+    }
+  }
+  return
+}
+</pre></div>
+</div>
+<p>An alternative design is to embed the reference to symbols directly in the
+type - memref&lt;8x%Nxf32&gt;. We went for the current approach in MLIR because it
+simplifies the design — types remain immutable when the values of symbols
+change.</p>
+</section>
+<section id="block-arguments-vs-phi-nodes">
+<h3>Block Arguments vs PHI nodes<a class="headerlink" href="#block-arguments-vs-phi-nodes" title="此标题的永久链接">¶</a></h3>
+<p>MLIR Regions represent SSA using “<a class="reference external" href="../LangRef.md/#blocks">block arguments</a>”
+rather than <a class="reference external" href="http://llvm.org/docs/LangRef.html#i-phi">PHI instructions</a> used in
+LLVM. This choice is representationally identical (the same constructs can be
+represented in either form) but block arguments have several advantages:</p>
+<ol class="simple">
+<li><p>LLVM PHI nodes always have to be kept at the top of a block, and
+transformations frequently have to manually skip over them. This is defined
+away with BB arguments.</p></li>
+<li><p>LLVM has a separate function Argument node. This is defined away with BB
+arguments, because the arguments to the entry block serve this purpose.</p></li>
+<li><p>Blocks of PHI nodes in LLVM execute atomically, which is surprising and
+super confusing to compiler engineers and it is easy to introduce bugs with
+this (very related to the
+“<a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.524.5461&amp;rep=rep1&amp;type=pdf">lost copy</a>”
+problem in SSA lowering literature.) With the BB argument representation,
+this confusion is defined away.</p></li>
+<li><p>The entry list of PHI nodes in LLVM are unordered, and some blocks have
+thousands of predecessors (e.g. unwind blocks). This can cause long compile
+time problems because transformations have to linearly scan this list. This
+is defined away with BB argument representation.</p></li>
+<li><p>LLVM has no way to represent values that are available only in one successor
+but not the other, e.g. its invoke instruction cannot produce the exception
+value JUST on the exception edge. Instead, the
+<a class="reference external" href="http://llvm.org/docs/LangRef.html#landingpad-instruction">landingpad instruction</a>
+is a hack used to represent this. MLIR doesn’t make use of this capability,
+but SIL uses it extensively, e.g. in the
+<a class="reference external" href="https://github.com/apple/swift/blob/main/docs/SIL.rst#switch-enum">switch_enum instruction</a>.</p></li>
+</ol>
+<p>For more context, block arguments were previously used in the Swift
+<a class="reference external" href="https://github.com/apple/swift/blob/main/docs/SIL.rst">SIL Intermediate Representation</a>,
+and described in
+<a class="reference external" href="https://www.youtube.com/watch?v=Ntj8ab-5cvE">a talk on YouTube</a>. The section of
+interest
+<a class="reference external" href="https://www.google.com/url?q=https://youtu.be/Ntj8ab-5cvE?t%3D596&amp;sa=D&amp;ust=1529450150971000&amp;usg=AFQjCNFQHEWL7m8q3eO-1DiKw9zqC2v24Q">starts here</a>.</p>
+</section>
+<section id="index-type-usage-and-limitations">
+<h3>Index type usage and limitations<a class="headerlink" href="#index-type-usage-and-limitations" title="此标题的永久链接">¶</a></h3>
+<p>Index types are intended to be used for platform-specific “size” values and may
+appear in subscripts, sizes of aggregate types and affine expressions. They are
+also tightly coupled with <code class="docutils literal notranslate"><span class="pre">affine.apply</span></code> and affine.load/store operations;
+having <code class="docutils literal notranslate"><span class="pre">index</span></code> type is a necessary precondition of a value to be acceptable by
+these operations.</p>
+<p>We allow <code class="docutils literal notranslate"><span class="pre">index</span></code> types in tensors, vectors, and memrefs as a code generation
+strategy has to map <code class="docutils literal notranslate"><span class="pre">index</span></code> to an implementation type and hence needs to be able
+to materialize corresponding values. However, the target might lack support for
+<code class="docutils literal notranslate"><span class="pre">vector</span></code> values with the target specific equivalent of the <code class="docutils literal notranslate"><span class="pre">index</span></code> type.</p>
+</section>
+<section id="data-layout-of-non-primitive-types">
+<h3>Data layout of non-primitive types<a class="headerlink" href="#data-layout-of-non-primitive-types" title="此标题的永久链接">¶</a></h3>
+<p>Data layout information such as the bit width or the alignment of types may be
+target and ABI-specific and thus should be configurable rather than imposed by
+the compiler. Especially, the layout of compound or <code class="docutils literal notranslate"><span class="pre">index</span></code> types may vary. MLIR
+specifies default bit widths for certain primitive <em>types</em>, in particular for
+integers and floats. It is equal to the number that appears in the type
+definition, e.g. the bit width of <code class="docutils literal notranslate"><span class="pre">i32</span></code> is <code class="docutils literal notranslate"><span class="pre">32</span></code>, so is the bit width of <code class="docutils literal notranslate"><span class="pre">f32</span></code>.
+The bit width is not <em>necessarily</em> related to the amount of memory (in bytes) or
+the register size (in bits) that is necessary to store the value of the given
+type. For example, <code class="docutils literal notranslate"><span class="pre">vector&lt;3xi57&gt;</span></code> is likely to be lowered to a vector of four
+64-bit integers, so that its storage requirement is <code class="docutils literal notranslate"><span class="pre">4</span> <span class="pre">x</span> <span class="pre">64</span> <span class="pre">/</span> <span class="pre">8</span> <span class="pre">=</span> <span class="pre">32</span></code> bytes,
+rather than <code class="docutils literal notranslate"><span class="pre">(3</span> <span class="pre">x</span> <span class="pre">57)</span> <span class="pre">ceildiv</span> <span class="pre">8</span> <span class="pre">=</span> <span class="pre">22</span></code> bytes as can be naively computed from the
+bit width. MLIR makes such <a class="reference internal" href="../DataLayout.html"><span class="doc">data layout information</span></a>
+configurable using attributes that can be queried during lowering, for example,
+when allocating a compound type.</p>
+<p>The data layout of dialect-specific types is undefined at MLIR level. Yet
+dialects are free to define their own quantities and make them available via the
+data layout infrastructure.</p>
+</section>
+<section id="integer-signedness-semantics">
+<h3>Integer signedness semantics<a class="headerlink" href="#integer-signedness-semantics" title="此标题的永久链接">¶</a></h3>
+<p>Integers in the builtin MLIR type system have a bitwidth (note that the <code class="docutils literal notranslate"><span class="pre">index</span></code>
+type has a symbolic width equal to the machine word size), and they <em>may</em>
+additionally have signedness semantics. The purpose is to satisfy the needs of
+different dialects, which can model different levels of abstractions. Certain
+abstraction, especially closer to source language, might want to differentiate
+signedness with integer types; while others, especially closer to machine
+instruction, might want signless integers. Instead of forcing each abstraction
+to adopt the same integer modelling or develop its own one in house, Integer
+type provides this as an option to help code reuse and consistency.</p>
+<p>For the standard dialect, the choice is to have signless integer types. An
+integer value does not have an intrinsic sign, and it’s up to the specific op
+for interpretation. For example, ops like <code class="docutils literal notranslate"><span class="pre">arith.addi</span></code> and <code class="docutils literal notranslate"><span class="pre">arith.muli</span></code> do two’s
+complement arithmetic, but some other operations get a sign, e.g. <code class="docutils literal notranslate"><span class="pre">arith.divsi</span></code>
+vs <code class="docutils literal notranslate"><span class="pre">arith.divui</span></code>.</p>
+<p>LLVM uses the <a class="reference external" href="http://llvm.org/docs/LangRef.html#integer-type">same design</a>,
+which was introduced in a revamp rolled out
+<a class="reference external" href="http://releases.llvm.org/2.0/docs/LangRef.html#t_derived">in the LLVM 2.0 integer type</a>.
+Prior to that, from
+<a class="reference external" href="http://releases.llvm.org/1.0/docs/LangRef.html#t_classifications">LLVM 1.0</a> to
+<a class="reference external" href="http://releases.llvm.org/1.9/docs/LangRef.html#t_classifications">1.9</a>, LLVM
+uses signed types like “sbyte” and “ubyte”. This shift was important and has
+served LLVM well over the years. The reason this is important is that it is a
+good thing for an intermediate representation to represent the same computation
+with the same instruction. Signed types got in the way, because (e.g.) an “add
+of an sbyte” does the same computation as an “add of a ubyte”, but the type
+system made them look artificially different. This split also required casts
+like “cast from sbyte to ubyte” which do nothing at the machine level. Removing
+signs from the type system eliminated these problems, making the compiler
+simpler.</p>
+<p>More information about this split is available in an old
+<a class="reference external" href="https://www.youtube.com/watch?v=VeRaLPupGks">talk on youtube</a> talking about
+LLVM 2.0.</p>
+<p>Note that this rationale only applies to the “standard ops” dialect in which we
+can express an opinion about its design. Other dialects generally try to model
+an external system, and should aim to reflect its design as closely as possible.</p>
+</section>
+<section id="splitting-floating-point-vs-integer-operations">
+<h3>Splitting floating point vs integer operations<a class="headerlink" href="#splitting-floating-point-vs-integer-operations" title="此标题的永久链接">¶</a></h3>
+<p>The MLIR “Arith” dialect splits many integer and floating point operations
+into different categories, for example <code class="docutils literal notranslate"><span class="pre">arith.addf</span></code> vs <code class="docutils literal notranslate"><span class="pre">arith.addi</span></code> and
+<code class="docutils literal notranslate"><span class="pre">arith.cmpf</span></code> vs <code class="docutils literal notranslate"><span class="pre">arith.cmpi</span></code>
+(<a class="reference external" href="http://llvm.org/docs/LangRef.html#binary-operations">following the design of LLVM</a>).
+These instructions <em>are</em> polymorphic on the number of elements in the type
+though, for example <code class="docutils literal notranslate"><span class="pre">addf</span></code> is used with scalar floats, vectors of floats, and
+tensors of floats (LLVM does the same thing with its scalar/vector types).</p>
+<p>This split is important because floating point and integer operations are quite
+different in practice: for example, floating point values include NaN’s, so
+<a class="reference external" href="http://llvm.org/docs/LangRef.html#icmp-instruction">integer comparisons</a> and
+<a class="reference external" href="http://llvm.org/docs/LangRef.html#fcmp-instruction">floating point comparisons</a>
+should use different comparison opcodes. On the arithmetic side of things,
+floating point operations support rounding modes, floating point contractions,
+<a class="reference external" href="http://llvm.org/docs/LangRef.html#fadd-instruction">“fast math”</a>, and integers
+may want to have two’s complement overflow behavior or be undefined on
+<a class="reference external" href="http://llvm.org/docs/LangRef.html#add-instruction">various forms of wrapping</a>
+for performance.</p>
+<p>We are a long way from this sort of thing being a priority to care about in
+MLIR, but since we have experience and know the right way to do this, we’d
+rather design it in from the beginning.</p>
+<p>Note that this rationale only applies to the “standard ops” dialect in which we
+can express an opinion about its design. Other dialects generally try to model
+an external system, and should aim to reflect its design as closely as possible.</p>
+</section>
+<section id="specifying-sign-in-integer-comparison-operations">
+<h3>Specifying sign in integer comparison operations<a class="headerlink" href="#specifying-sign-in-integer-comparison-operations" title="此标题的永久链接">¶</a></h3>
+<p>Since integers are <a class="reference external" href="#integer-signedness-semantics">signless</a>, it is necessary to
+define the sign for integer comparison operations. This sign indicates how to
+treat the foremost bit of the integer: as sign bit or as most significant bit.
+For example, comparing two <code class="docutils literal notranslate"><span class="pre">i4</span></code> values <code class="docutils literal notranslate"><span class="pre">0b1000</span></code> and <code class="docutils literal notranslate"><span class="pre">0b0010</span></code> yields different
+results for unsigned (<code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">&gt;</span> <span class="pre">3</span></code>) and signed (<code class="docutils literal notranslate"><span class="pre">-8</span> <span class="pre">&lt;</span> <span class="pre">3</span></code>) interpretations. This
+difference is only significant for <em>order</em> comparisons, but not for <em>equality</em>
+comparisons. Indeed, for the latter all bits must have the same value
+independently of the sign. Since both arguments have exactly the same bit width
+and cannot be padded by this operation, it is impossible to compare two values
+whose bit representations would differ while the values are interpreted as
+equal.</p>
+</section>
+<section id="specifying-comparison-kind-as-attribute">
+<h3>Specifying comparison kind as attribute<a class="headerlink" href="#specifying-comparison-kind-as-attribute" title="此标题的永久链接">¶</a></h3>
+<p>Unlike arithmetic, comparison operators share several common properties, e.g.
+they cannot be considered associative. In practice, comparisons are sometimes
+implemented by the same instruction or its variants so it makes sense to group
+them together at the IR level.</p>
+<p>An alternative would be introducing ten distinct operators for all currently
+supported kinds of integer comparisons. These operators would have increased the
+number of “reserved” names used by standard operations as well as the size of
+the C++ API while their implementations would have been mostly identical.</p>
+<p>The comparison kind is internally an integer attribute. However, for the sake of
+readability by humans, custom assembly form accepts string literals that are
+mapped to the underlying integer values: <code class="docutils literal notranslate"><span class="pre">cmpi</span> <span class="pre">&quot;eq&quot;,</span> <span class="pre">%lhs,</span> <span class="pre">%rhs</span></code> better implies
+integer equality comparison than <code class="docutils literal notranslate"><span class="pre">cmpi</span> <span class="pre">0,</span> <span class="pre">%lhs,</span> <span class="pre">%rhs</span></code> where it is unclear what
+gets compared to what else. This syntactic sugar is possible thanks to parser
+logic redefinitions for custom assembly form of non-builtin operations.
+Supporting it in the full notation would have required changing how the main
+parsing algorithm works and may have unexpected repercussions. While it had been
+possible to store the predicate as string attribute, it would have rendered
+impossible to implement switching logic based on the comparison kind and made
+attribute validity checks (one out of ten possible kinds) more complex.</p>
+</section>
+<section id="regions">
+<h3>Regions<a class="headerlink" href="#regions" title="此标题的永久链接">¶</a></h3>
+<section id="attributes-of-type-block">
+<h4>Attributes of type ‘Block’<a class="headerlink" href="#attributes-of-type-block" title="此标题的永久链接">¶</a></h4>
+<p>We considered representing regions through <code class="docutils literal notranslate"><span class="pre">ArrayAttr</span></code>s containing a list of a
+special type <code class="docutils literal notranslate"><span class="pre">IRBlockAttr</span></code>, which in turn would contain a list of operations.
+All attributes in MLIR are unique’d within the context, which would make the IR
+inside the regions immortal for no good reason.</p>
+</section>
+<section id="use-inlined-functions-as-regions">
+<h4>Use “inlined” functions as regions<a class="headerlink" href="#use-inlined-functions-as-regions" title="此标题的永久链接">¶</a></h4>
+<p>We considered attaching a “force-inline” attribute on a function and/or a
+function <code class="docutils literal notranslate"><span class="pre">call</span></code> operation. Even the minimal region support (use cases in
+affine.for and affine.if existing before the regions) requires access to the
+values defined in the dominating block, which is not supported by functions.
+Conceptually, function bodies are instances of regions rather than the inverse;
+regions can also be device kernels, alternative sections, etc.</p>
+</section>
+<section id="dedicated-region-operation">
+<h4>Dedicated <code class="docutils literal notranslate"><span class="pre">region</span></code> operation<a class="headerlink" href="#dedicated-region-operation" title="此标题的永久链接">¶</a></h4>
+<p>This would mean we have a special kind of operation that is allowed to have
+regions while other operations are not. Such distinction is similar to the
+Stmt/Op difference we have had and chose to remove to make the IR simpler and
+more flexible. It would also require analyses and passes to consider the
+interplay between operations (e.g., an <code class="docutils literal notranslate"><span class="pre">affine.for</span></code> operation must be followed
+by a region operation). Finally, a region operation can be introduced using the
+current implementation, among other operations and without being special in any
+sense.</p>
+</section>
+<section id="explicit-capture-of-the-values-used-in-a-region">
+<h4>Explicit capture of the values used in a region<a class="headerlink" href="#explicit-capture-of-the-values-used-in-a-region" title="此标题的永久链接">¶</a></h4>
+<p>Being able to use values defined outside the region implies that use-def chains
+may contain uses from different nested regions. Consequently, IR transformations
+and analyses can pull the instruction defining the value across region
+boundaries, for example in case of TableGen-defined canonicalization patterns.
+This would not be the case if all used values had been passed as region
+arguments. One of the motivations for introducing regions in the IR is precisely
+to enable cross-region analyses and transformations that are simpler than
+inter-procedural transformations. Having uses from different regions appear in
+the same use-def chain, contrary to an additional data structure maintaining
+correspondence between function call arguments as uses of the original
+definitions and formal arguments as new definitions, enables such
+simplification. Since individual operations now belong to blocks, which belong
+to regions, it is always possible to check if the definition of the value
+belongs to the same region as its particular use. The risk is that any IR
+traversal will need to handle explicitly this situation and it is easy to forget
+a check (or conversely it isn’t easy to design the right check in a tablegen
+pattern for example): traversing use-def chains potentially crosses implicitly
+semantic barriers, making it possible to unknowingly break region semantics.
+This is expected to be caught in the verifier after the transformation.</p>
+<p>At the same time, one may choose to pass certain or all values as region
+arguments to explicitly break the use-def chains in the current proposal. This
+can be combined with an attribute-imposed semantic requirement disallowing the
+body of the region to refer to any value from outside it.</p>
+</section>
+</section>
+<section id="dialect-type-extensions">
+<h3>Dialect type extensions<a class="headerlink" href="#dialect-type-extensions" title="此标题的永久链接">¶</a></h3>
+<p>This section describes the design decisions that shaped the dialect extensible
+type system present in MLIR.</p>
+<section id="interactions-between-dialects">
+<h4>Interactions between dialects<a class="headerlink" href="#interactions-between-dialects" title="此标题的永久链接">¶</a></h4>
+<p>There are two different interactions between dialects that are important to
+understand. When types of a dialect are:</p>
+<ul class="simple">
+<li><p>In operations of other dialects</p>
+<ul>
+<li><p>For standard/builtin operations, only builtin types are allowed. This
+restriction allows for operations to clearly understand the invariants
+that they are working under.</p></li>
+<li><p>Outside of standard/builtin operations, dialects are expected to verify
+the allowable operation types per operation.</p></li>
+</ul>
+</li>
+<li><p>In types of other dialects</p>
+<ul>
+<li><p>For builtin types, these types are allowed to contain types from other
+dialects. This simplifies the type system and removes the need for
+dialects to redefine all of the builtin aggregate types, e.g. tensor, as
+well as the memref type. Dialects are expected to verify that a specific
+type is valid within a builtin type, e.g. if a type can be an element of
+a tensor.</p></li>
+<li><p>For dialect types, the dialect is expected to verify any type
+invariants, e.g. if the tensor type can contain a specific type of that
+dialect.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="separating-builtin-and-standard-types">
+<h4>Separating builtin and standard types<a class="headerlink" href="#separating-builtin-and-standard-types" title="此标题的永久链接">¶</a></h4>
+<p>Following the separation between the built-in and standard dialect, it makes
+sense to separate built-in types and standard dialect types. Built-in types are
+required for the validity of the IR itself, e.g. the function type (which
+appears in function signatures and generic assembly forms of operations).
+Integer, float, vector, memref and tensor types, while important, are not
+necessary for IR validity.</p>
+</section>
+<section id="unregistered-types">
+<h4>Unregistered types<a class="headerlink" href="#unregistered-types" title="此标题的永久链接">¶</a></h4>
+<p>MLIR supports unregistered operations in generic assembly form. MLIR also
+supports a similar concept for types. When parsing, if the dialect for dialect
+type has not been registered the type is modeled as an ‘OpaqueType’. This allows
+for types to be round-tripped without needing to link in the dialect library
+that defined them. No additional information about opaque types, outside of
+parsing/printing, will be available.</p>
+</section>
+<section id="dialect-type-syntax">
+<h4>Dialect type syntax<a class="headerlink" href="#dialect-type-syntax" title="此标题的永久链接">¶</a></h4>
+<p>Dialect extended types are represented as string literals wrapped inside of the
+dialect namespace. This means that the parser delegates to the dialect for
+parsing specific type instances. This differs from the representation of dialect
+defined operations, of which have an identifier name that the parser uses to
+identify and parse them.</p>
+<p>This representation was chosen for several reasons:</p>
+<section id="dialects-must-provide-custom-type-parsers">
+<h5>Dialects must provide custom type parsers<a class="headerlink" href="#dialects-must-provide-custom-type-parsers" title="此标题的永久链接">¶</a></h5>
+<p>Dialect type parsing cannot plug into the existing parser infrastructure as
+operations do with the OpAsmParser/Printer. Operations have a defined syntax
+structure that is the same across all dialects. Types, on the other hand, may
+have many different, and sometimes conflicting, parsing constraints that would
+be difficult/unmaintainable to provide within a single interface.</p>
+<p>This also has the added benefit of encouraging dialects to reuse existing
+external type parsers. For example, an LLVM dialect may provide an MLIR LLVM
+type that is simply a wrapper around LLVM types. The LLVM dialect would then use
+the existing LLVM type parsing infrastructure.</p>
+<p>Example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>%s = &quot;foo&quot;() : () -&gt; !llvm&lt;&quot;i32*&quot;&gt;
+</pre></div>
+</div>
+</section>
+<section id="types-do-not-always-have-canonical-names">
+<h5>Types do not always have canonical names<a class="headerlink" href="#types-do-not-always-have-canonical-names" title="此标题的永久链接">¶</a></h5>
+<p>Unlike operations, types generally do not have a formal canonical name. For
+example, function types have no defined keyword and integer types are defined by
+a regular expression to support arbitrary bitwidth. Dialects with existing type
+systems, e.g. LLVM, are likely to provide wrappers around their existing type
+systems. For these wrapper types there is no simple canonical name, it’s logical
+to think of these types as existing within the namespace of the dialect. If a
+dialect wishes to assign a canonical name to a type, it can be done via
+<a class="reference external" href="../LangRef.md/#type-aliases">type aliases</a>.</p>
+</section>
+</section>
+</section>
+<section id="tuple-types">
+<h3>Tuple types<a class="headerlink" href="#tuple-types" title="此标题的永久链接">¶</a></h3>
+<p>The MLIR type system provides first class support for defining
+<a class="reference external" href="../Dialects/Builtin/#tupletype">tuple types</a>. This is due to the fact that
+<code class="docutils literal notranslate"><span class="pre">Tuple</span></code> represents a universal concept that is likely to, and has already begun
+to, present itself in many different dialects. Though this type is first class
+in the type system, it merely serves to provide a common mechanism in which to
+represent this concept in MLIR. As such, MLIR provides no standard operations
+for interfacing with <code class="docutils literal notranslate"><span class="pre">tuple</span></code> types. It is up to dialect authors to provide
+operations, e.g. extract_tuple_element, to interpret and manipulate them. When
+possible, operations should prefer to use multiple results instead. These
+provide a myriad of benefits, such as alleviating any need for tuple-extract
+operations that merely get in the way of analysis and transformation.</p>
+</section>
+<section id="assembly-forms">
+<h3>Assembly forms<a class="headerlink" href="#assembly-forms" title="此标题的永久链接">¶</a></h3>
+<p>MLIR decides to support both generic and custom assembly forms under the
+following considerations:</p>
+<p>MLIR is an open system; it is designed to support modular and pluggable
+dialects. Depending on whether there exists a corresponding dialect and whether
+the dialect is plugged in, operations may or may not be registered into MLIR
+system. Yet we still need a way to investigate these operations. So the generic
+assembly form is mandated by this aspect of MLIR system. It provides a default
+textual form for operations.</p>
+<p>On the other hand, an assembly form is for assisting developers to investigate
+the IR. The generic form serves as a safe fallback but it can be too verbose for
+certain ops. Therefore, MLIR gives each dialect the choice to define a custom
+assembly form for each operation according to the operation’s semantics and
+specific needs. The custom assembly form can de-duplicate information from the
+operation to derive a more concise form, thus better facilitating the
+comprehension of the IR.</p>
+</section>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="此标题的永久链接">¶</a></h2>
+<p>This section describes a few very simple examples that help understand how MLIR
+represents computation.</p>
+<section id="non-affine-control-flow">
+<h3>Non-affine control flow<a class="headerlink" href="#non-affine-control-flow" title="此标题的永久链接">¶</a></h3>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// A simple linear search in every row of a matrix
+for (i = 0; i &lt; N; i++) {
+  for (j = 0; j &lt; N; j++) {
+    // dynamic control flow
+    if (a[i][j] == key) {
+      s[i] = j;
+      break;
+    }
+  }
+}
+</pre></div>
+</div>
+<p>The presence of dynamic control flow leads to an inner non-affine function
+nested in an outer function that uses affine loops.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>func.func @search(%A: memref&lt;?x?xi32&gt;, %S: &lt;?xi32&gt;, %key : i32) {
+  %ni = memref.dim %A, 0 : memref&lt;?x?xi32&gt;
+  // This loop can be parallelized
+  affine.for %i = 0 to %ni {
+    call @search_body (%A, %S, %key, %i) : (memref&lt;?x?xi32&gt;, memref&lt;?xi32&gt;, i32, i32)
+  }
+  return
+}
+
+func.func @search_body(%A: memref&lt;?x?xi32&gt;, %S: memref&lt;?xi32&gt;, %key: i32, %i : i32) {
+  %nj = memref.dim %A, 1 : memref&lt;?x?xi32&gt;
+  cf.br ^bb1(0)
+
+^bb1(%j: i32)
+  %p1 = arith.cmpi &quot;lt&quot;, %j, %nj : i32
+  cf.cond_br %p1, ^bb2, ^bb5
+
+^bb2:
+  %v = affine.load %A[%i, %j] : memref&lt;?x?xi32&gt;
+  %p2 = arith.cmpi &quot;eq&quot;, %v, %key : i32
+  cf.cond_br %p2, ^bb3(%j), ^bb4
+
+^bb3(%j: i32)
+  affine.store %j, %S[%i] : memref&lt;?xi32&gt;
+  cf.br ^bb5
+
+^bb4:
+  %jinc = arith.addi %j, 1 : i32
+  cf.br ^bb1(%jinc)
+
+^bb5:
+  return
+}
+</pre></div>
+</div>
+<p>As per the <a class="reference internal" href="../LangRef.html"><span class="doc">MLIR spec</span></a>, the restrictions on dimensions and symbol
+identifiers to be used with the affine.apply operation only apply to accesses
+inside <code class="docutils literal notranslate"><span class="pre">affine.for</span></code> and <code class="docutils literal notranslate"><span class="pre">affine.if</span></code> operations. However, an analysis of accesses
+inside the called function (<code class="docutils literal notranslate"><span class="pre">&#64;search_body</span></code>) is necessary to determine if the
+<code class="docutils literal notranslate"><span class="pre">%i</span></code> loop could be parallelized: such function access analysis is calling
+context sensitive.</p>
+</section>
+<section id="non-affine-loop-bounds">
+<h3>Non-affine loop bounds<a class="headerlink" href="#non-affine-loop-bounds" title="此标题的永久链接">¶</a></h3>
+<p>Loop bounds that are not affine lead to a nesting of functions as shown below.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="c1">// Non-affine loop bound for k loop.</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">);</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span>
+<span class="w">       </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">l</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// block loop body</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">       </span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>func.func @outer_nest(%n : index) {
+  affine.for %i = 0 to %n {
+    affine.for %j = 0 to %n {
+      %pow = call @pow(2, %j) : (index, index) -&gt;  index
+      call @inner_nest(%pow, %n) : ...
+    }
+  }
+  return
+}
+
+func.func @inner_nest(%m : index, %n : index) {
+  affine.for %k = 0 to %m {
+    affine.for %l = 0 to %n {
+      ...
+    }
+  }
+  return
+}
+</pre></div>
+</div>
+</section>
+<section id="reference-2d-convolution">
+<h3>Reference 2D Convolution<a class="headerlink" href="#reference-2d-convolution" title="此标题的永久链接">¶</a></h3>
+<p>The following example illustrates a reference implementation of a 2D
+convolution, which uses an integer set <code class="docutils literal notranslate"><span class="pre">#domain</span></code> to represent valid input data
+in a dilated convolution.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Dilation factors S0 and S1 can be constant folded if constant at compile time.
+#domain = (d0, d1)[S0,S1,S2,S3]: (d0 % S0 == 0, d1 % S1 == 0, d0 &gt;= 0, d1 &gt;= 0,
+                                   S3 - d0 - 1 &gt;= 0, S4 - d1 - 1 &gt;= 0)
+// Identity map (shown here for illustration).
+#map0 = (d0, d1, d2, d3, d4, d5, d6) -&gt; (d0, d1, d2, d3, d4, d5, d6)
+
+// Affine map from output to input coordinate space.
+// d0 = output_h, d1 = output_w, d2 = kernel_h, d3 = kernel_w
+// S0 = h_stride, S1 = w_stride, S2 = h_kernel_dilation, S3 = w_kernel_dilation
+// S4 = h_pad_low, S5 = w_pad_low
+//     %out0 =  %0#1 * %h_stride + %0#4 * %h_kernel_dilation - %h_pad_low
+//     %out1=  %0#2 * %w_stride + %0#5 * %w_kernel_dilation - %w_pad_low
+#map1_0 = (d0, d1, d2, d3) [S0, S1, S2, S3, S4, S5] -&gt; (d0 * S0 + d2 * S2 - %S4)
+#map1_1 = (d0, d1, d2, d3) [S0, S1, S2, S3, S4, S5] -&gt; (d1 * S1 + d3 * S3 - %S5)
+
+// Semi-affine map to undilated input coordinate space.
+// d0 = input_h, d1 = input_w, S0 = h_base_dilation, S1 = w_base_dilation.
+#map2_0 = (d0, d1) [S0, S1] -&gt; (d0 / S0)
+#map2_1 = (d0, d1) [S0, S1] -&gt; (d1 / S1)
+
+// Conv2D shapes:
+// input:   [batch, input_height, input_width, input_feature]
+// kernel: [kernel_height, kernel_width, input_feature, output_feature]
+// output: [batch, output_height, output_width, output_feature]
+func.func @conv2d(%input: memref&lt;16x1024x1024x3xf32, #lm0, /*scratchpad=*/1&gt;,
+             %kernel: memref&lt;5x5x3x32xf32, #lm0, /*scratchpad=*/1&gt;,
+             %output: memref&lt;16x512x512x32xf32, #lm0, /*scratchpad=*/1&gt;) {
+  affine.for %b = 0 to %batch {
+    affine.for %oh = 0 to %output_height {
+      affine.for %ow = 0 to %output_width {
+        affine.for %of = 0 to %output_feature {
+          affine.for %kh = 0 to %kernel_height {
+            affine.for %kw = 0 to %kernel_width {
+              affine.for %if = 0 to %input_feature {
+                // Calculate input indices.
+                %1_0 = affine.apply #map1_0 (%0#1, %0#2, %0#4, %0#5)
+                  [%h_stride, %w_stride, %h_kernel_dilation, %w_kernel_dilation,
+                   %h_pad_low, %w_pad_low]
+                %1_1 = affine.apply #map1_1 (%0#1, %0#2, %0#4, %0#5)
+                  [%h_stride, %w_stride, %h_kernel_dilation, %w_kernel_dilation,
+                   %h_pad_low, %w_pad_low]
+
+                // Check if access is not in padding.
+                affine.if #domain(%1_0, %1_1)
+                                       [%h_base_dilation, %w_kernel_dilation, %h_bound, %w_bound] {
+                  %2_0 = affine.apply #map2 (%1_0, %1_1)
+                  %2_1 = affine.apply #map2 (%1_0, %1_1)
+                  // Compute: output[output_indices] += input[input_indices] * kernel[kernel_indices]
+                  call @multiply_accumulate(%input, %kernel, %output, %b, %oh, %ow, %of, %kh, %kw, %if, %2_0, %2_1)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return
+}
+</pre></div>
+</div>
+<p>TODO: (Add more examples showing the IR for a variety of interesting cases)</p>
+</section>
+</section>
+<section id="design-alternatives-and-extensions">
+<h2>Design alternatives and extensions<a class="headerlink" href="#design-alternatives-and-extensions" title="此标题的永久链接">¶</a></h2>
+<p>This is a list of some design alternatives and extensions that we discussed in
+detail but did not include in the spec or postponed them for future
+consideration on demand. We will revisit these discussions when we have more
+implementation experience and learn more about the challenges and limitations of
+our current design in practice.</p>
+<section id="polyhedral-code-representation-alternatives-schedule-lists-vs-schedules-trees-vs-affine-loop-if-forms">
+<h3>Polyhedral code representation alternatives: schedule lists vs schedules trees vs affine loop/if forms<a class="headerlink" href="#polyhedral-code-representation-alternatives-schedule-lists-vs-schedules-trees-vs-affine-loop-if-forms" title="此标题的永久链接">¶</a></h3>
+<p>The current MLIR uses a representation of polyhedral schedules using a tree of
+if/for loops. We extensively debated the tradeoffs involved in the typical
+unordered polyhedral instruction representation (where each instruction has
+multidimensional schedule information), discussed the benefits of schedule tree
+forms, and eventually decided to go with a syntactic tree of affine if/else
+conditionals and affine for loops. Discussion of the tradeoff was captured in
+this document:
+<a class="reference internal" href="RationaleSimplifiedPolyhedralForm.html"><span class="doc"> MLIR: The case for a simplified polyhedral form</span></a>.</p>
+<p>At a high level, we have two alternatives here:</p>
+<ol class="simple">
+<li><p>Schedule tree representation instead of an affine loop AST form: The current
+proposal uses an affine loop and conditional tree form, which is syntactic
+and with no separation of domains as sets and schedules as multidimensional
+affine functions. A schedule tree form however makes polyhedral domains and
+schedules a first class concept in the IR allowing compact expression of
+transformations through the schedule tree without changing the domains of
+instructions. Such a representation also hides prologues, epilogues, partial
+tiles, complex loop bounds and conditionals making loop nests free of
+“syntax”. Cost models instead look at domains and schedules. In addition, if
+necessary such a domain schedule representation can be normalized to
+explicitly propagate the schedule into domains and model all the cleanup
+code. An example and more detail on the schedule tree form is in the next
+section.</p></li>
+<li><p>Having two different forms of “affine regions”: an affine loop tree form and
+a polyhedral schedule tree form. In the latter, ops could carry attributes
+capturing domain, scheduling, and other polyhedral code generation options
+with IntegerSet, AffineMap, and other attributes.</p></li>
+</ol>
+<section id="schedule-tree-representation-for-affine-regions">
+<h4>Schedule Tree Representation for Affine Regions<a class="headerlink" href="#schedule-tree-representation-for-affine-regions" title="此标题的永久链接">¶</a></h4>
+<p>This representation is based on a simplified form of the domain/schedule
+representation used by the polyhedral compiler community. Domains represent what
+has to be executed while schedules represent the order in which domain elements
+are interleaved. We model domains as non-piece-wise convex integer sets, and
+schedules as affine functions; however, the former can be disjunctive, and the
+latter can be piece-wise affine relations. In the schedule tree representation,
+domain and schedules for instructions are represented in a tree-like structure
+which is called a schedule tree. Each non-leaf node of the tree is an abstract
+polyhedral dimension corresponding to an abstract fused loop for each ML
+instruction that appears in that branch. Each leaf node is an ML Instruction.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// A tiled matmul code (128x128x128) represented in schedule tree form
+
+// #map0 = (d0, d1, d2, d3, d4, d5) -&gt; (128*d0 + d3, 128*d1 + d4, 128*d2 + d5)
+#intset_ij = (i, j) [M, N, K]  : i &gt;= 0, -i + N - 1 &gt;= 0, j &gt;= 0, -j + N-1 &gt;= 0
+#intset_ijk = (i, j, k) [M, N, K] : i &gt;= 0, -i + N - 1 &gt;= 0, j &gt;= 0,
+                                     -j +  M-1 &gt;= 0, k &gt;= 0, -k + N - 1 &gt;= 0)
+func.func @matmul(%A, %B, %C, %M, %N, %K) : (...)  { // %M, N, K are symbols
+  // t1, t2, t3, t4, t5, t6  are abstract polyhedral loops
+  mldim %t1 : {S1,S2,S3,S4,S5}  floordiv (i, 128) {
+    mldim %t2 : {S1,S2,S3,S4,S5}  floordiv (j, 128) {
+      // (%i, %j) = affine.apply (d0, d1) -&gt; (128*d0, 128*d1) (%t1, %t2)
+      call dma_mem_to_scratchpad(%C, %i, %j, %M, %N, %K)
+          with @intset_ij(%i, %j) [%M, %N, %K]
+      mldim %t3 :   {S2,S3,S4,S5} floordiv (k, 128) {
+        // (%i, %j, %k) = affine.apply (d0, d1, d2)
+        //                          -&gt; (128*d0, 128*d1, 128*d2)  (%t1, %t2, %t3)
+        call dma_mem_to_scratchpad(%A, ...) with #inset_ijk (%i, %j, %k) [%M, %N, %K]
+        // (%i, %j, %k) = affine.apply (d0, d1, d2)
+        //                          -&gt; (128*d0, 128*d1, 128*d2)  (%t1, %t2, %t3)
+        call dma_mem_to_scratchpad(%B, ...) with #inset_ijk (%i, %j, %k) [%M, %N, %K]
+        mldim %t4 : {S4} i mod 128 {
+          mldim %t5 : {S4} j mod 128 {
+            mldim %t6 : {S4} k mod 128 {
+              // (%i, %j, %k) = affine.apply #map0 (%t1, %t2, %t3, %t4, %t5, %t6)
+              call matmul_body(A, B, C, %i, %j, %k, %M, %N, %K)
+                  with #inset_ijk(%i, %j, %k) [%M, %N, %K]
+            } // end mld4im t6
+          } // end mldim t5
+        } // end mldim t4
+      } // end mldim t3
+      // (%i, %j) = affine.apply (d0, d1) -&gt; (128*d0, 128*d1) (%t1, %t2)
+      call $dma_scratchpad_to_mem_C ... with #intset(%i, %j) [%M, %N, %K]
+    }  // end mldim t2
+  } // end mldim t1
+  return
+}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="affine-relations">
+<h3>Affine Relations<a class="headerlink" href="#affine-relations" title="此标题的永久链接">¶</a></h3>
+<p>The current MLIR spec includes affine maps and integer sets, but not affine
+relations. Affine relations are a natural way to model read and write access
+information, which can be very useful to capture the behavior of external
+library calls where no implementation is available, high-performance vendor
+libraries, or user-provided / user-tuned routines.</p>
+<p>An affine relation is a relation between input and output dimension identifiers
+while being symbolic on a list of symbolic identifiers and with affine
+constraints on the identifiers.</p>
+<p>Syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>// Affine relation definition at the top of file
+affine-rel-def ::= affine-rel-id `=` affine-relation-inline
+
+affine-rel-id ::= `##` prefixed-id
+
+affine-relation-inline ::=
+       `(` input-dims `)` (`[` symbols `]`)? `-&gt;`
+       `(` output-dims `)` :  affine-constraint-conjunction
+
+input-dims ::= bare-id-list
+output-dims ::= bare-id-list
+symbols ::= bare-id-list
+
+affine-rel ::= affine-rel-id | affine-relation-inline
+
+// Usage
+affine-rel-spec ::= affine-rel dim-and-symbol-use-list
+</pre></div>
+</div>
+<p>All identifiers appearing in input-dims, output-dims, and symbol-dims are
+pairwise distinct. All affine-constraint non-terminals in the above syntax are
+allowed to contain identifiers only from input-dims, output-dims, and
+symbol-dims.</p>
+<p>Affine relations are used to model read, write, may_read, and may_write sets of
+functions in the IR. The output dimension identifiers correspond to the data
+dimensions.</p>
+<p>Example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// read relation: two elements ( d0 &lt;= r0 &lt;= d0+1 )
+##aff_rel9 = (d0) -&gt; (r0) : r0 - d0 &gt;= 0, d0 - r0 + 1 &gt;= 0
+
+func.func @count (%A : memref&lt;128xf32&gt;, %pos : i32) -&gt; f32
+  reads: {%A ##aff_rel9 (%pos)}
+  writes: /* empty */
+  may_reads: /* empty */
+  may_writes: /* empty */ {
+bb0 (%0, %1: memref&lt;128xf32&gt;, i64):
+  %val = affine.load %A [%pos]
+  %val = affine.load %A [%pos + 1]
+  %p = arith.mulf %val, %val : f32
+  return %p : f32
+}
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3>Regions<a class="headerlink" href="#id1" title="此标题的永久链接">¶</a></h3>
+<section id="making-function-definition-an-operation">
+<h4>Making function definition an operation<a class="headerlink" href="#making-function-definition-an-operation" title="此标题的永久链接">¶</a></h4>
+<p>MLIR supports values of a Function type. Instead of having first-class IR
+concept for functions, one could define an operation with a body region that
+defines a function value. The particularity of functions is that their names are
+globally visible and can be referred to before being defined, unlike SSA values
+that must be defined first. Implementing a “function definition” operation would
+require to relax some of the SSA constraints in a region, and also make the IR
+Module a region as well. It would also affect the core infrastructure (e.g.,
+function passes) only for the sake of concept unification.</p>
+</section>
+<section id="having-types-on-a-region">
+<h4>Having types on a region<a class="headerlink" href="#having-types-on-a-region" title="此标题的永久链接">¶</a></h4>
+<p>Instead of inspecting the types of arguments of the first block, one could give
+the region itself a type. This type would be redundant with block argument
+types, which must have values and create room for type mismatches. While
+functions do have types that are partly redundant with the arguments of the
+first block in the function, this is necessary to support function declarations
+that do not have a body which we can refer to in order to obtain the argument
+types. A region is always contained in an operation or a function that can be
+queried to obtain the “type” of the region if necessary.</p>
+<p>A type on a region can be justified if Regions were to be considered separately
+from the enclosing entity (operation or function) and had their own semantics
+that should be checked.</p>
+</section>
+<section id="attaching-attributes-to-regions">
+<h4>Attaching attributes to regions<a class="headerlink" href="#attaching-attributes-to-regions" title="此标题的永久链接">¶</a></h4>
+<p>Regions could be annotated with dialect attributes to use attribute verification
+hooks. An operation could take multiple regions as arguments, and each of them
+may require different attributes. However, there are currently very few
+practical cases where this would be necessary. Instead, one could simulate
+per-region attributes with array attributes attached to the entity containing
+the region (operation or function). This decreases the overall complexity of the
+IR and enables more concise and op-specific forms, e.g., when all regions of an
+op have the same attribute that can be only mentioned once. Since the semantics
+of the region is entirely defined by the enclosing entity, it also makes sense
+to have attributes attached to that entity rather than to the region itself.</p>
+<p>This can be reconsidered in the future if we see a non-neglectable amount of use
+cases.</p>
+</section>
+</section>
+<section id="read-write-may-read-may-write-sets-for-external-functions">
+<h3>Read/Write/May_Read/May_Write sets for External Functions<a class="headerlink" href="#read-write-may-read-may-write-sets-for-external-functions" title="此标题的永久链接">¶</a></h3>
+<p>Having read, write, may_read, and may_write sets for external functions which
+include opaque ones, high-performance vendor libraries such as CuDNN, CuB, MKL,
+FFT libraries, user-provided/optimized functions, or data movement runtimes such
+as DMA ones is a powerful feature. It allows the compiler to perform analysis,
+composition/transformation in the presence of such calls and with loops around
+such calls on sub-tensors. For user-provided or custom hand-tuned functions, the
+read/write/may_read/may_write sets could be provided a-priori by a user as part
+of the external function signature or they could be part of a database.</p>
+<p>TODO: Design this, and update to use function attribute syntax.</p>
+<p>Example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>##rel9 ( ) [s0] -&gt; (r0, r1) : 0 &lt;= r0 &lt;= 1023, 0 &lt;= r1 &lt;= s0 - 1
+
+func.func @cblas_reduce_ffi(%M: memref&lt;1024 x ? x f32, #layout_map0, /*mem=*/0&gt;)
+  -&gt; f32 [
+  reads: {%M, ##rel9() }
+  writes: /* empty */
+  may_reads: /* empty */
+  may_writes: /* empty */
+]
+
+func.func @dma_mem_to_scratchpad(%a : memref&lt;1024 x f32, #layout_map0, /*mem=*/0&gt;,
+    %b : memref&lt;1024 x f32, #layout_map0, 1&gt;, %c : memref&lt;1024 x f32,
+    #layout_map0&gt;) [
+  reads: {%M, ##rel9() }
+  writes: /* empty */
+  may_reads: /* empty */
+  may_writes: /* empty */
+ ]
+</pre></div>
+</div>
+</section>
+<section id="memref-extensions">
+<h3>Memref Extensions<a class="headerlink" href="#memref-extensions" title="此标题的永久链接">¶</a></h3>
+<ol>
+<li><p>Arbitrary polyhedral shapes for tensors: e.g., triangular shapes in tensor
+dimensions where there is symmetry: use integer set (affine constraints) to
+model tensor data space (instead of just extents). Requires some changes to
+the IR and the in-memory form.</p></li>
+<li><p>Layout maps</p>
+<ol class="simple">
+<li><p>Allow piece-wise affine maps for layouts: allows clean modeling of
+boundary cases for images/tensors through padding, wrapping, mirroring,
+padding where padded values are the results of computation as opposed to
+data, padding in the interior as opposed to just boundaries.</p></li>
+<li><p>Allow many-to-one layout maps: Index and layout maps in the current
+proposal are bijective. Extending them to many-to-one layout maps allows
+cleaner(?) modeling of broadcast/reduce style computations while reusing
+memory.</p></li>
+</ol>
+<p>Proposal 2(a) requires non-trivial changes to the IR and the in-memory
+representation. 2(b) requires no change, but impacts how cost models look at
+index and layout maps.</p>
+</li>
+</ol>
+</section>
+<section id="affine-if-and-affine-for-extensions-for-escaping-scalars">
+<h3><code class="docutils literal notranslate"><span class="pre">affine.if</span></code> and <code class="docutils literal notranslate"><span class="pre">affine.for</span></code> Extensions for “Escaping Scalars”<a class="headerlink" href="#affine-if-and-affine-for-extensions-for-escaping-scalars" title="此标题的永久链接">¶</a></h3>
+<p>We considered providing a representation for SSA values that are live out of
+<code class="docutils literal notranslate"><span class="pre">if/else</span></code> conditional bodies and loop carried in <code class="docutils literal notranslate"><span class="pre">affine.for</span></code> loops. We
+ultimately abandoned this approach due to its complexity. In the current design
+of MLIR, scalar variables cannot escape for loops or if instructions. In
+situations, where escaping is necessary, we use zero-dimensional tensors and
+memrefs instead of scalars.</p>
+<p><strong>TODO</strong>: This whole section is obsolete and should be updated to use block
+arguments and a yield like terminator in for/if instructions.</p>
+<p>The abandoned design of supporting escaping scalars is as follows:</p>
+<section id="affine-for-instruction">
+<h4>affine.for Instruction<a class="headerlink" href="#affine-for-instruction" title="此标题的永久链接">¶</a></h4>
+<p>Syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">&lt;</span><span class="n">out</span><span class="o">-</span><span class="n">var</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span> <span class="o">=</span><span class="p">]</span>
+<span class="k">for</span> <span class="o">%&lt;</span><span class="n">index</span><span class="o">-</span><span class="n">variable</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">lower</span><span class="o">-</span><span class="n">bound</span><span class="o">&gt;</span> <span class="o">...</span> <span class="o">&lt;</span><span class="n">upper</span><span class="o">-</span><span class="n">bound</span><span class="o">&gt;</span> <span class="n">step</span> <span class="o">&lt;</span><span class="n">step</span><span class="o">&gt;</span>
+   <span class="p">[</span><span class="k">with</span> <span class="o">&lt;</span><span class="ow">in</span><span class="o">-</span><span class="n">var</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">{</span> <span class="o">&lt;</span><span class="n">loop</span><span class="o">-</span><span class="n">instruction</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>out-var-list is a comma separated list of SSA values defined in the loop body
+and used outside the loop body. in-var-list is a comma separated list of SSA
+values used inside the loop body and their initializers. loop-instruction-list
+is a list of instructions that may also include a yield instruction.</p>
+<p>Example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Return sum of elements in 1-dimensional mref A
+func.func i32 @sum(%A : memref&lt;?xi32&gt;, %N : i32) -&gt; (i32) {
+   %init = 0
+   %result = affine.for %i = 0 to N with %tmp(%init) {
+      %value = affine.load %A[%i]
+      %sum = %value + %tmp
+      yield %sum
+   }
+   return %result : i32
+}
+</pre></div>
+</div>
+</section>
+<section id="affine-if-else-instruction">
+<h4>affine.if/else Instruction<a class="headerlink" href="#affine-if-else-instruction" title="此标题的永久链接">¶</a></h4>
+<p>Syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">out</span><span class="o">-</span><span class="n">var</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">affine</span><span class="o">.</span><span class="k">if</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">cond</span><span class="o">-</span><span class="nb">list</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span> <span class="p">[</span><span class="k">else</span> <span class="p">{</span><span class="o">...</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>Out-var-list is a list of SSA values defined by the if-instruction. The values
+are arguments to the yield-instruction that occurs in both then and else clauses
+when else clause is present. When if instruction contains only if clause, the
+escaping value defined in the then clause should be merged with the value the
+variable had before the if instruction. The design captured here does not handle
+this situation.</p>
+<p>Example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>// Compute sum of half of the array
+func.func i32 @sum_half(%A : memref&lt;?xi32&gt;, %N : i32) -&gt; (i32) {
+   %s0 = 0
+   %s1 = affine.for %i = 1 ... N step 1 with %s2 (%s0) {
+       %s3 = if (%i &gt;= %N / 2) {
+          %v0 = affine.load %A[%i]
+          %s4 = %s2 + %v0
+          yield %s4
+       }
+       yield %s3
+   }
+   return %s1 : i32
+}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="multithreading-the-compiler">
+<h3>Multithreading the compiler<a class="headerlink" href="#multithreading-the-compiler" title="此标题的永久链接">¶</a></h3>
+<p>People want compilers to go fast, and one simple way to do that is to
+multi-thread them. There are multiple strategies for this, but a simple one is
+to optimize and compile separate functions in parallel. LLVM’s original pass
+manager anticipated this demand, and the CallGraphSCCPass manager is even
+designed to support this as well, but unfortunately, a few early design
+decisions in LLVM prevent this from ever happening. Instead, things like ThinLTO
+are forced to split programs into separate LLVM modules/context and optimize
+those chunks independently.</p>
+<p>The problem is that LLVM has several objects in its IR that are globally uniqued
+and also mutable: notably constants like <code class="docutils literal notranslate"><span class="pre">i32</span> <span class="pre">0</span></code>. In LLVM, these constants are
+<code class="docutils literal notranslate"><span class="pre">Value</span></code>’s, which allow them to be used as operands to instructions, and that
+they also have SSA use lists. Because these things are uniqued, every <code class="docutils literal notranslate"><span class="pre">i32</span> <span class="pre">0</span></code> in
+any function shares a use list. This means that optimizing multiple functions in
+parallel won’t work (at least without some sort of synchronization on the use
+lists, which would be unbearably inefficient).</p>
+<p>MLIR now supports a multithreaded pass manager. We do this through several
+design choices:</p>
+<ol class="simple">
+<li><p>MLIR makes use of extensive uniqued immutable data structures (affine
+expressions, types, etc are all immutable, uniqued, and immortal).</p></li>
+<li><p>Constants are defined in per-operation pools, instead of being globally
+uniqued.</p></li>
+<li><p>Functions, and other global-like operations, themselves are not SSA values
+either, so they don’t have the same problem as constants.</p></li>
+<li><p>Passes are copied (through their copy ctor) into one instance per
+thread, avoiding sharing of local state across threads.</p></li>
+</ol>
+<p>This allows MLIR passes to support efficient multithreaded compilation
+and code generation.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

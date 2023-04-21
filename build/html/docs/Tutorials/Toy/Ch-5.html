@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html  lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+      <title>Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/translations.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="索引" href="../../../genindex.html" />
+  <link rel="search" title="搜索" href="../../../search.html" />
+  <link rel="next" title="Chapter 6: Lowering to LLVM and CodeGeneration" href="Ch-6.html" />
+  <link rel="prev" title="Chapter 4: Enabling Generic Transformation with Interfaces" href="Ch-4.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">MLIR 中文文档</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">快速搜索</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="搜索" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#mlir">欢迎使用 mlir 中文文档</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../_index.html" class="reference internal ">开始使用</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../CreatingADialect.html" class="reference internal ">Creating a Dialect</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../DataFlowAnalysis.html" class="reference internal ">Writing DataFlow Analyses in MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../QuickstartRewrites.html" class="reference internal ">Quickstart tutorial to adding MLIR graph rewrite</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-1.html" class="reference internal ">Chapter 1: Toy Language and AST</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-2.html" class="reference internal ">Chapter 2: Emitting Basic MLIR</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-3.html" class="reference internal ">Chapter 3: High-level Language-Specific Analysis and Transformation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-4.html" class="reference internal ">Chapter 4: Enabling Generic Transformation with Interfaces</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#chapter-5-partial-lowering-to-lower-level-dialects-for-optimization" class="reference internal">Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a></li>
+                
+                  <li class="toctree-l2"><a href="#dialect-conversions" class="reference internal">Dialect Conversions</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-6.html" class="reference internal ">Chapter 6: Lowering to LLVM and CodeGeneration</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="Ch-7.html" class="reference internal ">Chapter 7: Adding a Composite Type to Toy</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="_index.html" class="reference internal ">Toy Tutorial</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../UnderstandingTheIRStructure.html" class="reference internal ">Understanding the IR Structure</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../_index.html" class="reference internal ">Tutorials</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+    <li>Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="Ch-4.html"
+       title="上一章">← Chapter 4: Enabling Generic Transformation with Interfaces</a>
+  </li>
+  <li class="next">
+    <a href="Ch-6.html"
+       title="下一章">Chapter 6: Lowering to LLVM and CodeGeneration →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="chapter-5-partial-lowering-to-lower-level-dialects-for-optimization">
+<h1>Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization<a class="headerlink" href="#chapter-5-partial-lowering-to-lower-level-dialects-for-optimization" title="此标题的永久链接">¶</a></h1>
+<p>[TOC]</p>
+<p>At this point, we are eager to generate actual code and see our Toy language
+take life. We will use LLVM to generate code, but just showing the LLVM builder
+interface here wouldn’t be very exciting. Instead, we will show how to perform
+progressive lowering through a mix of dialects coexisting in the same function.</p>
+<p>To make it more interesting, in this chapter we will consider that we want to
+reuse existing optimizations implemented in a dialect optimizing affine
+transformations: <code class="docutils literal notranslate"><span class="pre">Affine</span></code>. This dialect is tailored to the computation-heavy
+part of the program and is limited: it doesn’t support representing our
+<code class="docutils literal notranslate"><span class="pre">toy.print</span></code> builtin, for instance, neither should it! Instead, we can target
+<code class="docutils literal notranslate"><span class="pre">Affine</span></code> for the computation heavy part of Toy, and in the
+<a class="reference internal" href="Ch-6.html"><span class="doc">next chapter</span></a> directly target the <code class="docutils literal notranslate"><span class="pre">LLVM</span> <span class="pre">IR</span></code> dialect for lowering
+<code class="docutils literal notranslate"><span class="pre">print</span></code>. As part of this lowering, we will be lowering from the
+<a class="reference external" href="../../Dialects/Builtin.md/#rankedtensortype">TensorType</a> that <code class="docutils literal notranslate"><span class="pre">Toy</span></code> operates on
+to the <a class="reference external" href="../../Dialects/Builtin.md/#memreftype">MemRefType</a> that is indexed via
+an affine loop-nest. Tensors represent an abstract value-typed sequence of data,
+meaning that they don’t live in any memory. MemRefs, on the other hand,
+represent lower level buffer access, as they are concrete references to a region
+of memory.</p>
+</section>
+<section id="dialect-conversions">
+<h1>Dialect Conversions<a class="headerlink" href="#dialect-conversions" title="此标题的永久链接">¶</a></h1>
+<p>MLIR has many different dialects, so it is important to have a unified framework
+for <a class="reference external" href="../../../getting_started/Glossary.md/#conversion">converting</a> between them.
+This is where the <code class="docutils literal notranslate"><span class="pre">DialectConversion</span></code> framework comes into play. This framework
+allows for transforming a set of <em>illegal</em> operations to a set of <em>legal</em> ones.
+To use this framework, we need to provide two things (and an optional third):</p>
+<ul class="simple">
+<li><p>A <a class="reference external" href="../../DialectConversion.md/#conversion-target">Conversion Target</a></p>
+<ul>
+<li><p>This is the formal specification of what operations or dialects are
+legal for the conversion. Operations that aren’t legal will require
+rewrite patterns to perform
+<a class="reference external" href="../../../getting_started/Glossary.md/#legalization">legalization</a>.</p></li>
+</ul>
+</li>
+<li><p>A set of
+<a class="reference external" href="../../DialectConversion.md/#rewrite-pattern-specification">Rewrite Patterns</a></p>
+<ul>
+<li><p>This is the set of <a class="reference internal" href="../QuickstartRewrites.html"><span class="doc">patterns</span></a> used to convert
+<em>illegal</em> operations into a set of zero or more <em>legal</em> ones.</p></li>
+</ul>
+</li>
+<li><p>Optionally, a <a class="reference external" href="../../DialectConversion.md/#type-conversion">Type Converter</a>.</p>
+<ul>
+<li><p>If provided, this is used to convert the types of block arguments. We
+won’t be needing this for our conversion.</p></li>
+</ul>
+</li>
+</ul>
+<section id="conversion-target">
+<h2>Conversion Target<a class="headerlink" href="#conversion-target" title="此标题的永久链接">¶</a></h2>
+<p>For our purposes, we want to convert the compute-intensive <code class="docutils literal notranslate"><span class="pre">Toy</span></code> operations into
+a combination of operations from the <code class="docutils literal notranslate"><span class="pre">Affine</span></code>, <code class="docutils literal notranslate"><span class="pre">Arith</span></code>, <code class="docutils literal notranslate"><span class="pre">Func</span></code>, and <code class="docutils literal notranslate"><span class="pre">MemRef</span></code> dialects
+for further optimization. To start off the lowering, we first define our
+conversion target:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">ToyToAffineLoweringPass::runOnOperation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// The first thing to define is the conversion target. This will define the</span>
+<span class="w">  </span><span class="c1">// final target for this lowering.</span>
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">ConversionTarget</span><span class="w"> </span><span class="n">target</span><span class="p">(</span><span class="n">getContext</span><span class="p">());</span>
+
+<span class="w">  </span><span class="c1">// We define the specific operations, or dialects, that are legal targets for</span>
+<span class="w">  </span><span class="c1">// this lowering. In our case, we are lowering to a combination of the</span>
+<span class="w">  </span><span class="c1">// `Affine`, `Arith`, `Func`, and `MemRef` dialects.</span>
+<span class="w">  </span><span class="n">target</span><span class="p">.</span><span class="n">addLegalDialect</span><span class="o">&lt;</span><span class="n">affine</span><span class="o">::</span><span class="n">AffineDialect</span><span class="p">,</span><span class="w"> </span><span class="n">arith</span><span class="o">::</span><span class="n">ArithDialect</span><span class="p">,</span>
+<span class="w">                         </span><span class="n">func</span><span class="o">::</span><span class="n">FuncDialect</span><span class="p">,</span><span class="w"> </span><span class="n">memref</span><span class="o">::</span><span class="n">MemRefDialect</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// We also define the Toy dialect as Illegal so that the conversion will fail</span>
+<span class="w">  </span><span class="c1">// if any of these operations are *not* converted. Given that we actually want</span>
+<span class="w">  </span><span class="c1">// a partial lowering, we explicitly mark the Toy operations that don&#39;t want</span>
+<span class="w">  </span><span class="c1">// to lower, `toy.print`, as *legal*. `toy.print` will still need its operands</span>
+<span class="w">  </span><span class="c1">// to be updated though (as we convert from TensorType to MemRefType), so we</span>
+<span class="w">  </span><span class="c1">// only treat it as `legal` if its operands are legal.</span>
+<span class="w">  </span><span class="n">target</span><span class="p">.</span><span class="n">addIllegalDialect</span><span class="o">&lt;</span><span class="n">ToyDialect</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">  </span><span class="n">target</span><span class="p">.</span><span class="n">addDynamicallyLegalOp</span><span class="o">&lt;</span><span class="n">toy</span><span class="o">::</span><span class="n">PrintOp</span><span class="o">&gt;</span><span class="p">([](</span><span class="n">toy</span><span class="o">::</span><span class="n">PrintOp</span><span class="w"> </span><span class="n">op</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">llvm</span><span class="o">::</span><span class="n">none_of</span><span class="p">(</span><span class="n">op</span><span class="o">-&gt;</span><span class="n">getOperandTypes</span><span class="p">(),</span>
+<span class="w">                         </span><span class="p">[](</span><span class="n">Type</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">type</span><span class="p">.</span><span class="n">isa</span><span class="o">&lt;</span><span class="n">TensorType</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Above, we first set the toy dialect to illegal, and then the print operation as
+legal. We could have done this the other way around. Individual operations
+always take precedence over the (more generic) dialect definitions, so the order
+doesn’t matter. See <code class="docutils literal notranslate"><span class="pre">ConversionTarget::getOpInfo</span></code> for the details.</p>
+</section>
+<section id="conversion-patterns">
+<h2>Conversion Patterns<a class="headerlink" href="#conversion-patterns" title="此标题的永久链接">¶</a></h2>
+<p>After the conversion target has been defined, we can define how to convert the
+<em>illegal</em> operations into <em>legal</em> ones. Similarly to the canonicalization
+framework introduced in <a class="reference internal" href="Ch-3.html"><span class="doc">chapter 3</span></a>, the
+<a class="reference internal" href="../../DialectConversion.html"><span class="doc">DialectConversion framework</span></a> also uses
+<a class="reference internal" href="../QuickstartRewrites.html"><span class="doc">RewritePatterns</span></a> to perform the conversion logic.
+These patterns may be the <code class="docutils literal notranslate"><span class="pre">RewritePatterns</span></code> seen before or a new type of pattern
+specific to the conversion framework <code class="docutils literal notranslate"><span class="pre">ConversionPattern</span></code>. <code class="docutils literal notranslate"><span class="pre">ConversionPatterns</span></code>
+are different from traditional <code class="docutils literal notranslate"><span class="pre">RewritePatterns</span></code> in that they accept an
+additional <code class="docutils literal notranslate"><span class="pre">operands</span></code> parameter containing operands that have been
+remapped/replaced. This is used when dealing with type conversions, as the
+pattern will want to operate on values of the new type but match against the
+old. For our lowering, this invariant will be useful as it translates from the
+<a class="reference external" href="../../Dialects/Builtin.md/#rankedtensortype">TensorType</a> currently being
+operated on to the <a class="reference external" href="../../Dialects/Builtin.md/#memreftype">MemRefType</a>. Let’s
+look at a snippet of lowering the <code class="docutils literal notranslate"><span class="pre">toy.transpose</span></code> operation:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">/// Lower the `toy.transpose` operation to an affine loop nest.</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">TransposeOpLowering</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">ConversionPattern</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">TransposeOpLowering</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">MLIRContext</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">)</span>
+<span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">mlir</span><span class="o">::</span><span class="n">ConversionPattern</span><span class="p">(</span><span class="n">TransposeOp</span><span class="o">::</span><span class="n">getOperationName</span><span class="p">(),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">ctx</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">  </span><span class="c1">/// Match and rewrite the given `toy.transpose` operation, with the given</span>
+<span class="w">  </span><span class="c1">/// operands that have been remapped from `tensor&lt;...&gt;` to `memref&lt;...&gt;`.</span>
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">LogicalResult</span>
+<span class="w">  </span><span class="n">matchAndRewrite</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">Operation</span><span class="w"> </span><span class="o">*</span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Value</span><span class="o">&gt;</span><span class="w"> </span><span class="n">operands</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">mlir</span><span class="o">::</span><span class="n">ConversionPatternRewriter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rewriter</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">loc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">op</span><span class="o">-&gt;</span><span class="n">getLoc</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// Call to a helper function that will lower the current operation to a set</span>
+<span class="w">    </span><span class="c1">// of affine loops. We provide a functor that operates on the remapped</span>
+<span class="w">    </span><span class="c1">// operands, as well as the loop induction variables for the inner most</span>
+<span class="w">    </span><span class="c1">// loop body.</span>
+<span class="w">    </span><span class="n">lowerOpToLoops</span><span class="p">(</span>
+<span class="w">        </span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="n">operands</span><span class="p">,</span><span class="w"> </span><span class="n">rewriter</span><span class="p">,</span>
+<span class="w">        </span><span class="p">[</span><span class="n">loc</span><span class="p">](</span><span class="n">mlir</span><span class="o">::</span><span class="n">PatternRewriter</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rewriter</span><span class="p">,</span>
+<span class="w">              </span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Value</span><span class="o">&gt;</span><span class="w"> </span><span class="n">memRefOperands</span><span class="p">,</span>
+<span class="w">              </span><span class="n">ArrayRef</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Value</span><span class="o">&gt;</span><span class="w"> </span><span class="n">loopIvs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="c1">// Generate an adaptor for the remapped operands of the TransposeOp.</span>
+<span class="w">          </span><span class="c1">// This allows for using the nice named accessors that are generated</span>
+<span class="w">          </span><span class="c1">// by the ODS. This adaptor is automatically provided by the ODS</span>
+<span class="w">          </span><span class="c1">// framework.</span>
+<span class="w">          </span><span class="n">TransposeOpAdaptor</span><span class="w"> </span><span class="nf">transposeAdaptor</span><span class="p">(</span><span class="n">memRefOperands</span><span class="p">);</span>
+<span class="w">          </span><span class="n">mlir</span><span class="o">::</span><span class="n">Value</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">transposeAdaptor</span><span class="p">.</span><span class="n">input</span><span class="p">();</span>
+
+<span class="w">          </span><span class="c1">// Transpose the elements by generating a load from the reverse</span>
+<span class="w">          </span><span class="c1">// indices.</span>
+<span class="w">          </span><span class="n">SmallVector</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">Value</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">reverseIvs</span><span class="p">(</span><span class="n">llvm</span><span class="o">::</span><span class="n">reverse</span><span class="p">(</span><span class="n">loopIvs</span><span class="p">));</span>
+<span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="n">rewriter</span><span class="p">.</span><span class="n">create</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">AffineLoadOp</span><span class="o">&gt;</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="n">reverseIvs</span><span class="p">);</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Now we can prepare the list of patterns to use during the lowering process:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">ToyToAffineLoweringPass::runOnOperation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+
+<span class="w">  </span><span class="c1">// Now that the conversion target has been defined, we just need to provide</span>
+<span class="w">  </span><span class="c1">// the set of patterns that will lower the Toy operations.</span>
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">RewritePatternSet</span><span class="w"> </span><span class="n">patterns</span><span class="p">(</span><span class="o">&amp;</span><span class="n">getContext</span><span class="p">());</span>
+<span class="w">  </span><span class="n">patterns</span><span class="p">.</span><span class="n">add</span><span class="o">&lt;</span><span class="p">...,</span><span class="w"> </span><span class="n">TransposeOpLowering</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">getContext</span><span class="p">());</span>
+
+<span class="w">  </span><span class="p">...</span>
+</pre></div>
+</div>
+</section>
+<section id="partial-lowering">
+<h2>Partial Lowering<a class="headerlink" href="#partial-lowering" title="此标题的永久链接">¶</a></h2>
+<p>Once the patterns have been defined, we can perform the actual lowering. The
+<code class="docutils literal notranslate"><span class="pre">DialectConversion</span></code> framework provides several different modes of lowering, but,
+for our purposes, we will perform a partial lowering, as we will not convert
+<code class="docutils literal notranslate"><span class="pre">toy.print</span></code> at this time.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">ToyToAffineLoweringPass::runOnOperation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+
+<span class="w">  </span><span class="c1">// With the target and rewrite patterns defined, we can now attempt the</span>
+<span class="w">  </span><span class="c1">// conversion. The conversion will signal failure if any of our *illegal*</span>
+<span class="w">  </span><span class="c1">// operations were not converted successfully.</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">failed</span><span class="p">(</span><span class="n">mlir</span><span class="o">::</span><span class="n">applyPartialConversion</span><span class="p">(</span><span class="n">getOperation</span><span class="p">(),</span><span class="w"> </span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="n">patterns</span><span class="p">)))</span>
+<span class="w">    </span><span class="n">signalPassFailure</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="design-considerations-with-partial-lowering">
+<h3>Design Considerations With Partial Lowering<a class="headerlink" href="#design-considerations-with-partial-lowering" title="此标题的永久链接">¶</a></h3>
+<p>Before diving into the result of our lowering, this is a good time to discuss
+potential design considerations when it comes to partial lowering. In our
+lowering, we transform from a value-type, TensorType, to an allocated
+(buffer-like) type, MemRefType. However, given that we do not lower the
+<code class="docutils literal notranslate"><span class="pre">toy.print</span></code> operation, we need to temporarily bridge these two worlds. There are
+many ways to go about this, each with their own tradeoffs:</p>
+<ul>
+<li><p>Generate <code class="docutils literal notranslate"><span class="pre">load</span></code> operations from the buffer</p>
+<p>One option is to generate <code class="docutils literal notranslate"><span class="pre">load</span></code> operations from the buffer type to
+materialize an instance of the value type. This allows for the definition of
+the <code class="docutils literal notranslate"><span class="pre">toy.print</span></code> operation to remain unchanged. The downside to this approach
+is that the optimizations on the <code class="docutils literal notranslate"><span class="pre">affine</span></code> dialect are limited, because the
+<code class="docutils literal notranslate"><span class="pre">load</span></code> will actually involve a full copy that is only visible <em>after</em> our
+optimizations have been performed.</p>
+</li>
+<li><p>Generate a new version of <code class="docutils literal notranslate"><span class="pre">toy.print</span></code> that operates on the lowered type</p>
+<p>Another option would be to have another, lowered, variant of <code class="docutils literal notranslate"><span class="pre">toy.print</span></code>
+that operates on the lowered type. The benefit of this option is that there
+is no hidden, unnecessary copy to the optimizer. The downside is that
+another operation definition is needed that may duplicate many aspects of
+the first. Defining a base class in <a class="reference internal" href="../../DefiningDialects/Operations.html"><span class="doc">ODS</span></a> may
+simplify this, but you still need to treat these operations separately.</p>
+</li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">toy.print</span></code> to allow for operating on the lowered type</p>
+<p>A third option is to update the current definition of <code class="docutils literal notranslate"><span class="pre">toy.print</span></code> to allow
+for operating the on the lowered type. The benefit of this approach is that
+it is simple, does not introduce an additional hidden copy, and does not
+require another operation definition. The downside to this option is that it
+requires mixing abstraction levels in the <code class="docutils literal notranslate"><span class="pre">Toy</span></code> dialect.</p>
+</li>
+</ul>
+<p>For the sake of simplicity, we will use the third option for this lowering. This
+involves updating the type constraints on the PrintOp in the operation
+definition file:</p>
+<div class="highlight-tablegen notranslate"><div class="highlight"><pre><span></span>def PrintOp : Toy_Op&lt;&quot;print&quot;&gt; {
+  ...
+
+  // The print operation takes an input tensor to print.
+  // We also allow a F64MemRef to enable interop during partial lowering.
+  let arguments = (ins AnyTypeOf&lt;[F64Tensor, F64MemRef]&gt;:$input);
+}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="complete-toy-example">
+<h2>Complete Toy Example<a class="headerlink" href="#complete-toy-example" title="此标题的永久链接">¶</a></h2>
+<p>Let’s take a concrete example:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>toy.func @main() {
+  %0 = toy.constant dense&lt;[[1.000000e+00, 2.000000e+00, 3.000000e+00], [4.000000e+00, 5.000000e+00, 6.000000e+00]]&gt; : tensor&lt;2x3xf64&gt;
+  %2 = toy.transpose(%0 : tensor&lt;2x3xf64&gt;) to tensor&lt;3x2xf64&gt;
+  %3 = toy.mul %2, %2 : tensor&lt;3x2xf64&gt;
+  toy.print %3 : tensor&lt;3x2xf64&gt;
+  toy.return
+}
+</pre></div>
+</div>
+<p>With affine lowering added to our pipeline, we can now generate:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>func.func @main() {
+  %cst = arith.constant 1.000000e+00 : f64
+  %cst_0 = arith.constant 2.000000e+00 : f64
+  %cst_1 = arith.constant 3.000000e+00 : f64
+  %cst_2 = arith.constant 4.000000e+00 : f64
+  %cst_3 = arith.constant 5.000000e+00 : f64
+  %cst_4 = arith.constant 6.000000e+00 : f64
+
+  // Allocating buffers for the inputs and outputs.
+  %0 = memref.alloc() : memref&lt;3x2xf64&gt;
+  %1 = memref.alloc() : memref&lt;3x2xf64&gt;
+  %2 = memref.alloc() : memref&lt;2x3xf64&gt;
+
+  // Initialize the input buffer with the constant values.
+  affine.store %cst, %2[0, 0] : memref&lt;2x3xf64&gt;
+  affine.store %cst_0, %2[0, 1] : memref&lt;2x3xf64&gt;
+  affine.store %cst_1, %2[0, 2] : memref&lt;2x3xf64&gt;
+  affine.store %cst_2, %2[1, 0] : memref&lt;2x3xf64&gt;
+  affine.store %cst_3, %2[1, 1] : memref&lt;2x3xf64&gt;
+  affine.store %cst_4, %2[1, 2] : memref&lt;2x3xf64&gt;
+
+  // Load the transpose value from the input buffer and store it into the
+  // next input buffer.
+  affine.for %arg0 = 0 to 3 {
+    affine.for %arg1 = 0 to 2 {
+      %3 = affine.load %2[%arg1, %arg0] : memref&lt;2x3xf64&gt;
+      affine.store %3, %1[%arg0, %arg1] : memref&lt;3x2xf64&gt;
+    }
+  }
+
+  // Multiply and store into the output buffer.
+  affine.for %arg0 = 0 to 3 {
+    affine.for %arg1 = 0 to 2 {
+      %3 = affine.load %1[%arg0, %arg1] : memref&lt;3x2xf64&gt;
+      %4 = affine.load %1[%arg0, %arg1] : memref&lt;3x2xf64&gt;
+      %5 = arith.mulf %3, %4 : f64
+      affine.store %5, %0[%arg0, %arg1] : memref&lt;3x2xf64&gt;
+    }
+  }
+
+  // Print the value held by the buffer.
+  toy.print %0 : memref&lt;3x2xf64&gt;
+  memref.dealloc %2 : memref&lt;2x3xf64&gt;
+  memref.dealloc %1 : memref&lt;3x2xf64&gt;
+  memref.dealloc %0 : memref&lt;3x2xf64&gt;
+  return
+}
+</pre></div>
+</div>
+</section>
+<section id="taking-advantage-of-affine-optimization">
+<h2>Taking Advantage of Affine Optimization<a class="headerlink" href="#taking-advantage-of-affine-optimization" title="此标题的永久链接">¶</a></h2>
+<p>Our naive lowering is correct, but it leaves a lot to be desired with regards to
+efficiency. For example, the lowering of <code class="docutils literal notranslate"><span class="pre">toy.mul</span></code> has generated some redundant
+loads. Let’s look at how adding a few existing optimizations to the pipeline can
+help clean this up. Adding the <code class="docutils literal notranslate"><span class="pre">LoopFusion</span></code> and <code class="docutils literal notranslate"><span class="pre">AffineScalarReplacement</span></code> passes
+to the pipeline gives the following result:</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>func.func @main() {
+  %cst = arith.constant 1.000000e+00 : f64
+  %cst_0 = arith.constant 2.000000e+00 : f64
+  %cst_1 = arith.constant 3.000000e+00 : f64
+  %cst_2 = arith.constant 4.000000e+00 : f64
+  %cst_3 = arith.constant 5.000000e+00 : f64
+  %cst_4 = arith.constant 6.000000e+00 : f64
+
+  // Allocating buffers for the inputs and outputs.
+  %0 = memref.alloc() : memref&lt;3x2xf64&gt;
+  %1 = memref.alloc() : memref&lt;2x3xf64&gt;
+
+  // Initialize the input buffer with the constant values.
+  affine.store %cst, %1[0, 0] : memref&lt;2x3xf64&gt;
+  affine.store %cst_0, %1[0, 1] : memref&lt;2x3xf64&gt;
+  affine.store %cst_1, %1[0, 2] : memref&lt;2x3xf64&gt;
+  affine.store %cst_2, %1[1, 0] : memref&lt;2x3xf64&gt;
+  affine.store %cst_3, %1[1, 1] : memref&lt;2x3xf64&gt;
+  affine.store %cst_4, %1[1, 2] : memref&lt;2x3xf64&gt;
+
+  affine.for %arg0 = 0 to 3 {
+    affine.for %arg1 = 0 to 2 {
+      // Load the transpose value from the input buffer.
+      %2 = affine.load %1[%arg1, %arg0] : memref&lt;2x3xf64&gt;
+
+      // Multiply and store into the output buffer.
+      %3 = arith.mulf %2, %2 : f64
+      affine.store %3, %0[%arg0, %arg1] : memref&lt;3x2xf64&gt;
+    }
+  }
+
+  // Print the value held by the buffer.
+  toy.print %0 : memref&lt;3x2xf64&gt;
+  memref.dealloc %1 : memref&lt;2x3xf64&gt;
+  memref.dealloc %0 : memref&lt;3x2xf64&gt;
+  return
+}
+</pre></div>
+</div>
+<p>Here, we can see that a redundant allocation was removed, the two loop nests
+were fused, and some unnecessary <code class="docutils literal notranslate"><span class="pre">load</span></code>s were removed. You can build <code class="docutils literal notranslate"><span class="pre">toyc-ch5</span></code>
+and try yourself: <code class="docutils literal notranslate"><span class="pre">toyc-ch5</span> <span class="pre">test/Examples/Toy/Ch5/affine-lowering.mlir</span> <span class="pre">-emit=mlir-affine</span></code>. We can also check our optimizations by adding <code class="docutils literal notranslate"><span class="pre">-opt</span></code>.</p>
+<p>In this chapter we explored some aspects of partial lowering, with the intent to
+optimize. In the <a class="reference internal" href="Ch-6.html"><span class="doc">next chapter</span></a> we will continue the discussion about
+dialect conversion by targeting LLVM for code generation.</p>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="Ch-4.html"
+       title="上一章">← Chapter 4: Enabling Generic Transformation with Interfaces</a>
+  </li>
+  <li class="next">
+    <a href="Ch-6.html"
+       title="下一章">Chapter 6: Lowering to LLVM and CodeGeneration →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; 版权所有 2023, yaoyue123.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 6.1.3 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
