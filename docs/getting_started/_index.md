@@ -1,11 +1,8 @@
 ---
-title: "Getting Started"
-date: 2019-11-29T15:26:15Z
-draft: false
-weight: 10
+title: 开始使用
 ---
 
-Don't miss the MLIR Tutorial!
+不要错过MLIR教程！
 [slides](https://llvm.org/devmtg/2020-09/slides/MLIR_Tutorial.pdf) -
 [recording](https://www.youtube.com/watch?v=Y4SvqTtOIDk) -
 [online step-by-step](https://mlir.llvm.org/docs/Tutorials/Toy/)

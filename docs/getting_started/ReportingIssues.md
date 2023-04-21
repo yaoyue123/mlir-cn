@@ -1,8 +1,5 @@
 ---
 title: "Reporting Issues"
-date: 2022-04-27T10:30:15Z
-draft: false
-weight: 10
 ---
 
 Issues with MLIR can be reported through GitHub.  Report the issue for the

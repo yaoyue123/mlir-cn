@@ -1,8 +1,5 @@
 ---
 title: "Glossary"
-date: 2019-11-29T15:26:15Z
-draft: false
-weight: 30
 ---
 
 This glossary contains definitions of MLIR-specific terminology. It is intended

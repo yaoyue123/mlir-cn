@@ -1,8 +1,5 @@
 ---
 title: "Open Projects"
-date: 2019-11-29T15:26:15Z
-draft: false
-weight: 25
 ---
 
 Below is a list of projects that can be suitable for [Google Summer of Code

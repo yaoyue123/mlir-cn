@@ -1,8 +1,5 @@
 ---
 title: "Testing Guide"
-date: 2019-11-29T15:26:15Z
-draft: false
-weight: 40
 ---
 
 Testing is an integral part of any software infrastructure. In general, all
